@@ -1,0 +1,6 @@
+<button class="bottone" [ngStyle]="actionRichiesta?.css" (click)="handleClick()">
+    {{actionRichiesta?.label}}
+    <ng-container *ngIf="addButton">
+        <span class="plus-circle">+</span>
+    </ng-container>
+</button>
