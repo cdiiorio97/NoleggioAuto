@@ -43,46 +43,46 @@ export const AUTO_MOCK = [
 
 
 export const UTENTI_MOCK = [ 
-    {"id":1,"nome":"Loïs","cognome":"Kyles","admin":true,"email":"mkyles0@unblog.fr","password":"kT7\"#jUp60"},
-    {"id":2,"nome":"Camélia","cognome":"Legg","admin":true,"email":"ylegg1@weebly.com","password":"tD7(OLzpkiCyuF"},
-    {"id":3,"nome":"Estée","cognome":"Garstang","admin":false,"email":"ggarstang2@is.gd","password":"vB0\\RY3M{"},
-    {"id":4,"nome":"Anaé","cognome":"Delia","admin":true,"email":"xdelia3@prnewswire.com","password":"nV2\"XdRv$`Mf~yU_"},
-    {"id":5,"nome":"Aurélie","cognome":"Sugars","admin":false,"email":"wsugars4@statcounter.com","password":"jS7\"5TnjA"},
-    {"id":6,"nome":"Hélène","cognome":"Hinder","admin":false,"email":"rhinder5@discuz.net","password":"xA6\"nyZ7/6k~$H"},
-    {"id":7,"nome":"Maïwenn","cognome":"Galego","admin":true,"email":"bgalego6@omniture.com","password":"zU5?2()i~"},
-    {"id":8,"nome":"Mahélie","cognome":"Fist","admin":true,"email":"pfist7@dailymotion.com","password":"bT3|!`aQf"},
-    {"id":9,"nome":"Régine","cognome":"Bangley","admin":false,"email":"mbangley8@sfgate.com","password":"bJ7`2zt(JOntJc"},
-    {"id":10,"nome":"Lyséa","cognome":"Felgate","admin":false,"email":"afelgate9@wordpress.org","password":"sJ4|5`xd/"},
-    {"id":11,"nome":"Rachèle","cognome":"Jurczik","admin":false,"email":"djurczika@bizjournals.com","password":"rP5$q!+o<"},
-    {"id":12,"nome":"Angélique","cognome":"Gownge","admin":true,"email":"jgowngeb@people.com.cn","password":"uC9~CZPX>r=H"},
-    {"id":13,"nome":"Célestine","cognome":"Netting","admin":true,"email":"knettingc@slashdot.org","password":"zC9?=9I3.eV3"},
-    {"id":14,"nome":"Pål","cognome":"Hatherill","admin":false,"email":"shatherilld@thetimes.co.uk","password":"iG4{XmzA({j"},
-    {"id":15,"nome":"Méng","cognome":"Marquiss","admin":true,"email":"tmarquisse@issuu.com","password":"gS7'~#FT.&HF)"},
-    {"id":16,"nome":"Lyséa","cognome":"Lett","admin":false,"email":"jlettf@purevolume.com","password":"dF2<HTgY4_7@P@d"},
-    {"id":17,"nome":"Eugénie","cognome":"Plenty","admin":false,"email":"eplentyg@clickbank.net","password":"qO6}x$L<ISiRY!WK"},
-    {"id":18,"nome":"Yè","cognome":"Goranov","admin":false,"email":"dgoranovh@jugem.jp","password":"nD6?N{Bo"},
-    {"id":19,"nome":"Anaëlle","cognome":"Pullan","admin":false,"email":"cpullani@google.com","password":"qL5=\"@NF?0Uo!"},
-    {"id":20,"nome":"Liè","cognome":"Gerger","admin":true,"email":"bgergerj@purevolume.com","password":"pR4\\TcfBX6B&xu,t"},
-    {"id":21,"nome":"Maïlis","cognome":"Snuggs","admin":false,"email":"esnuggsk@slate.com","password":"aG3}bAUwST4GQ"},
-    {"id":22,"nome":"Félicie","cognome":"Ainger","admin":true,"email":"aaingerl@gmpg.org","password":"iT5'Sc}<"},
-    {"id":23,"nome":"Pénélope","cognome":"Thynne","admin":true,"email":"bthynnem@java.com","password":"aE3=h0r_>LE3I5=)"},
-    {"id":24,"nome":"Angèle","cognome":"Burbury","admin":true,"email":"rburburyn@usgs.gov","password":"yV7!)C>.`V.`J"},
-    {"id":25,"nome":"Danièle","cognome":"Masser","admin":false,"email":"smassero@webeden.co.uk","password":"fJ9`1B`Nx\""},
-    {"id":26,"nome":"Desirée","cognome":"Ironmonger","admin":true,"email":"nironmongerp@github.io","password":"kV2\\.J#!"},
-    {"id":27,"nome":"Mélodie","cognome":"Caldera","admin":true,"email":"acalderaq@ox.ac.uk","password":"dE6=XP'q"},
-    {"id":28,"nome":"Néhémie","cognome":"Moral","admin":true,"email":"jmoralr@nationalgeographic.com","password":"fI0`0#\\9(zL"},
-    {"id":29,"nome":"Marie-noël","cognome":"Niche","admin":false,"email":"aniches@cdbaby.com","password":"eL7|Bb.Gvb"},
-    {"id":30,"nome":"Thérèsa","cognome":"Codd","admin":false,"email":"lcoddt@sciencedirect.com","password":"bM4)`|gg,L"},
-    {"id":31,"nome":"Thérèsa","cognome":"Byer","admin":false,"email":"rbyeru@instagram.com","password":"rA8=\\|&4~"},
-    {"id":32,"nome":"Marie-thérèse","cognome":"Betz","admin":false,"email":"jbetzv@creativecommons.org","password":"jQ4'91eua!l%B3"},
-    {"id":33,"nome":"Dù","cognome":"Kellog","admin":true,"email":"pkellogw@google.co.uk","password":"bI5~%k@KA"},
-    {"id":34,"nome":"Méline","cognome":"Pilch","admin":true,"email":"tpilchx@telegraph.co.uk","password":"mJ3|1A/clW70Xij"},
-    {"id":35,"nome":"Marie-noël","cognome":"Peare","admin":false,"email":"bpearey@webmd.com","password":"pP9#|y3*c"},
-    {"id":36,"nome":"Stéphanie","cognome":"Pinnigar","admin":false,"email":"ppinnigarz@geocities.jp","password":"iZ1}&+XRy<tJk@"},
-    {"id":37,"nome":"Eléonore","cognome":"Reasce","admin":false,"email":"areasce10@twitter.com","password":"tL9/'%w`4KX"},
-    {"id":38,"nome":"Cécilia","cognome":"Luto","admin":false,"email":"jluto11@miitbeian.gov.cn","password":"sY4$=yXQaT"},
-    {"id":39,"nome":"Cunégonde","cognome":"Suggey","admin":false,"email":"bsuggey12@goo.gl","password":"aJ2.Wu2T"},
-    {"id":40,"nome":"Marie-ève","cognome":"Veschi","admin":true,"email":"bveschi13@posterous.com","password":"tJ0`j+Yl2'CU"}
+    {"id":1,"nome":"admin","cognome":"Kyles","isAdmin":true,"email":"mkyles0@unblog.fr","password":"admin"},
+    {"id":2,"nome":"Camélia","cognome":"Legg","isAdmin":true,"email":"ylegg1@weebly.com","password":"tD7(OLzpkiCyuF"},
+    {"id":3,"nome":"user","cognome":"Garstang","isAdmin":false,"email":"ggarstang2@is.gd","password":"user"},
+    {"id":4,"nome":"Anaé","cognome":"Delia","isAdmin":true,"email":"xdelia3@prnewswire.com","password":"nV2\"XdRv$`Mf~yU_"},
+    {"id":5,"nome":"Aurélie","cognome":"Sugars","isAdmin":false,"email":"wsugars4@statcounter.com","password":"jS7\"5TnjA"},
+    {"id":6,"nome":"Hélène","cognome":"Hinder","isAdmin":false,"email":"rhinder5@discuz.net","password":"xA6\"nyZ7/6k~$H"},
+    {"id":7,"nome":"Maïwenn","cognome":"Galego","isAdmin":true,"email":"bgalego6@omniture.com","password":"zU5?2()i~"},
+    {"id":8,"nome":"Mahélie","cognome":"Fist","isAdmin":true,"email":"pfist7@dailymotion.com","password":"bT3|!`aQf"},
+    {"id":9,"nome":"Régine","cognome":"Bangley","isAdmin":false,"email":"mbangley8@sfgate.com","password":"bJ7`2zt(JOntJc"},
+    {"id":10,"nome":"Lyséa","cognome":"Felgate","isAdmin":false,"email":"afelgate9@wordpress.org","password":"sJ4|5`xd/"},
+    {"id":11,"nome":"Rachèle","cognome":"Jurczik","isAdmin":false,"email":"djurczika@bizjournals.com","password":"rP5$q!+o<"},
+    {"id":12,"nome":"Angélique","cognome":"Gownge","isAdmin":true,"email":"jgowngeb@people.com.cn","password":"uC9~CZPX>r=H"},
+    {"id":13,"nome":"Célestine","cognome":"Netting","isAdmin":true,"email":"knettingc@slashdot.org","password":"zC9?=9I3.eV3"},
+    {"id":14,"nome":"Pål","cognome":"Hatherill","isAdmin":false,"email":"shatherilld@thetimes.co.uk","password":"iG4{XmzA({j"},
+    {"id":15,"nome":"Méng","cognome":"Marquiss","isAdmin":true,"email":"tmarquisse@issuu.com","password":"gS7'~#FT.&HF)"},
+    {"id":16,"nome":"Lyséa","cognome":"Lett","isAdmin":false,"email":"jlettf@purevolume.com","password":"dF2<HTgY4_7@P@d"},
+    {"id":17,"nome":"Eugénie","cognome":"Plenty","isAdmin":false,"email":"eplentyg@clickbank.net","password":"qO6}x$L<ISiRY!WK"},
+    {"id":18,"nome":"Yè","cognome":"Goranov","isAdmin":false,"email":"dgoranovh@jugem.jp","password":"nD6?N{Bo"},
+    {"id":19,"nome":"Anaëlle","cognome":"Pullan","isAdmin":false,"email":"cpullani@google.com","password":"qL5=\"@NF?0Uo!"},
+    {"id":20,"nome":"Liè","cognome":"Gerger","isAdmin":true,"email":"bgergerj@purevolume.com","password":"pR4\\TcfBX6B&xu,t"},
+    {"id":21,"nome":"Maïlis","cognome":"Snuggs","isAdmin":false,"email":"esnuggsk@slate.com","password":"aG3}bAUwST4GQ"},
+    {"id":22,"nome":"Félicie","cognome":"Ainger","isAdmin":true,"email":"aaingerl@gmpg.org","password":"iT5'Sc}<"},
+    {"id":23,"nome":"Pénélope","cognome":"Thynne","isAdmin":true,"email":"bthynnem@java.com","password":"aE3=h0r_>LE3I5=)"},
+    {"id":24,"nome":"Angèle","cognome":"Burbury","isAdmin":true,"email":"rburburyn@usgs.gov","password":"yV7!)C>.`V.`J"},
+    {"id":25,"nome":"Danièle","cognome":"Masser","isAdmin":false,"email":"smassero@webeden.co.uk","password":"fJ9`1B`Nx\""},
+    {"id":26,"nome":"Desirée","cognome":"Ironmonger","isAdmin":true,"email":"nironmongerp@github.io","password":"kV2\\.J#!"},
+    {"id":27,"nome":"Mélodie","cognome":"Caldera","isAdmin":true,"email":"acalderaq@ox.ac.uk","password":"dE6=XP'q"},
+    {"id":28,"nome":"Néhémie","cognome":"Moral","isAdmin":true,"email":"jmoralr@nationalgeographic.com","password":"fI0`0#\\9(zL"},
+    {"id":29,"nome":"Marie-noël","cognome":"Niche","isAdmin":false,"email":"aniches@cdbaby.com","password":"eL7|Bb.Gvb"},
+    {"id":30,"nome":"Thérèsa","cognome":"Codd","isAdmin":false,"email":"lcoddt@sciencedirect.com","password":"bM4)`|gg,L"},
+    {"id":31,"nome":"Thérèsa","cognome":"Byer","isAdmin":false,"email":"rbyeru@instagram.com","password":"rA8=\\|&4~"},
+    {"id":32,"nome":"Marie-thérèse","cognome":"Betz","isAdmin":false,"email":"jbetzv@creativecommons.org","password":"jQ4'91eua!l%B3"},
+    {"id":33,"nome":"Dù","cognome":"Kellog","isAdmin":true,"email":"pkellogw@google.co.uk","password":"bI5~%k@KA"},
+    {"id":34,"nome":"Méline","cognome":"Pilch","isAdmin":true,"email":"tpilchx@telegraph.co.uk","password":"mJ3|1A/clW70Xij"},
+    {"id":35,"nome":"Marie-noël","cognome":"Peare","isAdmin":false,"email":"bpearey@webmd.com","password":"pP9#|y3*c"},
+    {"id":36,"nome":"Stéphanie","cognome":"Pinnigar","isAdmin":false,"email":"ppinnigarz@geocities.jp","password":"iZ1}&+XRy<tJk@"},
+    {"id":37,"nome":"Eléonore","cognome":"Reasce","isAdmin":false,"email":"areasce10@twitter.com","password":"tL9/'%w`4KX"},
+    {"id":38,"nome":"Cécilia","cognome":"Luto","isAdmin":false,"email":"jluto11@miitbeian.gov.cn","password":"sY4$=yXQaT"},
+    {"id":39,"nome":"Cunégonde","cognome":"Suggey","isAdmin":false,"email":"bsuggey12@goo.gl","password":"aJ2.Wu2T"},
+    {"id":40,"nome":"Marie-ève","cognome":"Veschi","isAdmin":true,"email":"bveschi13@posterous.com","password":"tJ0`j+Yl2'CU"}
   ]
 
 
@@ -148,3 +148,33 @@ export const UTENTI_MOCK = [
     {"id":59,"idUtente":59,"idAuto":59,"dataInizio":"10/25/2024","dataFine":"10/19/2024","dataRichiesta":"9/18/2024","dataConferma":"11/16/2024","dataCancellazione":"8/30/2024","confermata":true,"confermataDa":59,"cancellataDa":59},
     {"id":60,"idUtente":60,"idAuto":60,"dataInizio":"6/4/2024","dataFine":"2/14/2025","dataRichiesta":"11/15/2024","dataConferma":"1/5/2025","dataCancellazione":"10/11/2024","confermata":true,"confermataDa":60,"cancellataDa":60}
 ]
+
+export const HEADERS_UTENTI_MOCK = [
+  { name: "Nome", field: "nome", sorting: 'asc', visibile: true },
+  { name: "Cognome", field: "cognome", sorting: 'asc', visibile: true },
+  { name: "Amministratore", field: "isAdmin", sorting: 'asc', visibile: true },
+  { name: "Email", field: "email", sorting: 'asc', visibile: true },
+  { name: "Password", field: "password", sorting: 'asc', visibile: false }
+]
+
+export const HEADERS_PRENOTAZIONI_MOCK = [
+  { name: "ID", field: "id", sorting: 'asc', visibile: true },
+  { name: "ID Utente", field: "idUtente", sorting: 'asc', visibile: true },
+  { name: "ID Auto", field: "idAuto", sorting: 'asc', visibile: true },
+  { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true },
+  { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true },
+  { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true },
+  { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: false },
+  { name: "Data Cancellazione", field: "dataCancellazione", sorting: 'asc', visibile: false },
+  { name: "Confermata", field: "confermata", sorting: 'asc', visibile: true },
+  { name: "Confermata Da", field: "confermataDa", sorting: 'asc', visibile: false },
+  { name: "Cancellata Da", field: "cancellataDa", sorting: 'asc', visibile: false }
+]
+
+export const HEADERS_AUTO_MOCK = [
+  { name: "ID", field: "id", sorting: 'asc', visibile: true },
+  { name: "Produttore", field: "brand", sorting: 'asc', visibile: true },
+  { name: "Modello", field: "modello", sorting: 'asc', visibile: true },
+  { name: "Targa", field: "targa", sorting: 'asc', visibile: true },
+]
+

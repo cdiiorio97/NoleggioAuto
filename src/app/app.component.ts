@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Config, Utente } from './config';
-import { AutenticazioneService } from './autenticazione.service';
+import { AutenticazioneService } from './services/login/autenticazione.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +22,6 @@ export class AppComponent {
     this.authService.getIsAdmin().subscribe((isAdmin: boolean) => {
       this.isAdmin = isAdmin;
       this.mostraNavBar();
-      console.log(this.isAdmin);
     });
   }
 

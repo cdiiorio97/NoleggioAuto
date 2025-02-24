@@ -1,6 +1,6 @@
 export class Config{
     navHeaders: NavHeader[] | undefined;
-    utenti: Utente[] | undefined
+    utenti: Utente[] | undefined;
 }
 
 export interface NavHeader{
@@ -20,7 +20,7 @@ export interface Utente{
     id: number;
     nome: string;
     cognome: string;
-    admin: boolean;
+    isAdmin: boolean;
     email: string;
     password: string;
 }
