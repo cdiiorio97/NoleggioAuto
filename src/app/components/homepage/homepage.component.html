@@ -1,0 +1,6 @@
+<ng-container  *ngIf="isAdmin">
+    <app-my-table class="tabella" [data]="utenti" [tableConfig]="tableConfig"></app-my-table> 
+</ng-container>
+<ng-container *ngIf="!isAdmin">
+    <app-my-table [data]="prenotazioni" [tableConfig]="tableConfig"></app-my-table> 
+</ng-container>

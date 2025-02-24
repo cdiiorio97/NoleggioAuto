@@ -1,0 +1,73 @@
+<div class="container">
+    <div class="spazio-azioni-sopra-tabella">
+        <div class="bottoni-intestazione-tabella">
+            <div class="filters-div" >  
+                <ng-container>
+                    <input type="text" [(ngModel)]="valoreFiltro" (input)="aggiornaFiltro($event);"
+                            placeholder=" Filtra per valore" style="width: 200px;">
+                    <select [(ngModel)]="campoFiltro" (change)="aggiornaCampoFiltro()">
+                        <option value= "" disabled>Seleziona Campo</option>
+                        <option *ngFor="let option of tableConfig?.headers" [value]="option.name">{{ option.name }}</option>
+                    </select>
+                </ng-container>
+            </div>
+            <ng-container *ngIf="isAdmin">
+                <app-button [actionRichiesta]="aggiungiAction" [addButton]="true" [routerLink]="['/aggiungi-utente']">
+                </app-button>
+            </ng-container>
+        </div>
+        <div></div>     <!--spazio vuoto-->
+    </div>
+    <div class="tabella-bottoni">  
+        <div style="display: flex; flex-direction: column;">      
+            <table >
+                <thead>     
+                    <tr style="height: 40px;">
+                        <th *ngFor="let header of tableConfig?.headers" (click)="ordinaColonna(header)" 
+                            [ngStyle]="getStyle(header)"> 
+                            {{header.name}}
+                            <span *ngIf="sortedColumn === header.field">
+                                {{ order === 'asc' ? '⬆️' : '⬇️' }}
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage" style="height: 40px;">
+                        <td *ngFor="let header of tableConfig?.headers" [class.boolean-cell]="isBoolean(row[header.field])">
+                            <ng-container *ngIf="isBoolean(row[header.field]); else showValue">
+                                <span *ngIf="row[header.field] === true">&#10003;</span> 
+                                <span *ngIf="row[header.field] === false">&#10007;</span>
+                            </ng-container>
+                            <ng-template #showValue>
+                            {{row[header.field]}}
+                            </ng-template>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>     
+        </div>
+        <div style="display: flex; flex-direction: column;">
+            <div style="height: 40px;"></div>                               <!-- spazio vuoto -->
+            <div *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage" class="edit-delete-buttons">
+                <app-button [actionRichiesta]="modificaAction" (onClick)="modifica(row)"></app-button>
+                <app-button [actionRichiesta]="eliminaAction" (onClick)="elimina(row)"></app-button>
+            </div>
+        </div>
+    </div>
+    <div class="paginazione-controlli" style="width: 80%;">
+        <button (click)="cambiaPagina(pagina - 1)" [disabled]="pagina === 1" class="paginazione-bottone">
+            Precedente
+        </button>
+        <span>Pagina {{ pagina }}</span>
+        <button *ngFor="let numero of numeroPagine" (click)="cambiaPagina(numero)" 
+                [disabled]="numero === pagina" class="paginazione-bottone">
+            {{ numero }}
+        </button>
+        <button (click)="cambiaPagina(pagina + 1)" 
+                [disabled]="(tableConfig?.pagination?.itemPerPage ?? 0) >0 && (pagina * (tableConfig?.pagination?.itemPerPage ?? 0)) >= filteredData.length" 
+                class="paginazione-bottone">
+            Successivo
+        </button>
+    </div>
+</div>
