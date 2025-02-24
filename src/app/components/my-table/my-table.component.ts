@@ -162,14 +162,6 @@ export class MyTableComponent implements OnInit{
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
-  handleActionsClick(event: Event, row: any){
-    const action = event as unknown as String;
-    if (action === "ADD NEW") 
-      console.log(action);
-    else
-      console.log(action + " " + JSON.stringify(row));
-  }
-
   modifica(row: any){
     this.router.navigateByUrl('/dettagli-utente/'+row.id, { state: { utente: row } });
   }

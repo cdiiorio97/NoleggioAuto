@@ -17,7 +17,6 @@ export class AppComponent {
   ngOnInit(){
     this.authService.getAuthState().subscribe((isLogged: boolean) => {
       this.autenticato= isLogged;
-      console.log(this.autenticato)
     })
     this.authService.getIsAdmin().subscribe((isAdmin: boolean) => {
       this.isAdmin = isAdmin;
