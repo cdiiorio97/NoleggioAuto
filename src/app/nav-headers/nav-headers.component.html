@@ -1,7 +1,0 @@
-<nav>
-    <ng-container *ngFor="let header of navHeaders">
-        <button class="nav-buttons" [routerLink]="header.link" routerLinkActive="active" *ngIf="header.visibile">
-            {{header.label}}
-        </button>
-    </ng-container>
-</nav>
