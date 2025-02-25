@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Utente } from '../../config';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
@@ -12,7 +11,10 @@ export class LoginPageComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private router: Router, private authService: AutenticazioneService) {}
+  constructor(
+    private router: Router, 
+    private authService: AutenticazioneService
+  ) {}
 
   ngOnInit(){
     this.authService.logout()
@@ -20,11 +22,9 @@ export class LoginPageComponent {
 
   onSubmit(username: string , password: string) : void {
     this.authService.login(username, password);
-    this.authService.getAuthState().subscribe(result => {
-      if(result)
-        this.router.navigate(['/homepage']);
-      else
-        this.authService.getErrorMessage().subscribe(result => console.log(result))
-    })
+    this.authService.setIsLogged();
+    this.authService.setIsAdmin();
+    if(this.authService.isLogged)
+      this.router.navigate(['/homepage']);
   }
 }

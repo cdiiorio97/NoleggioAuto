@@ -1,5 +1,13 @@
-<h1>{{title}}</h1>
-<ng-container *ngIf="autenticato">
-    <app-nav-headers [navHeaders]="config.navHeaders"></app-nav-headers>
+<ng-container *ngIf="authService.isLogged">
+    <ng-container *ngIf="authService.isAdmin">
+        <h1 >{{titleAdmin}}</h1>
+    </ng-container>
+    <ng-container *ngIf="!authService.isAdmin">
+        <h1 >{{titleUtente}}</h1>
+    </ng-container>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <app-nav-headers [navHeaders]="config.navHeaders"/>
+        <app-button [actionRichiesta]="logoutButton" (onClick)="logout()"/>
+    </div>
 </ng-container>
 <router-outlet></router-outlet>

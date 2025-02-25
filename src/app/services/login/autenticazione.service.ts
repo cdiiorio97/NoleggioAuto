@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { Utente } from '../../config';
 import { UtentiService } from '../utenti/utenti.service';
 
@@ -7,32 +6,18 @@ import { UtentiService } from '../utenti/utenti.service';
   providedIn: 'root'
 })
 export class AutenticazioneService {
-
-  private authState = new BehaviorSubject<boolean>(this.checkAuthentication());
-  private isAdmin = new BehaviorSubject<boolean>(this.checkIsAdmin());
-  private errorMessage = new BehaviorSubject<Error>(new Error());
-
   constructor(private utentiService: UtentiService){}
+  isLogged: boolean = false;
+  isAdmin: boolean = false
 
-  checkAuthentication(): boolean {
-    return sessionStorage.getItem('authToken') !== null;
+  setIsAdmin(): void {
+    this.isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
   }
 
-  getAuthState(): Observable<boolean> {
-    return this.authState.asObservable();
+  setIsLogged(): void {
+    this.isLogged = sessionStorage.getItem("isLogged") === "true" ? true : false
   }
 
-  getErrorMessage(): Observable<Error> {
-    return this.errorMessage.asObservable();
-  }
-
-  checkIsAdmin(): boolean {
-    return sessionStorage.getItem('isAdmin') === 'true';
-  }
-
-  getIsAdmin(): Observable<boolean> {
-    return this.isAdmin.asObservable();
-  }
 
   login(username: string, password: string): void {
     let user: Utente;
@@ -41,10 +26,9 @@ export class AutenticazioneService {
               try{
                 user = utenti.find(user => user.nome === username);
                 if (user && user.password === password) {
-                  sessionStorage.setItem('authToken', 'dummy-token');
                   sessionStorage.setItem('isAdmin', user.isAdmin.toString());
-                  this.authState.next(true);
-                  this.isAdmin.next(user.isAdmin);
+                  sessionStorage.setItem('isLogged', "true");
+                  sessionStorage.setItem('utenteLoggato', JSON.stringify(user))
                 }
                 else {
                   throw new Error("Autenticazione Fallita")
@@ -54,15 +38,17 @@ export class AutenticazioneService {
                   alert("Utente non registrato")
                 else 
                   alert('Nome utente o password non validi');
-                this.errorMessage.next(e);
-                this.authState.next(false)
+                sessionStorage.setItem("loginErrorMessage", e)
+                sessionStorage.setItem('isLogged', "false");
               }
             });
   }
-
-
+  
   logout(): void {
-    sessionStorage.removeItem('authToken');
-    this.authState.next(false);
+    sessionStorage.removeItem('isAdmin');
+    sessionStorage.removeItem('isLogged');
+    sessionStorage.removeItem('utenteLoggato')
+    this.isLogged = false;
+    this.isAdmin = false;
   }
 }

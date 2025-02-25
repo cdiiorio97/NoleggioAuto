@@ -13,6 +13,7 @@ export interface MyHeaders {
 
 export interface MyActions{
     label: string | undefined;
+    field?: string;
     css: any | undefined;
 }
 

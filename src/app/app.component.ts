@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { Config, Utente } from './config';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { Config } from './config';
+import { MyActions } from './components/my-table/my-table-config';
 import { AutenticazioneService } from './services/login/autenticazione.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -8,38 +10,46 @@ import { AutenticazioneService } from './services/login/autenticazione.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Noleggio Auto';
-  autenticato: boolean = false;
-  isAdmin: boolean = false;
 
-  constructor(private authService: AutenticazioneService){}
+  constructor(
+    public authService: AutenticazioneService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ){}
+  
+  isAdmin: boolean = false;
+  titleAdmin = 'Benvenuto Admin';
+  titleUtente = 'Benvenuto User';
 
   ngOnInit(){
-    this.authService.getAuthState().subscribe((isLogged: boolean) => {
-      this.autenticato= isLogged;
-    })
-    this.authService.getIsAdmin().subscribe((isAdmin: boolean) => {
-      this.isAdmin = isAdmin;
-      this.mostraNavBar();
-    });
+    this.authService.setIsLogged();
   }
-
-  mostraNavBar() {
-    this.config.navHeaders = this.config?.navHeaders?.map(header => {
-      if (header.label === 'Prenotazioni') {
-        header.visibile = this.isAdmin;
-      }
-      return header;
-    });
-  }
-
+  
   config: Config = {
     navHeaders: [
-      { label:'HomePage', link: '/homepage', visibile: true},
-      { label:'Parco Auto', link: '/parco-auto', visibile: true},
-      { label:'Profilo Utente', link: '/profilo-utente', visibile: true},
-      { label:'Prenotazioni', link: '/prenotazioni', visibile: this.isAdmin}
-    ],
-    utenti: []
-  } 
+      { label:'HomePage', field: 'homepage', link: '/homepage', visibile: true},
+      { label:'Parco Auto', field: 'parco-auto', link: '/parco-auto', visibile: true},
+      { label:'Profilo Utente', field: 'profilo-utente', link: '/profilo-utente', visibile: true},
+      { label:'Prenotazioni', field: 'prenotazioni', link: '/prenotazioni', visibile: true}
+    ]
+  }
+
+  logout(){
+    this.authService.logout();
+    this.router.navigate(["/login"]);
+  }
+
+  logoutButton: MyActions = {
+    label: "LOGOUT",
+    field: "logout",
+    css: {
+      "margin-top": "5px", 
+      "height": "30px", 
+      "width": "80px",
+      "margin-right": "5px", 
+      "border-radius": "10px",
+      "background-color": "grey"
+    }
+  }
+   
 }

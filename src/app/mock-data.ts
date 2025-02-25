@@ -91,27 +91,27 @@ export const UTENTI_MOCK = [
     {"id":2,"idUtente":2,"idAuto":2,"dataInizio":"5/8/2024","dataFine":"5/25/2024","dataRichiesta":"11/9/2024","dataConferma":"11/23/2024","dataCancellazione":"3/15/2024","confermata":false,"confermataDa":2,"cancellataDa":2},
     {"id":3,"idUtente":3,"idAuto":3,"dataInizio":"2/14/2025","dataFine":"9/15/2024","dataRichiesta":"11/29/2024","dataConferma":"4/4/2024","dataCancellazione":"11/3/2024","confermata":true,"confermataDa":3,"cancellataDa":3},
     {"id":4,"idUtente":4,"idAuto":4,"dataInizio":"4/24/2024","dataFine":"10/3/2024","dataRichiesta":"4/29/2024","dataConferma":"12/15/2024","dataCancellazione":"6/16/2024","confermata":true,"confermataDa":4,"cancellataDa":4},
-    {"id":5,"idUtente":5,"idAuto":5,"dataInizio":"6/12/2024","dataFine":"5/1/2024","dataRichiesta":"3/31/2024","dataConferma":"2/26/2024","dataCancellazione":"2/28/2024","confermata":true,"confermataDa":5,"cancellataDa":5},
+    {"id":3,"idUtente":5,"idAuto":5,"dataInizio":"6/12/2024","dataFine":"5/1/2024","dataRichiesta":"3/31/2024","dataConferma":"2/26/2024","dataCancellazione":"2/28/2024","confermata":true,"confermataDa":5,"cancellataDa":5},
     {"id":6,"idUtente":6,"idAuto":6,"dataInizio":"9/21/2024","dataFine":"1/11/2025","dataRichiesta":"11/11/2024","dataConferma":"1/6/2025","dataCancellazione":"11/3/2024","confermata":true,"confermataDa":6,"cancellataDa":6},
     {"id":7,"idUtente":7,"idAuto":7,"dataInizio":"11/22/2024","dataFine":"12/15/2024","dataRichiesta":"8/28/2024","dataConferma":"3/9/2024","dataCancellazione":"7/9/2024","confermata":false,"confermataDa":7,"cancellataDa":7},
-    {"id":8,"idUtente":8,"idAuto":8,"dataInizio":"6/29/2024","dataFine":"7/23/2024","dataRichiesta":"4/27/2024","dataConferma":"8/21/2024","dataCancellazione":"7/29/2024","confermata":false,"confermataDa":8,"cancellataDa":8},
+    {"id":3,"idUtente":8,"idAuto":8,"dataInizio":"6/29/2024","dataFine":"7/23/2024","dataRichiesta":"4/27/2024","dataConferma":"8/21/2024","dataCancellazione":"7/29/2024","confermata":false,"confermataDa":8,"cancellataDa":8},
     {"id":9,"idUtente":9,"idAuto":9,"dataInizio":"5/19/2024","dataFine":"8/28/2024","dataRichiesta":"9/8/2024","dataConferma":"8/13/2024","dataCancellazione":"2/25/2024","confermata":false,"confermataDa":9,"cancellataDa":9},
     {"id":10,"idUtente":10,"idAuto":10,"dataInizio":"7/11/2024","dataFine":"2/26/2024","dataRichiesta":"5/29/2024","dataConferma":"9/25/2024","dataCancellazione":"7/20/2024","confermata":false,"confermataDa":10,"cancellataDa":10},
     {"id":11,"idUtente":11,"idAuto":11,"dataInizio":"8/22/2024","dataFine":"8/20/2024","dataRichiesta":"4/17/2024","dataConferma":"6/5/2024","dataCancellazione":"9/1/2024","confermata":true,"confermataDa":11,"cancellataDa":11},
     {"id":12,"idUtente":12,"idAuto":12,"dataInizio":"4/12/2024","dataFine":"6/13/2024","dataRichiesta":"12/31/2024","dataConferma":"5/2/2024","dataCancellazione":"7/10/2024","confermata":false,"confermataDa":12,"cancellataDa":12},
-    {"id":13,"idUtente":13,"idAuto":13,"dataInizio":"4/5/2024","dataFine":"7/14/2024","dataRichiesta":"8/19/2024","dataConferma":"12/29/2024","dataCancellazione":"4/22/2024","confermata":false,"confermataDa":13,"cancellataDa":13},
+    {"id":3,"idUtente":13,"idAuto":13,"dataInizio":"4/5/2024","dataFine":"7/14/2024","dataRichiesta":"8/19/2024","dataConferma":"12/29/2024","dataCancellazione":"4/22/2024","confermata":false,"confermataDa":13,"cancellataDa":13},
     {"id":14,"idUtente":14,"idAuto":14,"dataInizio":"8/18/2024","dataFine":"4/22/2024","dataRichiesta":"5/6/2024","dataConferma":"11/18/2024","dataCancellazione":"7/3/2024","confermata":false,"confermataDa":14,"cancellataDa":14},
     {"id":15,"idUtente":15,"idAuto":15,"dataInizio":"2/27/2024","dataFine":"1/17/2025","dataRichiesta":"9/5/2024","dataConferma":"3/27/2024","dataCancellazione":"6/8/2024","confermata":true,"confermataDa":15,"cancellataDa":15},
     {"id":16,"idUtente":16,"idAuto":16,"dataInizio":"7/16/2024","dataFine":"11/20/2024","dataRichiesta":"1/9/2025","dataConferma":"12/7/2024","dataCancellazione":"4/22/2024","confermata":false,"confermataDa":16,"cancellataDa":16},
     {"id":17,"idUtente":17,"idAuto":17,"dataInizio":"9/5/2024","dataFine":"4/7/2024","dataRichiesta":"4/14/2024","dataConferma":"7/9/2024","dataCancellazione":"8/21/2024","confermata":false,"confermataDa":17,"cancellataDa":17},
-    {"id":18,"idUtente":18,"idAuto":18,"dataInizio":"4/5/2024","dataFine":"2/6/2025","dataRichiesta":"2/1/2025","dataConferma":"7/19/2024","dataCancellazione":"3/28/2024","confermata":false,"confermataDa":18,"cancellataDa":18},
+    {"id":3,"idUtente":18,"idAuto":18,"dataInizio":"4/5/2024","dataFine":"2/6/2025","dataRichiesta":"2/1/2025","dataConferma":"7/19/2024","dataCancellazione":"3/28/2024","confermata":false,"confermataDa":18,"cancellataDa":18},
     {"id":19,"idUtente":19,"idAuto":19,"dataInizio":"4/15/2024","dataFine":"10/17/2024","dataRichiesta":"4/11/2024","dataConferma":"4/10/2024","dataCancellazione":"1/20/2025","confermata":false,"confermataDa":19,"cancellataDa":19},
     {"id":20,"idUtente":20,"idAuto":20,"dataInizio":"3/5/2024","dataFine":"11/14/2024","dataRichiesta":"10/11/2024","dataConferma":"8/21/2024","dataCancellazione":"9/17/2024","confermata":false,"confermataDa":20,"cancellataDa":20},
     {"id":21,"idUtente":21,"idAuto":21,"dataInizio":"9/24/2024","dataFine":"4/27/2024","dataRichiesta":"10/17/2024","dataConferma":"1/27/2025","dataCancellazione":"10/31/2024","confermata":true,"confermataDa":21,"cancellataDa":21},
     {"id":22,"idUtente":22,"idAuto":22,"dataInizio":"4/11/2024","dataFine":"7/15/2024","dataRichiesta":"10/29/2024","dataConferma":"3/14/2024","dataCancellazione":"6/17/2024","confermata":true,"confermataDa":22,"cancellataDa":22},
-    {"id":23,"idUtente":23,"idAuto":23,"dataInizio":"5/8/2024","dataFine":"11/4/2024","dataRichiesta":"3/27/2024","dataConferma":"3/17/2024","dataCancellazione":"10/9/2024","confermata":false,"confermataDa":23,"cancellataDa":23},
+    {"id":33,"idUtente":23,"idAuto":23,"dataInizio":"5/8/2024","dataFine":"11/4/2024","dataRichiesta":"3/27/2024","dataConferma":"3/17/2024","dataCancellazione":"10/9/2024","confermata":false,"confermataDa":23,"cancellataDa":23},
     {"id":24,"idUtente":24,"idAuto":24,"dataInizio":"11/21/2024","dataFine":"2/5/2025","dataRichiesta":"12/30/2024","dataConferma":"4/26/2024","dataCancellazione":"10/14/2024","confermata":true,"confermataDa":24,"cancellataDa":24},
-    {"id":25,"idUtente":25,"idAuto":25,"dataInizio":"9/21/2024","dataFine":"2/5/2025","dataRichiesta":"6/11/2024","dataConferma":"6/30/2024","dataCancellazione":"8/28/2024","confermata":false,"confermataDa":25,"cancellataDa":25},
+    {"id":3,"idUtente":25,"idAuto":25,"dataInizio":"9/21/2024","dataFine":"2/5/2025","dataRichiesta":"6/11/2024","dataConferma":"6/30/2024","dataCancellazione":"8/28/2024","confermata":false,"confermataDa":25,"cancellataDa":25},
     {"id":26,"idUtente":26,"idAuto":26,"dataInizio":"6/18/2024","dataFine":"6/15/2024","dataRichiesta":"9/23/2024","dataConferma":"12/10/2024","dataCancellazione":"12/12/2024","confermata":true,"confermataDa":26,"cancellataDa":26},
     {"id":27,"idUtente":27,"idAuto":27,"dataInizio":"12/5/2024","dataFine":"6/3/2024","dataRichiesta":"2/8/2025","dataConferma":"7/2/2024","dataCancellazione":"12/22/2024","confermata":true,"confermataDa":27,"cancellataDa":27},
     {"id":28,"idUtente":28,"idAuto":28,"dataInizio":"1/4/2025","dataFine":"11/16/2024","dataRichiesta":"3/25/2024","dataConferma":"1/3/2025","dataCancellazione":"10/23/2024","confermata":false,"confermataDa":28,"cancellataDa":28},
@@ -149,32 +149,5 @@ export const UTENTI_MOCK = [
     {"id":60,"idUtente":60,"idAuto":60,"dataInizio":"6/4/2024","dataFine":"2/14/2025","dataRichiesta":"11/15/2024","dataConferma":"1/5/2025","dataCancellazione":"10/11/2024","confermata":true,"confermataDa":60,"cancellataDa":60}
 ]
 
-export const HEADERS_UTENTI_MOCK = [
-  { name: "Nome", field: "nome", sorting: 'asc', visibile: true },
-  { name: "Cognome", field: "cognome", sorting: 'asc', visibile: true },
-  { name: "Amministratore", field: "isAdmin", sorting: 'asc', visibile: true },
-  { name: "Email", field: "email", sorting: 'asc', visibile: true },
-  { name: "Password", field: "password", sorting: 'asc', visibile: false }
-]
 
-export const HEADERS_PRENOTAZIONI_MOCK = [
-  { name: "ID", field: "id", sorting: 'asc', visibile: true },
-  { name: "ID Utente", field: "idUtente", sorting: 'asc', visibile: true },
-  { name: "ID Auto", field: "idAuto", sorting: 'asc', visibile: true },
-  { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true },
-  { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true },
-  { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true },
-  { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: false },
-  { name: "Data Cancellazione", field: "dataCancellazione", sorting: 'asc', visibile: false },
-  { name: "Confermata", field: "confermata", sorting: 'asc', visibile: true },
-  { name: "Confermata Da", field: "confermataDa", sorting: 'asc', visibile: false },
-  { name: "Cancellata Da", field: "cancellataDa", sorting: 'asc', visibile: false }
-]
-
-export const HEADERS_AUTO_MOCK = [
-  { name: "ID", field: "id", sorting: 'asc', visibile: true },
-  { name: "Produttore", field: "brand", sorting: 'asc', visibile: true },
-  { name: "Modello", field: "modello", sorting: 'asc', visibile: true },
-  { name: "Targa", field: "targa", sorting: 'asc', visibile: true },
-]
 

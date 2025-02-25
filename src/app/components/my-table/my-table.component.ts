@@ -13,6 +13,7 @@ import { UtentiService } from '../../services/utenti/utenti.service';
 export class MyTableComponent implements OnInit{
   @Input() data: any[] | undefined;
   @Input() tableConfig: MyTableConfig | undefined;
+  @Input() dettagliURL: string = "";
 
   originalData: any[] | undefined;
   sortedColumn: string = '';
@@ -73,10 +74,7 @@ export class MyTableComponent implements OnInit{
     this.orderedData = this.data || [];
     this.filtro = {};
 
-    this.authService.getIsAdmin().subscribe((isAdmin: boolean) => {
-      this.isAdmin = isAdmin;
-    });
-    
+    this.isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
     
     this.aggiungiAction = this.actions?.find(action => action.label === 'Aggiungi');
     this.modificaAction = this.actions?.find(action => action.label === 'EDIT');
@@ -163,7 +161,7 @@ export class MyTableComponent implements OnInit{
   }
 
   modifica(row: any){
-    this.router.navigateByUrl('/dettagli-utente/'+row.id, { state: { utente: row } });
+    this.router.navigateByUrl(this.dettagliURL + row.id, { state: { utente: row } });
   }
 
   async elimina(utente: any){

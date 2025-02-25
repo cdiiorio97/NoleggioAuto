@@ -1,9 +1,9 @@
 export class Config{
     navHeaders: NavHeader[] | undefined;
-    utenti: Utente[] | undefined;
 }
 
 export interface NavHeader{
+    field: string;
     label: string;
     link: string;
     visibile: boolean;
@@ -23,4 +23,17 @@ export interface Utente{
     isAdmin: boolean;
     email: string;
     password: string;
+}
+
+export interface Prenotazione{
+    id: number;
+    idUtente: number;
+    idAuto: number;
+    dataFine: Date;
+    dataRichiesta: Date;
+    dataConferma: Date;
+    dataCancellazione: Date;
+    confermata: boolean;
+    confermataDa: number;
+    cancellataDa: number;
 }

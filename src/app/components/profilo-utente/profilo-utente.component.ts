@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { Utente } from '../../config';
 import { UtentiService } from '../../services/utenti/utenti.service';
+import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
   selector: 'app-profilo-utente',
@@ -9,7 +10,6 @@ import { UtentiService } from '../../services/utenti/utenti.service';
   styleUrl: './profilo-utente.component.css'
 })
 export class ProfiloUtenteComponent {
-  @Input() utente?: Utente;
   user: Utente = {
     id: 0,
     nome: '',
@@ -22,14 +22,13 @@ export class ProfiloUtenteComponent {
   
   constructor(
     private location: Location,
-    private userService: UtentiService
+    private userService: UtentiService,
   ) {}
 
   ngOnInit(): void {
-    const userState = history.state.utente;
-    if (userState) {
-      this.user = userState;
-    }
+    
+    let utenteProvaString = sessionStorage.getItem("utenteLoggato")
+    this.user = utenteProvaString !== null ? JSON.parse(utenteProvaString) : null;
   }
 
   togglePasswordVisibility() {
@@ -39,24 +38,13 @@ export class ProfiloUtenteComponent {
   }
 
   async onSubmit() {
-    if(!this.utente){
-      try{
-        await this.userService.addUser(this.user)
-        alert("utente aggiunto")
-        this.location.back();
-      } catch (e){
-        alert("errore durante l'aggiunta: " + e)
-      }
+    try{
+      await this.userService.updateUser(this.user);
+      alert("utente aggiornato");
+      this.location.back();
     }
-    else {
-      try{
-        await this.userService.updateUser(this.user);
-        alert("utente aggiornato");
-        this.location.back();
-      }
-      catch(e) {
-        alert("errore durante l'aggiornamento dati: " + e)
-      }
+    catch(e) {
+      alert("errore durante l'aggiornamento dati: " + e)
     }
   }
 

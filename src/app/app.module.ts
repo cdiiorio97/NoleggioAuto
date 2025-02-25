@@ -14,6 +14,8 @@ import { PaginazionePipe } from './paginazione.pipe';
 import { FormsModule } from '@angular/forms';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { AutenticazioneService } from './services/login/autenticazione.service';
+import { DettagliPrenotazioneComponent } from './components/dettagli-prenotazione/dettagli-prenotazione.component';
+import { DettagliUtenteComponent } from './components/dettagli-utente/dettagli-utente.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { AutenticazioneService } from './services/login/autenticazione.service';
     ProfiloUtenteComponent,
     HomepageComponent,
     ParcoAutoComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    DettagliPrenotazioneComponent,
+    DettagliUtenteComponent
   ],
   imports: [
     BrowserModule,

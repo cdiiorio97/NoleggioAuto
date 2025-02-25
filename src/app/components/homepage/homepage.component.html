@@ -1,6 +1,6 @@
-<ng-container  *ngIf="isAdmin">
-    <app-my-table class="tabella" [data]="utenti" [tableConfig]="tableConfig"></app-my-table> 
+<ng-container *ngIf="isAdmin">
+    <app-my-table [data]="utenti" [tableConfig]="tableConfig" [dettagliURL]="dettagliUtente"/> 
 </ng-container>
 <ng-container *ngIf="!isAdmin">
-    <app-my-table [data]="prenotazioni" [tableConfig]="tableConfig"></app-my-table> 
+    <app-prenotazioni/>
 </ng-container>

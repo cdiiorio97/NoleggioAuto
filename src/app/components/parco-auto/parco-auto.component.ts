@@ -10,32 +10,28 @@ import { TabellaService } from '../../services/tabella/tabella.service';
   styleUrl: './parco-auto.component.css'
 })
 export class ParcoAutoComponent {
-  @Input() auto: Auto[] | undefined;
-  headers: MyHeaders[] = [];
-  tableConfig: MyTableConfig | undefined;
+  auto: Auto[] | undefined;
+  headers: MyHeaders[] = [
+    { name: "ID", field: "id", sorting: 'asc', visibile: true },
+    { name: "Produttore", field: "brand", sorting: 'asc', visibile: true },
+    { name: "Modello", field: "modello", sorting: 'asc', visibile: true },
+    { name: "Targa", field: "targa", sorting: 'asc', visibile: true },
+  ];
 
   constructor(private autoService: AutoService, private tabellaService: TabellaService){ }
 
   ngOnInit(): void {
-    if(!this.auto){
       this.autoService.getAutomobili()
-        .subscribe((data : any) => {
-          this.auto = data;
-      });
-    }
-    if (this.auto && this.auto.length > 0) {
-      this.tabellaService.getHeaders("auto")
-                          .subscribe((headers: MyHeaders[]) => {
-                            this.headers = headers 
-                          });
-    }
-
-    this.tableConfig = {
-      headers: this.headers.filter(elem => elem.visibile),
-      pagination: { itemPerPage: 8 },
-      actions: undefined,
-    }
+          .subscribe((data : any) => {
+            this.auto = data;
+    });
   }
 
-  
+  tableConfig: MyTableConfig = {
+    headers: this.headers.filter(elem => elem.visibile),
+    pagination: { itemPerPage: 8 },
+    actions: undefined,
+  }
+
+
 }

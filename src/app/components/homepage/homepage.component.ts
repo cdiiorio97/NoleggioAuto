@@ -1,10 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Utente } from '../../config';
 import { MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { UtentiService } from '../../services/utenti/utenti.service';
-import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
-import { TabellaService } from '../../services/tabella/tabella.service';
 
 @Component({
   selector: 'app-homepage',
@@ -12,57 +9,34 @@ import { TabellaService } from '../../services/tabella/tabella.service';
   styleUrl: './homepage.component.css'
 })
 export class HomepageComponent {
-  headers: MyHeaders[] = [];
   utenti: Utente[] | undefined;
   prenotazioni: any[] | undefined;
-  tableConfig: MyTableConfig | undefined;
+  headers: MyHeaders[] = [
+    { name: "Nome", field: "nome", sorting: 'asc', visibile: true },
+    { name: "Cognome", field: "cognome", sorting: 'asc', visibile: true },
+    { name: "Amministratore", field: "isAdmin", sorting: 'asc', visibile: true },
+    { name: "Email", field: "email", sorting: 'asc', visibile: true },
+    { name: "Password", field: "password", sorting: 'asc', visibile: false }
+  ];
+  tableConfig: MyTableConfig = {
+    headers: this.headers.filter(elem => elem.visibile),
+    pagination: { itemPerPage: 8 },
+    actions: undefined,
+  }
   isAdmin: boolean = false;
+  dettagliUtente: string = "/dettagli-utente/"
+  dettagliPrenotazione: string = "/dettagli-prenotazione/"
 
   constructor(
-    private utentiService: UtentiService, 
-    private authService: AutenticazioneService,
-    private prenotazioniService: PrenotazioniService,
-    private tabellaService: TabellaService
+    private utentiService: UtentiService
   ){}
 
   ngOnInit(): void {
-    this.authService.getIsAdmin().subscribe((isAdmin: boolean) => {
-      this.isAdmin = isAdmin;
-    });
+    this.isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
 
-    if(this.isAdmin){
-      if(!this.utenti){
-        this.utentiService.getUtenti()
-          .subscribe((data : any) => {
-            this.utenti = data;
-          });
-      }
-      if (this.utenti && this.utenti.length > 0) {
-        this.tabellaService.getHeaders("utenti")
-            .subscribe((headers: MyHeaders[]) => {
-              this.headers = headers 
-            });
-      }
+    this.utentiService.getUtenti()
+      .subscribe((data : any) => {
+        this.utenti = data;
+      });
     }
-    else {
-      if(!this.prenotazioni){
-        this.prenotazioniService.getPrenotazioni()
-            .subscribe((data : any) => {
-              this.prenotazioni = data;
-            });
-      }
-      if (this.prenotazioni && this.prenotazioni.length > 0) {
-        this.tabellaService.getHeaders("prenotazioni")
-            .subscribe((headers: MyHeaders[]) => {
-              this.headers = headers 
-            });
-      }
-    }
-
-    this.tableConfig = {
-      headers: this.headers.filter(elem => elem.visibile),
-      pagination: { itemPerPage: 8 },
-      actions: undefined,
-    }
-  }
 }
