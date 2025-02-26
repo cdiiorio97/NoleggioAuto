@@ -1,26 +1,40 @@
 <app-button [actionRichiesta]="goBackAction" (onClick)="goBack()"/>
 
 <form class="form" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-        <label for="id">Id Prenotazione:</label>
-        <input type="number" id="id" [(ngModel)]="prenotazione.id" name="id" required style="width: 70px;">
-    </div>
+    <ng-container *ngIf="utenteLoggato?.isAdmin">
+        <div class="form-group">
+            <label for="id">Id Prenotazione:</label>
+            <input type="number" id="id" [(ngModel)]="prenotazione.id" name="id" required style="width: 70px;">
+        </div>
 
-    <div class="form-group">
-        <label for="idUtente">idUtente:</label>
-        <input type="number" id="idUtente" [(ngModel)]="prenotazione.idUtente" name="idUtente" required style="width: 40px;">
-        <input type="text" id="utenteNome" [(ngModel)]="utente" name="utenteNome" required disabled>
-    </div>
+        <div class="form-group">
+            <label for="idUtente">idUtente:</label>
+            <input type="number" id="idUtente" [(ngModel)]="prenotazione.idUtente" name="idUtente" required style="width: 40px;">
+            <input type="text" id="utenteNome" [(ngModel)]="utenteName" name="utenteNome" readonly>
+        </div>
+    </ng-container>
 
-    <div class="form-group">
-        <label for="idAuto">idAuto:</label>
-        <input type="number" id="idAuto" [(ngModel)]="prenotazione.idAuto" name="idAuto" required style="width: 40px;">
-        <input type="text" id="autoNome" [(ngModel)]="auto" name="auto" required disabled>
-    </div>
-    <div class="form-group">    
-        <label for="dataRichiesta">data Richiesta:</label>
-        <input type="date" id="dataRichiesta" [(ngModel)]="prenotazione.dataRichiesta" name="dataRichiesta" required>
-    </div>
+    
+    <ng-container>
+        <div class="form-group">
+            <label for="idAuto">Auto:</label>
+            <select [(ngModel)]="prenotazione.idAuto" style="width: 200px;" (change)="changeAutoScelta($event)">
+                    <option *ngFor="let auto of autoList" [value]="auto.id">{{auto.brand}} {{auto.modello}}</option>>
+            </select>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf='this.currentUrl !== "/aggiungi-prenotazione"'>
+        <!-- <div class="form-group">
+            <label for="idAuto">idAuto:</label>
+            <input type="number" id="idAuto" [(ngModel)]="prenotazione.idAuto" name="idAuto" required style="width: 40px;">
+            <input type="text" id="autoNome" [(ngModel)]="auto" name="auto" required disabled>
+        </div> -->
+        <div class="form-group">    
+            <label for="dataRichiesta">data Richiesta:</label>
+            <input type="date" id="dataRichiesta" [(ngModel)]="prenotazione.dataRichiesta" name="dataRichiesta" required>
+        </div>
+    </ng-container>
     <div class="form-group">    
         <label for="dataInizio">data Inizio:</label>
         <input type="date" id="dataInizio" [(ngModel)]="prenotazione.dataInizio" name="dataInizio" required>
@@ -29,28 +43,31 @@
         <label for="dataFine">data Fine:</label>
         <input type="date" id="dataFine" [(ngModel)]="prenotazione.dataFine" name="dataFine" required>
     </div>
-    <div class="form-group">
-        <label for="confermata">Confermata:</label>
-        <select id="confermata" name="confermata" [(ngModel)]="prenotazione.confermata">
-            <option value= "null" [defaultSelected]="true"></option>
-            <option [value]="false">NO</option>
-            <option [value]="true">SI</option>
-        </select>
-    </div>
-    <div class="form-group" *ngIf="prenotazione.confermata">    
-        <label for="dataConferma">data Conferma:</label>
-        <input type="date" id="dataConferma" [(ngModel)]="prenotazione.dataConferma" name="dataConferma" required>
-    </div>
-    <div *ngIf="prenotazione.cancellataDa !== 0" style="display:flex; flex-direction:column; gap: 10px;"> 
-        <div class="form-group">    
-            <label for="dataCancellazione">data Cancellazione:</label>
-            <input type="date" id="dataCancellazione" [(ngModel)]="prenotazione.dataCancellazione" name="dataCancellazione" required>
+
+    <ng-container *ngIf='this.currentUrl !== "/aggiungi-prenotazione"'>
+        <div class="form-group">
+            <label for="confermata">Confermata:</label>
+            <select id="confermata" name="confermata" [(ngModel)]="prenotazione.confermata">
+                <option value= "null" [defaultSelected]="true"></option>
+                <option [value]="false">NO</option>
+                <option [value]="true">SI</option>
+            </select>
         </div>
-        <div class="form-group">    
-            <label for="cancellataDa">cancellata Da:</label>
-            <input type="text" id="cancellataDa" [(ngModel)]="prenotazione.cancellataDa" name="cancellataDa" required>
+        <div class="form-group" *ngIf="prenotazione.confermata">    
+            <label for="dataConferma">data Conferma:</label>
+            <input type="date" id="dataConferma" [(ngModel)]="prenotazione.dataConferma" name="dataConferma" required>
         </div>
-    </div>
+        <div *ngIf="prenotazione.cancellataDa !== 0" style="display:flex; flex-direction:column; gap: 10px;"> 
+            <div class="form-group">    
+                <label for="dataCancellazione">data Cancellazione:</label>
+                <input type="date" id="dataCancellazione" [(ngModel)]="prenotazione.dataCancellazione" name="dataCancellazione" required>
+            </div>
+            <div class="form-group">    
+                <label for="cancellataDa">cancellata Da:</label>
+                <input type="text" id="cancellataDa" [(ngModel)]="prenotazione.cancellataDa" name="cancellataDa" required>
+            </div>
+        </div>
+    </ng-container>
 
     
     <button type="submit" class="save-button">Salva</button>

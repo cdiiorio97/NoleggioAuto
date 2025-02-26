@@ -25,11 +25,11 @@ export class PrenotazioniComponent implements OnInit {
     { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true },
     { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true },
     { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true },
-    { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: false },
-    { name: "Data Cancellazione", field: "dataCancellazione", sorting: 'asc', visibile: false },
+    { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: true },
+    { name: "Data Cancellazione", field: "dataCancellazione", sorting: 'asc', visibile: true },
     { name: "Confermata", field: "confermata", sorting: 'asc', visibile: true },
-    { name: "Confermata Da", field: "confermataDa", sorting: 'asc', visibile: false },
-    { name: "Cancellata Da", field: "cancellataDa", sorting: 'asc', visibile: false }
+    { name: "Confermata Da", field: "confermataDa", sorting: 'asc', visibile: true },
+    { name: "Cancellata Da", field: "cancellataDa", sorting: 'asc', visibile: true }
   ];
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
