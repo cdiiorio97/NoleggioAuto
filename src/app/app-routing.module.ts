@@ -16,10 +16,12 @@ const routes: Routes = [
   { path: 'parco-auto', component: ParcoAutoComponent },
   { path: 'profilo-utente', component: ProfiloUtenteComponent },
   { path: 'dettagli-utente/:id', component: DettagliUtenteComponent },
-  { path: 'dettagli-prenotazione/:id', component: DettagliPrenotazioneComponent},
-  { path: 'dettagli-auto/:id', component: DettagliAutoComponent},
-  { path: 'aggiungi-utente', component: ProfiloUtenteComponent},
-  { path: 'prenotazioni', component: PrenotazioniComponent}
+  { path: 'dettagli-prenotazione/:id', component: DettagliPrenotazioneComponent },
+  { path: 'dettagli-auto/:id', component: DettagliAutoComponent },
+  { path: 'aggiungi-utente', component: ProfiloUtenteComponent },
+  { path: 'aggiungi-prenotazione', component: DettagliPrenotazioneComponent },
+  { path: 'aggiungi-auto', component: DettagliAutoComponent },
+  { path: 'prenotazioni', component: PrenotazioniComponent }
 ];
 
 @NgModule({

@@ -23,11 +23,16 @@ export class UtentiService {
     return foundUser;
   }
 
-  addUser(user: any) {
+  addUser(newUser: any) {
     if (!this.utenti) {
       this.utenti = of([]);
     }
-    this.utenti.subscribe(users => users.push(user));
+    else {
+      this.getUtenti().subscribe(users => {
+        users.unshift(newUser);
+        this.utenti = of(users);
+      });
+    };
   }
 
   deleteUser(id: number) {

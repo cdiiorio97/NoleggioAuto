@@ -7,11 +7,23 @@ import { Prenotazione } from '../../config';
   providedIn: 'root'
 })
 export class PrenotazioniService {
-
+  prenotazioni: Observable<Prenotazione[]> | undefined;
   constructor() { }
 
   getPrenotazioni(): Observable<any[]> {
-    return of(PRENOTAZIONI_MOCK)
+    return this.prenotazioni = of(PRENOTAZIONI_MOCK)
+  }
+
+  addPrenotazione(newPren: any){
+    if (!this.prenotazioni) {
+      this.prenotazioni = of([]);
+    }
+    else {
+      this.getPrenotazioni().subscribe(pren => {
+        pren.unshift(newPren);
+        this.prenotazioni = of(pren);
+      });
+    };
   }
 
   updatePrenotazione(prenotazione: Prenotazione): void {

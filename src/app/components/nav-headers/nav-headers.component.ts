@@ -11,11 +11,9 @@ export class NavHeadersComponent {
 
   ngOnInit(){
     let isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
-    if(!isAdmin){
-      this.navHeaders?.map(elem => {
+    this.navHeaders?.map(elem => {
         if(elem.field === "prenotazioni")
-          elem.visibile = false;
-      })
-    }
+          elem.visibile = isAdmin;
+    })
   }
 }

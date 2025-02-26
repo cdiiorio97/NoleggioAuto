@@ -11,9 +11,8 @@
                     </select>
                 </ng-container>
             </div>
-            <ng-container *ngIf="isAdmin">
-                <app-button [actionRichiesta]="aggiungiAction" [addButton]="true" [routerLink]="['/aggiungi-utente']">
-                </app-button>
+            <ng-container *ngIf="aggiuntaConsentita">
+                <app-button [actionRichiesta]="aggiungiAction" [addButton]="true" [routerLink]="aggiuntaURL"/>
             </ng-container>
         </div>
         <div></div>     <!--spazio vuoto-->
@@ -53,9 +52,7 @@
                 <ng-container *ngFor="let button of actionsTabella">
                     <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
                 </ng-container>
-                <!-- <app-button [actionRichiesta]="modificaAction" (onClick)="modifica(row)"/>
-                <app-button [actionRichiesta]="eliminaAction" (onClick)="elimina(row)"></app-button>
-           -->  </div>
+            </div>
         </div>
     </div>
     <div class="paginazione-controlli" style="width: 80%;">

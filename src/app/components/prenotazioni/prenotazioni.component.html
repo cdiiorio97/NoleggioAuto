@@ -1,1 +1,13 @@
-<app-my-table [data]="prenotazioni" [tableConfig]="tableConfig" [dettagliURL]="dettagliPrenotazione"/>
+<ng-container *ngIf="this.historyUtente" >
+    <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 15px; gap: 5px">
+        <app-button [actionRichiesta]="goBackAction" (onClick)="goBack()"/>
+        <span style="font-size: 25px; margin-top: 5px;">
+            Prenotazioni di <b>{{this.historyUtente.nome}} {{this.historyUtente.cognome}}</b>
+        </span>
+    </div>
+</ng-container>
+<app-my-table [data]="prenotazioni" 
+            [tableConfig]="tableConfig" 
+            [dettagliURL]="dettagliPrenotazione" 
+            [aggiuntaConsentita]="aggiuntaConsentita"
+            [aggiuntaURL]="'/aggiungi-prenotazione'"/>

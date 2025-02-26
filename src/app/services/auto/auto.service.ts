@@ -7,11 +7,12 @@ import { Auto } from '../../config';
   providedIn: 'root'
 })
 export class AutoService {
+  automobili: Observable<Auto[]>  | undefined;
 
   constructor() { }
 
   getAutomobili() : Observable<any[]> {
-    return of(AUTO_MOCK);
+    return this.automobili = of(AUTO_MOCK);
   }
 
   getAutoById(id:number): Auto {
@@ -22,8 +23,16 @@ export class AutoService {
     return auto;
   }
 
-  addAuto(auto: Auto){
-    this.getAutomobili().subscribe(automobili => automobili.push(auto));
+  addAuto(newAuto: Auto){
+    if (!this.automobili) {
+      this.automobili = of([]);
+    }
+    else {
+      this.getAutomobili().subscribe(auto => {
+        auto.unshift(newAuto);
+        this.automobili = of(auto);
+      });
+    };
   }
 
   updateAuto(auto: Auto){

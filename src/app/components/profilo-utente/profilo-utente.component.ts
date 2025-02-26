@@ -31,9 +31,10 @@ export class ProfiloUtenteComponent {
   ngOnInit(): void {
     this.currentUrl = this.router.url;
     if(this.currentUrl === "/profilo-utente"){
-      let utenteProvaString = sessionStorage.getItem("utenteLoggato")
-      this.user = utenteProvaString !== null ? JSON.parse(utenteProvaString) : null;
-    } else 
+      let utenteLoggatoString = sessionStorage.getItem("utenteLoggato")
+      this.user = utenteLoggatoString !== null ? JSON.parse(utenteLoggatoString) : null;
+    } 
+    else if(this.currentUrl !== "/aggiungi-utente")
         this.user = history.state.elem;
   }
 
@@ -44,14 +45,24 @@ export class ProfiloUtenteComponent {
   }
 
   async onSubmit() {
-    try{
-      await this.userService.updateUser(this.user);
-      //console.log(this.user)
-      alert("utente aggiornato");
-      this.location.back();
+    if(this.currentUrl === "/aggiungi-utente"){
+      try{
+        this.userService.addUser(this.user)
+        alert("utente aggiunto")
+        this.router.navigateByUrl("/homepage")
+      } catch (e){
+        alert("errore durante l'aggiunta: " + e)
+      }
     }
-    catch(e) {
-      alert("errore durante l'aggiornamento dati: ${e}")
+    else {
+      try{
+        await this.userService.updateUser(this.user);
+        alert("utente aggiornato");
+        this.router.navigateByUrl("/homepage")
+      }
+      catch(e) {
+        alert("errore durante l'aggiornamento dati: " + e)
+      }
     }
   }
 

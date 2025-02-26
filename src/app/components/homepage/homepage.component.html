@@ -1,6 +1,7 @@
 <ng-container *ngIf="isAdmin">
-    <app-my-table [data]="utenti" [tableConfig]="tableConfig" [dettagliURL]="dettagliUtente" [actionsTabella]="actions"/> 
+    <app-my-table [data]="utenti" [tableConfig]="tableConfig" [dettagliURL]="dettagliUtente" 
+                    [actionsTabella]="actions" [aggiuntaConsentita]="true" [aggiuntaURL]="'/aggiungi-utente'"/> 
 </ng-container>
 <ng-container *ngIf="!isAdmin">
-    <app-prenotazioni/>
+    <app-prenotazioni [aggiuntaConsentita]="true"/>
 </ng-container>

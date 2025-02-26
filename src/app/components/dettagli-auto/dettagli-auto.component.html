@@ -1,8 +1,4 @@
-<button class="go-back-button" (click)="goBack()">
-    <div class="contenuto-bottone">
-        <span class="go-back-arrow">&#8592;</span> GO BACK
-    </div>
-</button>
+<app-button [actionRichiesta]="goBackAction" (onClick)="goBack()"/>
 
 <form class="form" (ngSubmit)="onSubmit()">
     <div class="form-group">

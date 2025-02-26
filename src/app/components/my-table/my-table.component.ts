@@ -12,8 +12,10 @@ import { UtentiService } from '../../services/utenti/utenti.service';
 export class MyTableComponent implements OnInit{
   @Input() data: any[] | undefined;
   @Input() tableConfig: MyTableConfig | undefined;
-  @Input() dettagliURL: string = "";
-  @Input() nomeTabella: string = "";
+  @Input() dettagliURL?: string;
+  @Input() aggiuntaURL?: string;
+  @Input() actionsTabella?: MyActions[] = [];
+  @Input() aggiuntaConsentita?: boolean = false;
 
   originalData: any[] | undefined;
   sortedColumn: string = '';
@@ -25,7 +27,6 @@ export class MyTableComponent implements OnInit{
   campoFiltro: string = '';
   vecchioCampoFiltro: string = '';
   pagina: number = 1;
-  @Input() actionsTabella?: MyActions[] = [];
   modificaAction: MyActions | undefined;
   aggiungiAction: MyActions | undefined;
   eliminaAction: MyActions | undefined;

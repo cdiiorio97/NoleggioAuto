@@ -1,19 +1,23 @@
-import { Component } from '@angular/core';
-import { MyHeaders, MyTableConfig } from '../my-table/my-table-config';
+import { Component, Input, OnInit } from '@angular/core';
+import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
 import { Prenotazione, Utente } from '../../config';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-prenotazioni',
   templateUrl: './prenotazioni.component.html',
   styleUrl: './prenotazioni.component.css'
 })
-export class PrenotazioniComponent {
+export class PrenotazioniComponent implements OnInit {
+  @Input() aggiuntaConsentita?: boolean;
+
   prenotazioni: Prenotazione[] | undefined;
   utenteLoggato: Utente | undefined;
   backButtonVisibile: boolean = false;
   dettagliPrenotazione: string = "/dettagli-prenotazione/"
   historyUtente: any | undefined;
+  goBackAction: MyActions | undefined;
   headers: MyHeaders[] = [
     { name: "ID", field: "id", sorting: 'asc', visibile: true },
     { name: "ID Utente", field: "idUtente", sorting: 'asc', visibile: true },
@@ -33,28 +37,33 @@ export class PrenotazioniComponent {
   };
 
   constructor(
-    private prenotazioneService: PrenotazioniService
+    private prenotazioneService: PrenotazioniService,
+    private router: Router
   ){}
 
   ngOnInit(): void {
-    let utenteLoggato
+    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
+    let utenteTemp
     if(history.state.utente){
-      utenteLoggato = history.state.utente;
+      utenteTemp = history.state.utente;
       this.historyUtente = history.state.utente;
     }
     else {
       let utenteLoggatoString = sessionStorage.getItem("utenteLoggato");
-      utenteLoggato = utenteLoggatoString ? JSON.parse(utenteLoggatoString) : null;
+      utenteTemp = utenteLoggatoString ? JSON.parse(utenteLoggatoString) : null;
     }
     this.prenotazioneService.getPrenotazioni()
       .subscribe((data : Prenotazione[]) => {
-        if(!utenteLoggato.isAdmin || history.state.utente)
-          this.prenotazioni = data.filter(prenotazione => prenotazione.idUtente === utenteLoggato.id);
-        if(!utenteLoggato.isAdmin)
+        if(!utenteTemp.isAdmin || history.state.utente){
+          this.prenotazioni = data.filter(prenotazione => prenotazione.idUtente === utenteTemp.id);
           this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "idUtente")
-        if(utenteLoggato.isAdmin) {
-          this.prenotazioni = data;
         }
+        else 
+          this.prenotazioni = data;
       });
+  }
+
+    goBack(): void {
+      this.router.navigateByUrl('/homepage')
     }
 }

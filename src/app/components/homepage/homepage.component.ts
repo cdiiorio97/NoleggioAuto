@@ -44,16 +44,13 @@ export class HomepageComponent {
   isAdmin: boolean = false;
   dettagliUtente: string = "/dettagli-utente/"
 
-  constructor(
-    private utentiService: UtentiService
-  ){}
+  constructor( private utentiService: UtentiService ){}
 
   ngOnInit(): void {
     this.isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
-
     this.utentiService.getUtenti()
       .subscribe((data : any) => {
-        this.utenti = data;
+          this.utenti = data;
       });
     }
 }

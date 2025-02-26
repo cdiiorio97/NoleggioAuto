@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { Prenotazione } from '../../config';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
 import { AutoService } from '../../services/auto/auto.service';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { MyActions } from '../my-table/my-table-config';
+import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
   selector: 'app-dettagli-prenotazione',
@@ -25,7 +27,6 @@ export class DettagliPrenotazioneComponent {
     confermataDa: 0,
     cancellataDa: 0
   }
-  
   passwordVisibile: boolean = false;
   currentUrl: string = '';
   auto: string = '';
@@ -36,14 +37,17 @@ export class DettagliPrenotazioneComponent {
     private autoService: AutoService,
     private userService: UtentiService,
     private router: Router,
-    private prenotazioniService: PrenotazioniService
+    private location: Location,
+    private prenotazioniService: PrenotazioniService,
+    private authService: AutenticazioneService
   ) {}
 
 
   ngOnInit(): void {
-    const prenotazioneState = history.state.elem;
-    if (prenotazioneState) {
-      this.prenotazione = prenotazioneState;
+    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
+    this.currentUrl = this.router.url;
+    if (this.currentUrl !== "/aggiungi-prenotazione") {
+      this.prenotazione = history.state.elem;
       this.prenotazione.dataCancellazione = this.convertDateFormat(this.prenotazione.dataCancellazione)
       this.prenotazione.dataConferma = this.convertDateFormat(this.prenotazione.dataConferma)
       this.prenotazione.dataInizio = this.convertDateFormat(this.prenotazione.dataInizio)
@@ -54,7 +58,6 @@ export class DettagliPrenotazioneComponent {
       let userTemp = this.userService.getUserById(this.prenotazione.idUtente)
       this.utente = userTemp.nome + " " + userTemp.cognome;
       
-      this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
     }
   }
 
@@ -74,17 +77,31 @@ export class DettagliPrenotazioneComponent {
   }
 
   async onSubmit() {
-    try{
-      await this.prenotazioniService.updatePrenotazione(this.prenotazione);
-      alert("utente aggiornato");
-      this.router.navigateByUrl('/prenotazioni')
+    if(this.currentUrl === "/aggiungi-prenotazione"){
+      try{
+        this.prenotazioniService.addPrenotazione(this.prenotazione)
+        alert("prenotazione aggiunta")
+        this.router.navigateByUrl("/homepage")
+      } catch (e){
+        alert(`errore durante l'aggiunta: ${e}`)
+      }
     }
-    catch(e) {
-      alert("errore durante l'aggiornamento dati: ${e}")
+    else {
+      try{
+        await this.prenotazioniService.updatePrenotazione(this.prenotazione);
+        alert("utente aggiornato");
+        this.goBack()
+      }
+      catch(e) {
+        alert(`errore durante l'aggiornamento dati: ${e}`)
+      }
     }
   }
 
   goBack(): void {
-    this.router.navigateByUrl('/prenotazioni')
+    if(this.authService.isAdmin)
+      this.location.back();
+    else 
+      this.router.navigateByUrl('/homepage')
   }
 }

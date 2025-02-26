@@ -3,6 +3,7 @@ import { Auto } from '../../config';
 import { Location } from '@angular/common';
 import { AutoService } from '../../services/auto/auto.service';
 import { Router } from '@angular/router';
+import { MyActions } from '../my-table/my-table-config';
 
 @Component({
   selector: 'app-dettagli-auto',
@@ -17,38 +18,39 @@ export class DettagliAutoComponent {
     modello: ''
   }
   passwordVisibile: boolean = false;
+  goBackAction: MyActions | undefined;
+  currentUrl: string = '';
 
   constructor(
-    private location: Location,
     private autoService: AutoService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    const autoState = history.state.elem;
-    if (autoState) {
-      this.auto = autoState;
-    }
+    this.currentUrl = this.router.url;
+    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
+    if(this.currentUrl !== "/aggiungi-auto")
+      this.auto = history.state.elem;
   }
 
   async onSubmit() {
-    if(!this.auto){
+    if(this.currentUrl === "/aggiungi-auto"){
       try{
         await this.autoService.addAuto(this.auto)
         alert("auto aggiunta")
-        this.location.back();
+        this.router.navigateByUrl("/parco-auto")
       } catch (e){
-        alert("errore durante l'aggiunta: " + e)
+        alert(`errore durante l'aggiunta: ${e}`)
       }
     }
     else {
       try{
         await this.autoService.updateAuto(this.auto);
         alert("auto aggiornata");
-        this.location.back();
+        this.router.navigateByUrl("/parco-auto")
       }
       catch(e) {
-        alert("errore durante l'aggiornamento dati: " + e)
+        alert(`errore durante l'aggiornamento dati: ${e}`)
       }
     }
   }

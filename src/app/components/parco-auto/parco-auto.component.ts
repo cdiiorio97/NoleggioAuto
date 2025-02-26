@@ -3,6 +3,7 @@ import { Auto } from '../../config';
 import { MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { AutoService } from '../../services/auto/auto.service';
 import { TabellaService } from '../../services/tabella/tabella.service';
+import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
   selector: 'app-parco-auto',
@@ -12,6 +13,7 @@ import { TabellaService } from '../../services/tabella/tabella.service';
 export class ParcoAutoComponent {
   auto: Auto[] | undefined;
   dettagliAuto: string = "/dettagli-auto/";
+  isAdmin: boolean = false;
   headers: MyHeaders[] = [
     { name: "ID", field: "id", sorting: 'asc', visibile: true },
     { name: "Produttore", field: "brand", sorting: 'asc', visibile: true },
@@ -19,9 +21,13 @@ export class ParcoAutoComponent {
     { name: "Targa", field: "targa", sorting: 'asc', visibile: true },
   ];
 
-  constructor(private autoService: AutoService, private tabellaService: TabellaService){ }
+  constructor(
+    private autoService: AutoService,
+    private authService: AutenticazioneService
+  ){ }
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin;
       this.autoService.getAutomobili()
           .subscribe((data : any) => {
             this.auto = data;
