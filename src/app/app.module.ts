@@ -19,6 +19,7 @@ import { DettagliAutoComponent } from './components/dettagli-auto/dettagli-auto.
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonComponent } from './components/button/button.component';
+import { RichiestePrenotazioniComponent } from './components/richieste-prenotazioni/richieste-prenotazioni.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ButtonComponent } from './components/button/button.component';
     LoginPageComponent,
     DettagliPrenotazioneComponent,
     DettagliUtenteComponent,
-    DettagliAutoComponent
+    DettagliAutoComponent,
+    RichiestePrenotazioniComponent
   ],
   imports: [
     BrowserModule,

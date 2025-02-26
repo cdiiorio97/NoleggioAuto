@@ -53,6 +53,9 @@
                     <ng-container *ngIf="row.editabile">
                         <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
                     </ng-container>
+                    <ng-container *ngIf="row.editabile === undefined && permessiEditRow">
+                        <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
+                    </ng-container>
                 </ng-container>
             </div>
         </div>

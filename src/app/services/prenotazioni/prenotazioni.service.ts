@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PRENOTAZIONI_MOCK } from '../../mock-data';
+import { PRENOTAZIONI_MOCK, RICHIESTE_PRENOTAZIONI_MOCK } from '../../mock-data';
 import { Prenotazione } from '../../config';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { Prenotazione } from '../../config';
 })
 export class PrenotazioniService {
   prenotazioni: Observable<Prenotazione[]> | undefined;
+  richiestePrenotazioni: Observable<Prenotazione[]> | undefined
   constructor() { }
 
   getPrenotazioni(): Observable<any[]> {
@@ -31,6 +32,19 @@ export class PrenotazioniService {
       const index = prenotazioni.findIndex(elem => elem.id === prenotazione.id);
       if (index !== -1) {
         prenotazioni[index] = prenotazione;
+      }
+    });
+  }
+
+  getRichiestePrenotazioni(): Observable<any[]> {
+    return this.richiestePrenotazioni = of(RICHIESTE_PRENOTAZIONI_MOCK)
+  }
+
+  updateRichiestaPrenotazione(nuovaPren: Prenotazione): void {
+    this.getRichiestePrenotazioni().subscribe(richieste => {
+      const index = richieste.findIndex(elem => elem.id === nuovaPren.id);
+      if (index !== -1) {
+        richieste[index] = nuovaPren;
       }
     });
   }

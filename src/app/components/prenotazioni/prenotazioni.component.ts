@@ -43,26 +43,39 @@ export class PrenotazioniComponent implements OnInit {
 
   ngOnInit(): void {
     this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
+    let utenteLoggatoString = sessionStorage.getItem("utenteLoggato");
+    this.utenteLoggato = utenteLoggatoString ? JSON.parse(utenteLoggatoString) : null;
     let utenteTemp
     if(history.state.utente){
       utenteTemp = history.state.utente;
       this.historyUtente = history.state.utente;
     }
-    else {
-      let utenteLoggatoString = sessionStorage.getItem("utenteLoggato");
-      utenteTemp = utenteLoggatoString ? JSON.parse(utenteLoggatoString) : null;
-    }
+    else 
+      utenteTemp = this.utenteLoggato;
+    
     this.prenotazioneService.getPrenotazioni()
       .subscribe((data : Prenotazione[]) => {
-        if(!utenteTemp.isAdmin || history.state.utente){
-          this.prenotazioni = data.filter(prenotazione => prenotazione.idUtente === utenteTemp.id);
-          this.prenotazioni.forEach(elem => {
-            elem.editabile = this.getDaysDifference(elem.dataInizio) > 2;
-          });      
-          this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "idUtente")
+        if(this.utenteLoggato){
+          if(!this.utenteLoggato.isAdmin || this.historyUtente){
+            this.prenotazioni = data.filter(prenotazione => prenotazione.idUtente === utenteTemp.id);
+            this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "idUtente")
+          }
+          else if (this.utenteLoggato.isAdmin)
+            this.prenotazioni = data;
+          
+          if(this.prenotazioni){
+            if(this.utenteLoggato.isAdmin){
+              this.prenotazioni.forEach(elem => {
+                elem.editabile = true;
+              });
+            }
+            else {
+              this.prenotazioni.forEach(elem => {
+                elem.editabile = this.getDaysDifference(elem.dataInizio) > 2;
+              });
+            }
+          }
         }
-        else 
-          this.prenotazioni = data;
       });
   }
 
@@ -76,9 +89,5 @@ export class PrenotazioniComponent implements OnInit {
     const diffTime = bookingDate.getTime() - currentDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
-  }
-
-  showButtons(startDate: string): boolean {
-    return this.getDaysDifference(startDate) > 2;
   }
 }

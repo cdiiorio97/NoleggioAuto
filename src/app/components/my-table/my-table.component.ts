@@ -16,6 +16,7 @@ export class MyTableComponent implements OnInit{
   @Input() aggiuntaURL?: string;
   @Input() actionsTabella?: MyActions[] = [];
   @Input() aggiuntaConsentita?: boolean = false;
+  @Input() permessiEditRow: boolean = false;
 
   originalData: any[] | undefined;
   sortedColumn: string = '';

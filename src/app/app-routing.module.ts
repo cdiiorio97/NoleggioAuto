@@ -8,6 +8,7 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { DettagliPrenotazioneComponent } from './components/dettagli-prenotazione/dettagli-prenotazione.component';
 import { DettagliUtenteComponent } from './components/dettagli-utente/dettagli-utente.component';
 import { DettagliAutoComponent } from './components/dettagli-auto/dettagli-auto.component';
+import { RichiestePrenotazioniComponent } from './components/richieste-prenotazioni/richieste-prenotazioni.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -21,7 +22,8 @@ const routes: Routes = [
   { path: 'aggiungi-utente', component: ProfiloUtenteComponent },
   { path: 'aggiungi-prenotazione', component: DettagliPrenotazioneComponent },
   { path: 'aggiungi-auto', component: DettagliAutoComponent },
-  { path: 'prenotazioni', component: PrenotazioniComponent }
+  { path: 'prenotazioni', component: PrenotazioniComponent },
+  { path: 'richieste-prenotazioni', component: RichiestePrenotazioniComponent }
 ];
 
 @NgModule({
