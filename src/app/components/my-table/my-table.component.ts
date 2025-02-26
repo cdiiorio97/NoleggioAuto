@@ -150,11 +150,10 @@ export class MyTableComponent implements OnInit{
     this.router.navigateByUrl(this.dettagliURL + row.id, { state: { elem: row } });
   }
 
-  async elimina(utente: any){
+  async elimina(row: any){
     try{
-      await this.userService.deleteUser(utente.id);
-      alert(`L'utente ${utente.nome} ${utente.cognome} è stato eliminato`);
-      window.location.reload()
+      alert(`L'oggetto ${row.id} è stato eliminato`);
+      /* window.location.reload() */
     } catch (error){
       alert(error)
     }

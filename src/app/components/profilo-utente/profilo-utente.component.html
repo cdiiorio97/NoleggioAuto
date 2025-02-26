@@ -5,7 +5,7 @@
 <form class="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label for="id">Id:</label>
-        <input type="number" id="id" [(ngModel)]="user.id" name="id" required style="width: 70px;">
+        <input type="number" id="id" [(ngModel)]="user.id" name="id" required style="width: 50px;" disabled>
     </div>
 
     <div class="form-group">
@@ -23,17 +23,19 @@
         <input type="email" id="email" [(ngModel)]="user.email" name="email" required>
     </div>
 
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" [(ngModel)]="user.password" name="password" required style="width: 200px;">
-        <button type="button" style="height: 34px;width: 50px;" (click)="togglePasswordVisibility()">
-            <i class="fa" [ngClass]="{'fa-eye': !passwordVisibile, 'fa-eye-slash': passwordVisibile}"></i>
-          </button>
-    </div>
+    <ng-container *ngIf="(currentUrl === '/profilo-utente' || currentUrl === '/aggiungi-utente')">
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" [(ngModel)]="user.password" name="password" required style="width: 200px;">
+            <button type="button" style="height: 34px;width: 50px;" (click)="togglePasswordVisibility()">
+                <i class="fa" [ngClass]="{'fa-eye': !passwordVisibile, 'fa-eye-slash': passwordVisibile}"></i>
+            </button>
+        </div>
+    </ng-container>
     
     <div class="form-group">
         <label for="is-admin">Tipo Utente:</label>
-        <select id="is-admin" name="isAdmin" [(ngModel)]="user.isAdmin">
+        <select id="is-admin" name="isAdmin" [(ngModel)]="user.isAdmin" [disabled]="!user.isAdmin">
             <option value= "null" [defaultSelected]="true"></option>
             <option [value]="false">Utente</option>
             <option [value]="true">Admin</option>
