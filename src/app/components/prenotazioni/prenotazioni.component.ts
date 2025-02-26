@@ -25,10 +25,10 @@ export class PrenotazioniComponent implements OnInit {
     { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true },
     { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true },
     { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true },
-    { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: true },
-    { name: "Data Cancellazione", field: "dataCancellazione", sorting: 'asc', visibile: true },
     { name: "Confermata", field: "confermata", sorting: 'asc', visibile: true },
+    { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: true },
     { name: "Confermata Da", field: "confermataDa", sorting: 'asc', visibile: true },
+    { name: "Data Cancellazione", field: "dataCancellazione", sorting: 'asc', visibile: true },
     { name: "Cancellata Da", field: "cancellataDa", sorting: 'asc', visibile: true }
   ];
   tableConfig: MyTableConfig = {
@@ -56,6 +56,9 @@ export class PrenotazioniComponent implements OnInit {
       .subscribe((data : Prenotazione[]) => {
         if(!utenteTemp.isAdmin || history.state.utente){
           this.prenotazioni = data.filter(prenotazione => prenotazione.idUtente === utenteTemp.id);
+          this.prenotazioni.forEach(elem => {
+            elem.editabile = this.getDaysDifference(elem.dataInizio) > 2;
+          });      
           this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "idUtente")
         }
         else 
@@ -63,7 +66,19 @@ export class PrenotazioniComponent implements OnInit {
       });
   }
 
-    goBack(): void {
-      this.router.navigateByUrl('/homepage')
-    }
+  goBack(): void {
+    this.router.navigateByUrl('/homepage')
+  }
+
+  getDaysDifference(dataInizio: Date | string): number {
+    let currentDate = new Date();
+    const bookingDate = typeof(dataInizio) === "string" ? new Date(dataInizio) : dataInizio
+    const diffTime = bookingDate.getTime() - currentDate.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  }
+
+  showButtons(startDate: string): boolean {
+    return this.getDaysDifference(startDate) > 2;
+  }
 }

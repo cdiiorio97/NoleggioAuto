@@ -53,7 +53,6 @@ export class MyTableComponent implements OnInit{
       this.actionsTabella?.push(this.modificaAction);
     if(this.eliminaAction)
       this.actionsTabella?.push(this.eliminaAction)
-    console.log(this.actionsTabella)
     
   }
 

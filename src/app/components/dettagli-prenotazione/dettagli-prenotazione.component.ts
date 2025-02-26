@@ -37,6 +37,7 @@ export class DettagliPrenotazioneComponent {
   utenteLoggato: Utente | undefined;
   goBackAction: MyActions | undefined;
   autoScelta: any | undefined;
+  dataMinima: string = '';
   
   constructor(
     private autoService: AutoService,
@@ -64,6 +65,7 @@ export class DettagliPrenotazioneComponent {
       this.utente = this.userService.getUserById(this.prenotazione.idUtente)
       this.utenteName = `${this.utente.nome} ${this.utente.cognome}`
     }
+    this.dataMinima = this.utilsService.convertDateFormat(new Date())
   }
 
   convertiDatePrenotazione(){
@@ -86,6 +88,8 @@ export class DettagliPrenotazioneComponent {
       this.prenotazione.idUtente = this.utenteLoggato?.id ?? 0;
       this.prenotazione.dataConferma = undefined;
       this.prenotazione.dataCancellazione = undefined;
+      this.prenotazione.confermataDa = undefined;
+      this.prenotazione.cancellataDa = undefined;
       try{
         this.prenotazioniService.addPrenotazione(this.prenotazione)
         alert("Richiesta di prenotazione inoltrata")

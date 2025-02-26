@@ -17,8 +17,8 @@
     
     <ng-container>
         <div class="form-group">
-            <label for="idAuto">Auto:</label>
-            <select [(ngModel)]="prenotazione.idAuto" style="width: 200px;" (change)="changeAutoScelta($event)">
+            <label for="auto">Auto:</label>
+            <select [(ngModel)]="prenotazione.idAuto" style="width: 200px;" (change)="changeAutoScelta($event)" name="auto">
                     <option *ngFor="let auto of autoList" [value]="auto.id">{{auto.brand}} {{auto.modello}}</option>>
             </select>
         </div>
@@ -32,22 +32,22 @@
         </div> -->
         <div class="form-group">    
             <label for="dataRichiesta">data Richiesta:</label>
-            <input type="date" id="dataRichiesta" [(ngModel)]="prenotazione.dataRichiesta" name="dataRichiesta" required>
+            <input type="date" id="dataRichiesta" [(ngModel)]="prenotazione.dataRichiesta" name="dataRichiesta" required [min]="dataMinima">
         </div>
     </ng-container>
     <div class="form-group">    
         <label for="dataInizio">data Inizio:</label>
-        <input type="date" id="dataInizio" [(ngModel)]="prenotazione.dataInizio" name="dataInizio" required>
+        <input type="date" id="dataInizio" [(ngModel)]="prenotazione.dataInizio" name="dataInizio" required [min]="dataMinima">
     </div>
     <div class="form-group">    
         <label for="dataFine">data Fine:</label>
-        <input type="date" id="dataFine" [(ngModel)]="prenotazione.dataFine" name="dataFine" required>
+        <input type="date" id="dataFine" [(ngModel)]="prenotazione.dataFine" name="dataFine" required [min]="prenotazione.dataInizio">
     </div>
 
     <ng-container *ngIf='this.currentUrl !== "/aggiungi-prenotazione"'>
         <div class="form-group">
             <label for="confermata">Confermata:</label>
-            <select id="confermata" name="confermata" [(ngModel)]="prenotazione.confermata">
+            <select id="confermata" name="confermata" [(ngModel)]="prenotazione.confermata" [ngModelOptions]="{standalone: true}">
                 <option value= "null" [defaultSelected]="true"></option>
                 <option [value]="false">NO</option>
                 <option [value]="true">SI</option>
@@ -57,7 +57,7 @@
             <label for="dataConferma">data Conferma:</label>
             <input type="date" id="dataConferma" [(ngModel)]="prenotazione.dataConferma" name="dataConferma" required>
         </div>
-        <div *ngIf="prenotazione.cancellataDa !== 0" style="display:flex; flex-direction:column; gap: 10px;"> 
+        <div *ngIf="prenotazione.cancellataDa !== undefined" style="display:flex; flex-direction:column; gap: 10px;"> 
             <div class="form-group">    
                 <label for="dataCancellazione">data Cancellazione:</label>
                 <input type="date" id="dataCancellazione" [(ngModel)]="prenotazione.dataCancellazione" name="dataCancellazione" required>

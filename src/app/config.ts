@@ -37,4 +37,5 @@ export interface Prenotazione{
     confermata?: boolean;
     confermataDa?: number;
     cancellataDa?: number;
+    editabile?: boolean;
 }

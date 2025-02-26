@@ -21,7 +21,7 @@
         <div style="display: flex; flex-direction: column;">      
             <table >
                 <thead>     
-                    <tr style="height: 40px;">
+                    <tr style="height: 50px;">
                         <th *ngFor="let header of tableConfig?.headers" (click)="ordinaColonna(header)" 
                             [ngStyle]="getStyle(header)"> 
                             {{header.name}}
@@ -47,10 +47,12 @@
             </table>     
         </div>
         <div style="display: flex; flex-direction: column;">
-            <div style="height: 40px;"></div>                               <!-- spazio vuoto -->
+            <div style="height: 50px;"></div>                               <!-- spazio vuoto -->
             <div *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage" class="edit-delete-buttons">
                 <ng-container *ngFor="let button of actionsTabella">
-                    <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
+                    <ng-container *ngIf="row.editabile">
+                        <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
+                    </ng-container>
                 </ng-container>
             </div>
         </div>
