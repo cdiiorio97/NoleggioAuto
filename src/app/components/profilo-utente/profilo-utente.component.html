@@ -1,4 +1,7 @@
-    
+<ng-container *ngIf="currentUrl === '/aggiungi-utente'">
+    <app-button [actionRichiesta]="goBackAction" (onClick)="goBack()"/>
+</ng-container>
+
 <form class="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label for="id">Id:</label>
@@ -36,7 +39,6 @@
             <option [value]="true">Admin</option>
         </select>
     </div>
-
     
     <button type="submit" class="save-button">Salva</button>
   </form>

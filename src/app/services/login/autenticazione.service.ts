@@ -24,7 +24,7 @@ export class AutenticazioneService {
     this.utentiService.getUtenti()
             .subscribe(utenti => {
               try{
-                user = utenti.find(user => user.nome === username);
+                user = utenti.find(user => user.nome.toLowerCase() === username.toLowerCase());
                 if (user && user.password === password) {
                   sessionStorage.setItem('isAdmin', user.isAdmin.toString());
                   sessionStorage.setItem('isLogged', "true");

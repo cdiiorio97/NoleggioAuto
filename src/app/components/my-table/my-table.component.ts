@@ -31,6 +31,8 @@ export class MyTableComponent implements OnInit{
   modificaAction: MyActions | undefined;
   aggiungiAction: MyActions | undefined;
   eliminaAction: MyActions | undefined;
+  accettaAction: MyActions | undefined;
+  rifiutaAction: MyActions | undefined;
   
   isAdmin: boolean = false;
 
@@ -50,10 +52,19 @@ export class MyTableComponent implements OnInit{
     this.aggiungiAction = JSON.parse(sessionStorage.getItem("addAction") ?? ''); 
     this.modificaAction = JSON.parse(sessionStorage.getItem("editAction") ?? ''); 
     this.eliminaAction = JSON.parse(sessionStorage.getItem("deleteAction") ?? '');
-    if (this.modificaAction) 
-      this.actionsTabella?.push(this.modificaAction);
-    if(this.eliminaAction)
-      this.actionsTabella?.push(this.eliminaAction)
+    this.accettaAction = JSON.parse(sessionStorage.getItem("accettaAction") ?? ''); 
+    this.rifiutaAction = JSON.parse(sessionStorage.getItem("rifiutaAction") ?? '');
+    if(this.router.url !== "/richieste-prenotazioni"){
+      if (this.modificaAction) 
+        this.actionsTabella?.push(this.modificaAction);
+      if(this.eliminaAction)
+        this.actionsTabella?.push(this.eliminaAction)
+    } else {
+      if (this.accettaAction)
+        this.actionsTabella?.push(this.accettaAction);
+      if(this.rifiutaAction)
+        this.actionsTabella?.push(this.rifiutaAction);
+    }
     
   }
 
@@ -161,8 +172,12 @@ export class MyTableComponent implements OnInit{
       case 'delete':
         this.elimina(row);
         break;
+      case 'accetta':
+      case 'rifiuta':
+        alert("prenotazione " + action + "ta")
+        break;
       case 'prenotazioni':
-        this.router.navigateByUrl('/prenotazioni', { state: { utente: row } });
+        this.router.navigateByUrl('/prenotazioni/' + row.id, { state: { utente: row } });
         break;
       default:
         console.log('Azione non definita:', action);

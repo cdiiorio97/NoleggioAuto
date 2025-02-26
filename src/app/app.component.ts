@@ -15,6 +15,8 @@ export class AppComponent {
   addAction: MyActions | undefined;
   deleteAction: MyActions | undefined;
   goBackAction: MyActions | undefined;
+  accettaAction: MyActions | undefined;
+  rifiutaAction: MyActions | undefined;
 
   constructor(
     public authService: AutenticazioneService,
@@ -112,6 +114,37 @@ export class AppComponent {
         "color": "white",
         "align-items":"center"
       }
+    },
+    { 
+      field: "accetta",
+      icon: "check",
+      iconPosition: "left",
+      css: {
+        "margin-top": "5px", 
+        "height": "32px", 
+        "width": "50px",
+        "margin-right": "5px", 
+        "border-radius": "10px",
+        "border": "none" ,
+        "background-color": "green"
+      } 
+    },
+    {  
+      field: "rifiuta",
+      icon:"do_not_disturb_on",
+      iconPosition:"right",
+      css: {
+        "display": "flex",
+        "flex-direction": "row",
+        "margin-top": "5px",
+        "height": "32px", 
+        "width": "50px",
+        "padding": "10px",
+        "background-color": "red", 
+        "border-radius": "10px",
+        "border": "none",
+        "align-items":"center"
+      } 
     }
   ]
 
@@ -124,10 +157,15 @@ export class AppComponent {
     this.addAction = this.actions.find(elem => elem.field === "add")
     this.deleteAction = this.actions.find(elem => elem.field === "delete")
     this.goBackAction = this.actions.find(elem => elem.field === "goBack")
+    
+    this.rifiutaAction = this.actions.find(elem => elem.field === "rifiuta")
+    this.accettaAction = this.actions.find(elem => elem.field === "accetta")
     sessionStorage.setItem("editAction", this.editAction ? JSON.stringify(this.editAction) : '');
     sessionStorage.setItem("addAction", this.editAction ? JSON.stringify(this.addAction) : '');
     sessionStorage.setItem("deleteAction", this.editAction ? JSON.stringify(this.deleteAction) : '');
     sessionStorage.setItem("goBackAction", this.goBackAction ? JSON.stringify(this.goBackAction) : '');
+    sessionStorage.setItem("accettaAction", this.accettaAction ? JSON.stringify(this.accettaAction) : '');
+    sessionStorage.setItem("rifiutaAction", this.rifiutaAction ? JSON.stringify(this.rifiutaAction) : '');
   }
 
   config: Config = {
@@ -135,7 +173,8 @@ export class AppComponent {
       { label: 'HomePage', field: 'homepage', link: '/homepage', visibile: true },
       { label: 'Parco Auto', field: 'parco-auto', link: '/parco-auto', visibile: true },
       { label: 'Profilo Utente', field: 'profilo-utente', link: '/profilo-utente', visibile: true },
-      { label: 'Prenotazioni', field: 'prenotazioni', link: '/prenotazioni', visibile: true }
+      { label: 'Prenotazioni', field: 'prenotazioni', link: '/prenotazioni', visibile: true },
+      { label: 'Nuove Richieste', field: 'richieste-prenotazioni', link:'/richieste-prenotazioni', visibile: true}
     ]
   }
 

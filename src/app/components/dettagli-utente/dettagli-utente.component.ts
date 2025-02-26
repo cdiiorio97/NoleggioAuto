@@ -1,7 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Location } from '@angular/common';
-import { Utente } from '../../config';
-import { UtentiService } from '../../services/utenti/utenti.service';
 import { MyActions } from '../my-table/my-table-config';
 import { Router } from '@angular/router';
 

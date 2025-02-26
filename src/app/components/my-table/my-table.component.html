@@ -35,8 +35,8 @@
                     <tr *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage" style="height: 40px;">
                         <td *ngFor="let header of tableConfig?.headers" [class.boolean-cell]="isBoolean(row[header.field])">
                             <ng-container *ngIf="isBoolean(row[header.field]); else showValue">
-                                <span *ngIf="row[header.field] === true">&#10003;</span> 
-                                <span *ngIf="row[header.field] === false">&#10007;</span>
+                                <span *ngIf="row[header.field] === true" class="material-icons">check</span> 
+                                <span *ngIf="row[header.field] === false"class="material-icons">close</span>
                             </ng-container>
                             <ng-template #showValue>
                             {{row[header.field]}}

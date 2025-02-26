@@ -23,6 +23,7 @@ const routes: Routes = [
   { path: 'aggiungi-prenotazione', component: DettagliPrenotazioneComponent },
   { path: 'aggiungi-auto', component: DettagliAutoComponent },
   { path: 'prenotazioni', component: PrenotazioniComponent },
+  { path: 'prenotazioni/:id', component: PrenotazioniComponent },
   { path: 'richieste-prenotazioni', component: RichiestePrenotazioniComponent }
 ];
 

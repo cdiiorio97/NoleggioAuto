@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { Utente } from '../../config';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { Router } from '@angular/router';
+import { MyActions } from '../my-table/my-table-config';
 
 @Component({
   selector: 'app-profilo-utente',
@@ -20,15 +21,17 @@ export class ProfiloUtenteComponent {
   }
   passwordVisibile: boolean = false;
   currentUrl: string = '';
+  goBackAction: MyActions | undefined;
+  
   
   constructor(
-    private location: Location,
     private userService: UtentiService, 
     private router: Router
   ) {}
 
 
   ngOnInit(): void {
+    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
     this.currentUrl = this.router.url;
     if(this.currentUrl === "/profilo-utente"){
       let utenteLoggatoString = sessionStorage.getItem("utenteLoggato")
@@ -67,6 +70,6 @@ export class ProfiloUtenteComponent {
   }
 
   goBack(): void {
-    this.location.back();
+    this.router.navigateByUrl("/homepage")
   }
 }

@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { Auto } from '../../config';
 import { MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { AutoService } from '../../services/auto/auto.service';
-import { TabellaService } from '../../services/tabella/tabella.service';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
