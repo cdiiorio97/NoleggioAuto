@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { Utente } from '../../config';
 import { UtentiService } from '../../services/utenti/utenti.service';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profilo-utente',
@@ -19,16 +19,22 @@ export class ProfiloUtenteComponent {
     password: ''
   }
   passwordVisibile: boolean = false;
+  currentUrl: string = '';
   
   constructor(
     private location: Location,
-    private userService: UtentiService,
+    private userService: UtentiService, 
+    private router: Router
   ) {}
 
+
   ngOnInit(): void {
-    
-    let utenteProvaString = sessionStorage.getItem("utenteLoggato")
-    this.user = utenteProvaString !== null ? JSON.parse(utenteProvaString) : null;
+    this.currentUrl = this.router.url;
+    if(this.currentUrl === "/profilo-utente"){
+      let utenteProvaString = sessionStorage.getItem("utenteLoggato")
+      this.user = utenteProvaString !== null ? JSON.parse(utenteProvaString) : null;
+    } else 
+        this.user = history.state.elem;
   }
 
   togglePasswordVisibility() {
@@ -40,11 +46,12 @@ export class ProfiloUtenteComponent {
   async onSubmit() {
     try{
       await this.userService.updateUser(this.user);
+      //console.log(this.user)
       alert("utente aggiornato");
       this.location.back();
     }
     catch(e) {
-      alert("errore durante l'aggiornamento dati: " + e)
+      alert("errore durante l'aggiornamento dati: ${e}")
     }
   }
 

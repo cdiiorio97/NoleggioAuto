@@ -6,6 +6,8 @@ import { ProfiloUtenteComponent } from './components/profilo-utente/profilo-uten
 import { PrenotazioniComponent } from './components/prenotazioni/prenotazioni.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { DettagliPrenotazioneComponent } from './components/dettagli-prenotazione/dettagli-prenotazione.component';
+import { DettagliUtenteComponent } from './components/dettagli-utente/dettagli-utente.component';
+import { DettagliAutoComponent } from './components/dettagli-auto/dettagli-auto.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -13,8 +15,9 @@ const routes: Routes = [
   { path: 'homepage', component: HomepageComponent },
   { path: 'parco-auto', component: ParcoAutoComponent },
   { path: 'profilo-utente', component: ProfiloUtenteComponent },
-  { path: 'dettagli-utente/:id', component: ProfiloUtenteComponent },
+  { path: 'dettagli-utente/:id', component: DettagliUtenteComponent },
   { path: 'dettagli-prenotazione/:id', component: DettagliPrenotazioneComponent},
+  { path: 'dettagli-auto/:id', component: DettagliAutoComponent},
   { path: 'aggiungi-utente', component: ProfiloUtenteComponent},
   { path: 'prenotazioni', component: PrenotazioniComponent}
 ];

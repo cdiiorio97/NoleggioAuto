@@ -15,6 +15,14 @@ export class UtentiService {
     return this.utenti = of(UTENTI_MOCK);
   }
 
+  getUserById(id:number) : Utente {
+    let foundUser = UTENTI_MOCK.find(elem => elem.id === id) as Utente;
+    if (!foundUser) {
+      throw new Error('User not found');
+    }
+    return foundUser;
+  }
+
   addUser(user: any) {
     if (!this.utenti) {
       this.utenti = of([]);
@@ -31,7 +39,7 @@ export class UtentiService {
 
   updateUser(updatedUser: any) {
     if (this.utenti) {
-      this.utenti.subscribe(users => {
+      this.getUtenti().subscribe(users => {
         const index = users.findIndex(user => user.id === updatedUser.id);
         if (index !== -1) {
           users[index] = updatedUser;

@@ -11,8 +11,20 @@ export class ButtonComponent {
   @Input() addButton?: boolean;
   @Output() onClick = new EventEmitter<any>();
 
+  iconPositionLeft: boolean = false;
+  iconPositionRight: boolean = false;
+  iconCentered: boolean = false;
+
   handleClick(){
     this.onClick.emit(this.actionRichiesta?.label)
   }
 
+  ngOnInit(){
+    if(this.actionRichiesta?.iconPosition === "left")
+      this.iconPositionLeft = true;
+    else if (this.actionRichiesta?.iconPosition === "right")
+      this.iconPositionRight = true;
+    else
+      this.iconCentered = true;
+  }
 }

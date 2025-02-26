@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from './my-table-config';
 import { Router } from '@angular/router';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { UtentiService } from '../../services/utenti/utenti.service';
 
 @Component({
@@ -14,6 +13,7 @@ export class MyTableComponent implements OnInit{
   @Input() data: any[] | undefined;
   @Input() tableConfig: MyTableConfig | undefined;
   @Input() dettagliURL: string = "";
+  @Input() nomeTabella: string = "";
 
   originalData: any[] | undefined;
   sortedColumn: string = '';
@@ -25,45 +25,14 @@ export class MyTableComponent implements OnInit{
   campoFiltro: string = '';
   vecchioCampoFiltro: string = '';
   pagina: number = 1;
+  @Input() actionsTabella?: MyActions[] = [];
   modificaAction: MyActions | undefined;
   aggiungiAction: MyActions | undefined;
   eliminaAction: MyActions | undefined;
-  actions: MyActions[] =[
-    { label: "EDIT", 
-      css: {
-        "margin-top": "5px", 
-        "height": "30px", 
-        "margin-right": "5px", 
-        "border-radius": "10px",
-        "border-color": "lightblue", 
-        "background-color": "lightblue"
-      } 
-    },
-    { label: "DELETE", 
-      css: {
-        "margin-top": "5px",
-        "height": "30px", 
-        "background-color": "red", 
-        "border-radius": "10px"
-      } 
-    },
-    { label: "Aggiungi",
-      css: {
-        "margin-top": "0", 
-        "height": "30px", 
-        "width": "120px",
-        "border-radius": "10px",
-        "border": "none", 
-        "background-color": "#2f8131",
-        "color": "white",
-        "font-weight": "bold"
-      } 
-    }
-  ]
+  
   isAdmin: boolean = false;
 
   constructor(
-    private authService: AutenticazioneService,
     private router: Router,
     private userService: UtentiService
   ){}
@@ -76,9 +45,14 @@ export class MyTableComponent implements OnInit{
 
     this.isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
     
-    this.aggiungiAction = this.actions?.find(action => action.label === 'Aggiungi');
-    this.modificaAction = this.actions?.find(action => action.label === 'EDIT');
-    this.eliminaAction = this.actions?.find(action => action.label === 'DELETE');
+    this.aggiungiAction = JSON.parse(sessionStorage.getItem("addAction") ?? ''); 
+    this.modificaAction = JSON.parse(sessionStorage.getItem("editAction") ?? ''); 
+    this.eliminaAction = JSON.parse(sessionStorage.getItem("deleteAction") ?? '');
+    if (this.modificaAction) 
+      this.actionsTabella?.push(this.modificaAction);
+    if(this.eliminaAction)
+      this.actionsTabella?.push(this.eliminaAction)
+    console.log(this.actionsTabella)
     
   }
 
@@ -161,7 +135,7 @@ export class MyTableComponent implements OnInit{
   }
 
   modifica(row: any){
-    this.router.navigateByUrl(this.dettagliURL + row.id, { state: { utente: row } });
+    this.router.navigateByUrl(this.dettagliURL + row.id, { state: { elem: row } });
   }
 
   async elimina(utente: any){
@@ -176,5 +150,22 @@ export class MyTableComponent implements OnInit{
 
   isBoolean(value: any): boolean {
     return typeof value === 'boolean';
+  }
+
+  handleActionsClick(action: string, row: any){
+    switch(action) {
+      case 'edit':
+        this.modifica(row);
+        break;
+      case 'delete':
+        this.elimina(row);
+        break;
+      case 'prenotazioni':
+        this.router.navigateByUrl('/prenotazioni', { state: { utente: row } });
+        break;
+      default:
+        console.log('Azione non definita:', action);
+        break;
+    }
   }
 }

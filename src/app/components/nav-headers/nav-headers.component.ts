@@ -8,4 +8,14 @@ import { NavHeader } from '../../config';
 })
 export class NavHeadersComponent {
   @Input() navHeaders: NavHeader[] | undefined;
+
+  ngOnInit(){
+    let isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
+    if(!isAdmin){
+      this.navHeaders?.map(elem => {
+        if(elem.field === "prenotazioni")
+          elem.visibile = false;
+      })
+    }
+  }
 }

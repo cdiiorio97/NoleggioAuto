@@ -50,9 +50,12 @@
         <div style="display: flex; flex-direction: column;">
             <div style="height: 40px;"></div>                               <!-- spazio vuoto -->
             <div *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage" class="edit-delete-buttons">
-                <app-button [actionRichiesta]="modificaAction" (onClick)="modifica(row)"/>
+                <ng-container *ngFor="let button of actionsTabella">
+                    <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
+                </ng-container>
+                <!-- <app-button [actionRichiesta]="modificaAction" (onClick)="modifica(row)"/>
                 <app-button [actionRichiesta]="eliminaAction" (onClick)="elimina(row)"></app-button>
-            </div>
+           -->  </div>
         </div>
     </div>
     <div class="paginazione-controlli" style="width: 80%;">

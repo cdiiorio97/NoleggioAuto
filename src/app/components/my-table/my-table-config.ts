@@ -1,7 +1,6 @@
 export class MyTableConfig{
     headers: MyHeaders[] | undefined;
     pagination: MyPagination | undefined;
-    actions: MyActions[] | undefined;
 }
 
 export interface MyHeaders {
@@ -12,9 +11,11 @@ export interface MyHeaders {
 }
 
 export interface MyActions{
-    label: string | undefined;
+    label?: string | undefined;
     field?: string;
-    css: any | undefined;
+    icon?: string;
+    iconPosition?: string;
+    css?: any | undefined;
 }
 
 export interface MyPagination{

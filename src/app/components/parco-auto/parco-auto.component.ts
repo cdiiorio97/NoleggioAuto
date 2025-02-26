@@ -11,6 +11,7 @@ import { TabellaService } from '../../services/tabella/tabella.service';
 })
 export class ParcoAutoComponent {
   auto: Auto[] | undefined;
+  dettagliAuto: string = "/dettagli-auto/";
   headers: MyHeaders[] = [
     { name: "ID", field: "id", sorting: 'asc', visibile: true },
     { name: "Produttore", field: "brand", sorting: 'asc', visibile: true },
@@ -29,8 +30,7 @@ export class ParcoAutoComponent {
 
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
-    pagination: { itemPerPage: 8 },
-    actions: undefined,
+    pagination: { itemPerPage: 8 }
   }
 
 

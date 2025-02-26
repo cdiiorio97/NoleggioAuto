@@ -29,10 +29,11 @@ export interface Prenotazione{
     id: number;
     idUtente: number;
     idAuto: number;
-    dataFine: Date;
-    dataRichiesta: Date;
-    dataConferma: Date;
-    dataCancellazione: Date;
+    dataInizio: Date | string;
+    dataFine: Date | string;
+    dataRichiesta: Date | string;
+    dataConferma: Date | string;
+    dataCancellazione: Date | string;
     confermata: boolean;
     confermataDa: number;
     cancellataDa: number;

@@ -11,6 +11,9 @@ import { Prenotazione, Utente } from '../../config';
 export class PrenotazioniComponent {
   prenotazioni: Prenotazione[] | undefined;
   utenteLoggato: Utente | undefined;
+  backButtonVisibile: boolean = false;
+  dettagliPrenotazione: string = "/dettagli-prenotazione/"
+  historyUtente: any | undefined;
   headers: MyHeaders[] = [
     { name: "ID", field: "id", sorting: 'asc', visibile: true },
     { name: "ID Utente", field: "idUtente", sorting: 'asc', visibile: true },
@@ -26,8 +29,7 @@ export class PrenotazioniComponent {
   ];
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
-    pagination: { itemPerPage: 8 },
-    actions: undefined,
+    pagination: { itemPerPage: 8 }
   };
 
   constructor(
@@ -35,11 +37,24 @@ export class PrenotazioniComponent {
   ){}
 
   ngOnInit(): void {
-    const utenteLoggatoString = sessionStorage.getItem("utenteLoggato");
-    const utenteLoggato = utenteLoggatoString ? JSON.parse(utenteLoggatoString) : null;
+    let utenteLoggato
+    if(history.state.utente){
+      utenteLoggato = history.state.utente;
+      this.historyUtente = history.state.utente;
+    }
+    else {
+      let utenteLoggatoString = sessionStorage.getItem("utenteLoggato");
+      utenteLoggato = utenteLoggatoString ? JSON.parse(utenteLoggatoString) : null;
+    }
     this.prenotazioneService.getPrenotazioni()
-      .subscribe((data : any) => {
-        this.prenotazioni = data;
+      .subscribe((data : Prenotazione[]) => {
+        if(!utenteLoggato.isAdmin || history.state.utente)
+          this.prenotazioni = data.filter(prenotazione => prenotazione.idUtente === utenteLoggato.id);
+        if(!utenteLoggato.isAdmin)
+          this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "idUtente")
+        if(utenteLoggato.isAdmin) {
+          this.prenotazioni = data;
+        }
       });
     }
 }
