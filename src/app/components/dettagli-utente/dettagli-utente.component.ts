@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MyActions } from '../my-table/my-table-config';
 import { Router } from '@angular/router';
+import { BACK_BUTTON } from '../../costanti';
 
 @Component({
   selector: 'app-dettagli-utente',
@@ -8,12 +9,8 @@ import { Router } from '@angular/router';
   styleUrl: './dettagli-utente.component.css'
 })
 export class DettagliUtenteComponent {
-  goBackAction: MyActions | undefined;
   private router = inject(Router)
-
-  ngOnInit(): void {
-    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
-  }
+  goBackAction: MyActions = BACK_BUTTON;
 
   goBack(): void {
     this.router.navigateByUrl("/homepage")

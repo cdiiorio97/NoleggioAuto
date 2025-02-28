@@ -1,6 +1,8 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from './my-table-config';
 import { Router } from '@angular/router';
+import { ACCEPT_BUTTON, ADD_BUTTON, DELETE_BUTTON, EDIT_BUTTON, REFUSE_BUTTON } from '../../costanti';
+import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
   selector: 'app-my-table',
@@ -9,6 +11,8 @@ import { Router } from '@angular/router';
 })
 
 export class MyTableComponent implements OnInit{
+  private router = inject(Router);
+  private authService = inject(AutenticazioneService)
   @Input() data: any[] = [];
   @Input() tableConfig: MyTableConfig | undefined;
   @Input() dettagliURL?: string;
@@ -27,13 +31,12 @@ export class MyTableComponent implements OnInit{
   campoFiltro: string = '';
   vecchioCampoFiltro: string = '';
   pagina: number = 1;
-  modificaAction: MyActions | undefined;
-  aggiungiAction: MyActions | undefined;
-  eliminaAction: MyActions | undefined;
-  accettaAction: MyActions | undefined;
-  rifiutaAction: MyActions | undefined;
-  isAdmin: boolean = false;
-  private router = inject(Router);
+  modificaAction: MyActions = EDIT_BUTTON;
+  aggiungiAction: MyActions = ADD_BUTTON;
+  eliminaAction: MyActions = DELETE_BUTTON;
+  accettaAction: MyActions = ACCEPT_BUTTON;
+  rifiutaAction: MyActions = REFUSE_BUTTON;
+  isAdmin: boolean = this.authService.getIsAdmin();
 
   ngOnInit(): void {
     this.originalData = this.data;
@@ -41,22 +44,12 @@ export class MyTableComponent implements OnInit{
     this.orderedData = this.data || [];
     this.filtro = {};
 
-    this.isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
-    
-    this.aggiungiAction = JSON.parse(sessionStorage.getItem("addAction") ?? ''); 
-    this.modificaAction = JSON.parse(sessionStorage.getItem("editAction") ?? ''); 
-    this.eliminaAction = JSON.parse(sessionStorage.getItem("deleteAction") ?? '');
-    this.accettaAction = JSON.parse(sessionStorage.getItem("accettaAction") ?? ''); 
-    this.rifiutaAction = JSON.parse(sessionStorage.getItem("rifiutaAction") ?? '');
     if(this.router.url !== "/richieste-prenotazioni"){
-      if (this.modificaAction) 
         this.actionsTabella?.push(this.modificaAction);
-      if(this.eliminaAction)
-        this.actionsTabella?.push(this.eliminaAction)
+        if(this.isAdmin || this.router.url !== "/parco-auto")
+          this.actionsTabella?.push(this.eliminaAction)
     } else {
-      if (this.accettaAction)
         this.actionsTabella?.push(this.accettaAction);
-      if(this.rifiutaAction)
         this.actionsTabella?.push(this.rifiutaAction);
     }
     
@@ -87,7 +80,6 @@ export class MyTableComponent implements OnInit{
     return `${field}-column-${area}`;
   }
   
-
   aggiornaCampoFiltro(): void {
     if(this.vecchioCampoFiltro !== this.campoFiltro)
       delete this.filtro[this.vecchioCampoFiltro.toLowerCase()];
@@ -180,6 +172,9 @@ export class MyTableComponent implements OnInit{
       case 'accetta':
       case 'rifiuta':
         alert("prenotazione " + action + "ta")
+        break;
+      case 'prenotazioni':
+        this.router.navigateByUrl(`/prenotazioni-utente/${row.id}`);
         break;
       default:
         this.router.navigateByUrl(`/${action}/${row.id}`);

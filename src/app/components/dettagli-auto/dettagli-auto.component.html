@@ -3,24 +3,24 @@
 <form class="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label for="id">Id:</label>
-        <input type="number" id="id" [(ngModel)]="auto.id" name="id" required style="width: 70px;">
+        <input type="number" id="id" [(ngModel)]="auto.id" name="id" required style="width: 70px;" [readonly]="!isAdmin">
     </div>
 
     <div class="form-group">
         <label for="targa">Targa:</label>
-        <input type="text" id="targa" [(ngModel)]="auto.targa" name="targa" required>
+        <input type="text" id="targa" [(ngModel)]="auto.targa" name="targa" required  [readonly]="!isAdmin">
     </div>
 
     <div class="form-group">
         <label for="brand">Brand:</label>
-        <input type="text" id="brand" [(ngModel)]="auto.brand" name="brand" required>
+        <input type="text" id="brand" [(ngModel)]="auto.brand" name="brand" required  [readonly]="!isAdmin">
     </div>
 
     <div class="form-group">    
         <label for="modello">Modello:</label>
-        <input type="text" id="modello" [(ngModel)]="auto.modello" name="modello" required>
+        <input type="text" id="modello" [(ngModel)]="auto.modello" name="modello" required  [readonly]="!isAdmin">
     </div>
     
-    <button type="submit" class="save-button">Salva</button>
+    <button type="submit" class="save-button" [disabled]="!isAdmin">Salva</button>
   </form>
   

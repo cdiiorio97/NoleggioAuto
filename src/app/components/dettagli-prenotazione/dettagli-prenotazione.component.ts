@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Auto, Prenotazione, Utente } from '../../config';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { UtentiService } from '../../services/utenti/utenti.service';
 import { MyActions } from '../my-table/my-table-config';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { DateFormatPipe } from '../../date-format.pipe';
+import { BACK_BUTTON } from '../../costanti';
 
 @Component({
   selector: 'app-dettagli-prenotazione',
@@ -15,6 +16,14 @@ import { DateFormatPipe } from '../../date-format.pipe';
   styleUrl: './dettagli-prenotazione.component.css'
 })
 export class DettagliPrenotazioneComponent {
+  private autoService = inject(AutoService)
+  private userService = inject(UtentiService)
+  private router = inject(Router)
+  private location = inject(Location)
+  private prenotazioniService = inject(PrenotazioniService)
+  private authService = inject(AutenticazioneService)
+  private datePipe = inject(DateFormatPipe)
+
   prenotazione: Prenotazione = {
     id: 0,
     utente: {
@@ -38,57 +47,59 @@ export class DettagliPrenotazioneComponent {
     dataCancellazione: new Date(),
     confermata: false,
     confermataDa: undefined,
+    cancellata: false,
     cancellataDa: undefined
   }
-  currentUrl: string = '';
   auto: string = '';
   autoList: Auto[] = []
   utenteName: string = '';
   utente: Utente | undefined;
-  utenteLoggato: Utente | undefined;
-  goBackAction: MyActions | undefined;
+  goBackAction: MyActions = BACK_BUTTON;
   autoScelta: any | undefined;
-  dataMinima: string = '';
-  
-  constructor(
-    private autoService: AutoService,
-    private userService: UtentiService,
-    private router: Router,
-    private location: Location,
-    private prenotazioniService: PrenotazioniService,
-    private authService: AutenticazioneService,
-    private datePipe: DateFormatPipe
-  ) {}
+  utenteLoggato: Utente = this.authService.getUtenteLoggato();
+  currentUrl: string = this.router.url;
+  dataMinima: string = this.datePipe.transform(new Date(), "yearFirst");
 
 
   ngOnInit(): void {
-    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
-    this.currentUrl = this.router.url;
-    let utenteLoggatoString = sessionStorage.getItem("utenteLoggato")
-    this.utenteLoggato = utenteLoggatoString ? JSON.parse(utenteLoggatoString) : '';
-    this.autoService.getAutomobili()
-                    .subscribe(elems => this.autoList = elems)
-    if (this.currentUrl !== "/aggiungi-prenotazione") {
-      this.prenotazione = history.state.elem;
-      this.convertiDatePrenotazione();
-      /* let autoTemp =  this.autoService.getAutoById(this.prenotazione.idAuto)
-      //this.auto = autoTemp.brand + " " + autoTemp.modello
-      this.userService.getUserById(this.prenotazione.idUtente).subscribe({
-        next: (utente) => {
-          this.utente = utente;
-          this.utenteName = `${this.utente.nome} ${this.utente.cognome}`;
-        },
-        error: (e) => {
-          alert(e.error.text)
-          sessionStorage.setItem("getErrorMessage", e.error.text)
-        }
-      }); */
+    this.getAutoList();
+    if (this.currentUrl !== "/aggiungi-prenotazione"){
+      const match = this.currentUrl.match(/\/dettagli-prenotazione\/(\d+)/);
+      if (match) {
+        const numero = parseInt(match[1], 10);
+        this.getPrenotazioneById(numero);
+      }
     }
-    this.dataMinima = this.datePipe.transform(new Date(), "yearFirst")
+  }
+
+  getAutoList(): void{
+    this.autoService.getAutomobili().subscribe({
+      next: (automobili) => {  this.autoList = automobili }
+    })
   }
 
   getUserById(id: number): void {
-    
+    this.userService.getUserById(id).subscribe({
+      next: (utente) => {
+        this.utente = utente;
+        this.utenteName = `${this.utente.nome} ${this.utente.cognome}`;
+      },
+      error: (e) => {
+        alert(e.error.text)
+        sessionStorage.setItem("getErrorMessage", e.error.text)
+      }
+    }); 
+  }
+
+  getPrenotazioneById(id:number): void {
+    this.prenotazioniService.getPrenotazioniById(id).subscribe({
+      next: (response: Prenotazione) => {
+        this.prenotazione = response;
+        this.convertiDatePrenotazione();
+        this.autoScelta = this.prenotazione.auto;
+        this.utente = this.prenotazione.utente;
+      }
+    })
   }
 
   convertiDatePrenotazione(){
@@ -98,7 +109,6 @@ export class DettagliPrenotazioneComponent {
     this.prenotazione.dataRichiesta = this.datePipe.transform(this.prenotazione.dataRichiesta, "yearFirst")
     this.prenotazione.dataFine = this.datePipe.transform(this.prenotazione.dataFine, "yearFirst")
   }
-
 
   async onSubmit() {
     if(this.currentUrl === "/aggiungi-prenotazione"){
@@ -120,7 +130,7 @@ export class DettagliPrenotazioneComponent {
       try{
         await this.prenotazioniService.updatePrenotazione(this.prenotazione);
         alert("utente aggiornato");
-        this.goBack()
+        this.router.navigateByUrl(`/prenotazioni-utente?id=${this.utenteLoggato.id}`)
       }
       catch(e) {
         alert(`errore durante l'aggiornamento dati: ${e}`)
@@ -129,11 +139,6 @@ export class DettagliPrenotazioneComponent {
   }
 
   goBack(): void {
-    this.authService.getIsAdmin() ? this.location.back() : this.router.navigateByUrl('/homepage')
-  }
-
-  changeAutoScelta(event: Event){
-    let target = event.target as HTMLSelectElement;
-    //this.prenotazione.idAuto = target.value as unknown as number;
+    this.authService.getIsAdmin() ? this.router.navigateByUrl("/prenotazioni") : this.router.navigateByUrl('/homepage')
   }
 }

@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { AUTO_MOCK } from '../../mock-data';
 import { Auto } from '../../config';
 import { HttpClient } from '@angular/common/http';
 import { BASE_URL } from '../../costanti';

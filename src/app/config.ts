@@ -36,6 +36,7 @@ export interface Prenotazione{
     dataCancellazione?: Date | string;
     confermata?: boolean;
     confermataDa?: Utente;
+    cancellata?: boolean;
     cancellataDa?: Utente;
     editabile?: boolean;
 }

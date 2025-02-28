@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { Utente } from '../../config';
 import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { UtentiService } from '../../services/utenti/utenti.service';
+import { AutenticazioneService } from '../../services/login/autenticazione.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
@@ -9,6 +11,9 @@ import { UtentiService } from '../../services/utenti/utenti.service';
   styleUrl: './homepage.component.css'
 })
 export class HomepageComponent {
+  utentiService = inject(UtentiService)
+  private authService = inject(AutenticazioneService)
+  private router = inject(Router);
   utenti: Utente[]  = [];
   prenotazioni: any[] = [];
   actions: MyActions[] = [{
@@ -42,11 +47,13 @@ export class HomepageComponent {
     headers: this.headers.filter(elem => elem.visibile),
     pagination: { itemPerPage: 8 },
   }
-  isAdmin: boolean = sessionStorage.getItem("isAdmin") === "true" ? true : false;
-  utentiService = inject(UtentiService)
+  utenteLoggato: Utente = this.authService.getUtenteLoggato();
 
   ngOnInit(): void {
-    this.getUtenti()
+    if(this.utenteLoggato.isAdmin)
+      this.getUtenti()
+    else
+      this.router.navigateByUrl(`prenotazioni-utente/${this.utenteLoggato.id}`)
   }
 
   getUtenti(): void {

@@ -1,16 +1,16 @@
-<ng-container *ngIf="this.historyUtente" >
+<ng-container *ngIf="backButtonVisibile" >
     <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 15px; gap: 5px">
         <app-button [actionRichiesta]="goBackAction" (onClick)="goBack()"/>
         <span style="font-size: 25px; margin-top: 5px;">
-            Prenotazioni di <b>{{this.historyUtente.nome}} {{this.historyUtente.cognome}}</b>
+            Prenotazioni di <b>{{utenteSelezionato?.nome}} {{utenteSelezionato?.cognome}}</b>
         </span>
     </div>
 </ng-container>
 <ng-container *ngIf="prenotazioni.length > 0">
 <app-my-table [data]="prenotazioni" 
             [tableConfig]="tableConfig" 
-            [dettagliURL]="dettagliPrenotazione" 
+            [dettagliURL]="'/dettagli-prenotazione'" 
             [aggiuntaConsentita]="aggiuntaConsentita"
             [aggiuntaURL]="'/aggiungi-prenotazione'"
-            [permessiEditRow]="utenteLoggato?.isAdmin ?? false"/>
+            [permessiEditRow]="utenteLoggato.isAdmin"/>
 </ng-container>

@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { NavHeader } from '../../config';
+import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
   selector: 'app-nav-headers',
@@ -8,12 +9,14 @@ import { NavHeader } from '../../config';
 })
 export class NavHeadersComponent {
   @Input() navHeaders: NavHeader[] | undefined;
+  private authService = inject(AutenticazioneService)
+
+  isAdmin: boolean = this.authService.getIsAdmin();
 
   ngOnInit(){
-    let isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
     this.navHeaders?.map(elem => {
         if(elem.field === "prenotazioni" || elem.field === "richieste-prenotazioni")
-          elem.visibile = isAdmin;
+          elem.visibile = this.isAdmin;
     })
   }
 }

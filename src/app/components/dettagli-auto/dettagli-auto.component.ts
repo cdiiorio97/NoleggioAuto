@@ -3,6 +3,8 @@ import { Auto } from '../../config';
 import { AutoService } from '../../services/auto/auto.service';
 import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
+import { BACK_BUTTON } from '../../costanti';
+import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
   selector: 'app-dettagli-auto',
@@ -10,20 +12,21 @@ import { MyActions } from '../my-table/my-table-config';
   styleUrl: './dettagli-auto.component.css'
 })
 export class DettagliAutoComponent {
+  private carService = inject(AutoService);
+  private authService = inject(AutenticazioneService)
+  private router = inject(Router);
+
   auto: Auto = {
     id: 0,
     targa: '',
     brand: '',
     modello: ''
   }
-  goBackAction: MyActions | undefined;
-  currentUrl: string = '';
-  private carService = inject(AutoService);
-  private router = inject(Router);
+  goBackAction: MyActions = BACK_BUTTON;
+  currentUrl: string = this.router.url;
+  isAdmin: boolean = this.authService.getIsAdmin();
 
   ngOnInit(): void {
-    this.currentUrl = this.router.url;
-    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
     if(this.currentUrl !== "/aggiungi-auto"){
       const match = this.currentUrl.match(/\/dettagli-auto\/(\d+)/);
       if (match) {
@@ -35,9 +38,7 @@ export class DettagliAutoComponent {
 
   getAutoById(id:number){
     this.carService.getAutoById(id).subscribe({
-      next: (response: Auto) => {
-        this.auto = response
-      }
+      next: (response: Auto) => { this.auto = response }
     })
   }
 

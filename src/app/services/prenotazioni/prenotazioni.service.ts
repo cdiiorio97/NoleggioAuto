@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { RICHIESTE_PRENOTAZIONI_MOCK } from '../../mock-data';
 import { Prenotazione } from '../../config';
 import { BASE_URL } from '../../costanti';
 import { HttpClient } from '@angular/common/http';
@@ -39,7 +38,7 @@ export class PrenotazioniService {
   }
 
   getRichiestePrenotazioni(): Observable<any[]> {
-    return of(RICHIESTE_PRENOTAZIONI_MOCK)
+    return this.http.get<Prenotazione[]>(`${this.baseUrl}/richieste-prenotazioni`);
   }
 
   updateRichiestaPrenotazione(nuovaPren: Prenotazione): void {

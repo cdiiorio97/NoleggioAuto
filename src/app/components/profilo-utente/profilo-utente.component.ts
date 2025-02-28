@@ -4,6 +4,7 @@ import { UtentiService } from '../../services/utenti/utenti.service';
 import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
+import { BACK_BUTTON } from '../../costanti';
 
 @Component({
   selector: 'app-profilo-utente',
@@ -11,6 +12,9 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
   styleUrl: './profilo-utente.component.css'
 })
 export class ProfiloUtenteComponent {
+  private userService = inject(UtentiService)
+  private router = inject(Router)
+  private authService = inject(AutenticazioneService)
   user: Utente = {
     id: 0,
     nome: '',
@@ -20,15 +24,10 @@ export class ProfiloUtenteComponent {
     password: ''
   }
   passwordVisibile: boolean = false;
-  currentUrl: string = '';
-  goBackAction: MyActions | undefined;
-  private userService = inject(UtentiService)
-  private router = inject(Router)
-  private authService = inject(AutenticazioneService)
+  currentUrl: string = this.router.url;
+  goBackAction: MyActions = BACK_BUTTON
 
   ngOnInit(): void {
-    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
-    this.currentUrl = this.router.url;
     if(this.currentUrl === "/profilo-utente")
       this.user = this.authService.getUtenteLoggato() 
     else if(this.currentUrl !== "/aggiungi-utente"){
