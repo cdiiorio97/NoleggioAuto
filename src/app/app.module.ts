@@ -20,6 +20,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonComponent } from './components/button/button.component';
 import { RichiestePrenotazioniComponent } from './components/richieste-prenotazioni/richieste-prenotazioni.component';
+import { DateFormatPipe } from './date-format.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -36,13 +38,15 @@ import { RichiestePrenotazioniComponent } from './components/richieste-prenotazi
     DettagliPrenotazioneComponent,
     DettagliUtenteComponent,
     DettagliAutoComponent,
-    RichiestePrenotazioniComponent
+    RichiestePrenotazioniComponent,
+    DateFormatPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule
   ],
   providers: [AutenticazioneService, provideAnimationsAsync()],
   bootstrap: [AppComponent]

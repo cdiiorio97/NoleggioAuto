@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from './my-table-config';
 import { Router } from '@angular/router';
 import { UtentiService } from '../../services/utenti/utenti.service';
@@ -10,7 +10,7 @@ import { UtentiService } from '../../services/utenti/utenti.service';
 })
 
 export class MyTableComponent implements OnInit{
-  @Input() data: any[] | undefined;
+  @Input() data: any[] = [];
   @Input() tableConfig: MyTableConfig | undefined;
   @Input() dettagliURL?: string;
   @Input() aggiuntaURL?: string;
@@ -18,7 +18,7 @@ export class MyTableComponent implements OnInit{
   @Input() aggiuntaConsentita?: boolean = false;
   @Input() permessiEditRow: boolean = false;
 
-  originalData: any[] | undefined;
+  originalData: any[] = [];
   sortedColumn: string = '';
   order: string = '';
   filteredData: any[] = [];
@@ -33,13 +33,8 @@ export class MyTableComponent implements OnInit{
   eliminaAction: MyActions | undefined;
   accettaAction: MyActions | undefined;
   rifiutaAction: MyActions | undefined;
-  
   isAdmin: boolean = false;
-
-  constructor(
-    private router: Router,
-    private userService: UtentiService
-  ){}
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.originalData = this.data;
@@ -147,13 +142,12 @@ export class MyTableComponent implements OnInit{
   }
 
   modifica(row: any){
-    this.router.navigateByUrl(this.dettagliURL + row.id, { state: { elem: row } });
+    this.router.navigateByUrl(`${this.dettagliURL}/${row.id}`);
   }
 
   async elimina(row: any){
     try{
       alert(`L'oggetto ${row.id} è stato eliminato`);
-      /* window.location.reload() */
     } catch (error){
       alert(error)
     }
@@ -176,7 +170,7 @@ export class MyTableComponent implements OnInit{
         alert("prenotazione " + action + "ta")
         break;
       case 'prenotazioni':
-        this.router.navigateByUrl('/prenotazioni/' + row.id, { state: { utente: row } });
+        this.router.navigateByUrl('/prenotazioni/' + row.id,);
         break;
       default:
         console.log('Azione non definita:', action);

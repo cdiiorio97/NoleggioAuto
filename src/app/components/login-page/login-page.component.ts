@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
@@ -8,23 +8,31 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
   styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent {
-  username: string = '';
-  password: string = '';
-
-  constructor(
-    private router: Router, 
-    private authService: AutenticazioneService
-  ) {}
+  username: string = "";
+  password: string = "";
+  private router = inject(Router)
+  private authService = inject(AutenticazioneService)
 
   ngOnInit(){
     this.authService.logout()
   }
 
-  onSubmit(username: string , password: string) : void {
-    this.authService.login(username, password);
-    this.authService.setIsLogged();
-    this.authService.setIsAdmin();
-    if(this.authService.isLogged)
-      this.router.navigate(['/homepage']);
+  onLogin() : void {
+    this.authService.login(this.username, this.password).subscribe({
+      next: (response) => {
+        if(response){
+          this.authService.setIsLogged("true");
+          this.authService.setIsAdmin(response.isAdmin ? "true" : "false");
+          this.authService.setUtenteLoggato(response);
+          this.router.navigate(['/homepage']);
+        }
+      },
+      error: (e) => {
+        alert(e.error.text)
+        sessionStorage.setItem("loginErrorMessage", e.error.text)
+        this.authService.setIsLogged("false");
+        this.authService.setIsAdmin("false")
+      },
+    });
   }
 }

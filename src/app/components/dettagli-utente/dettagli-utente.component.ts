@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MyActions } from '../my-table/my-table-config';
 import { Router } from '@angular/router';
 
@@ -9,10 +9,7 @@ import { Router } from '@angular/router';
 })
 export class DettagliUtenteComponent {
   goBackAction: MyActions | undefined;
-  
-  constructor(
-    private router: Router
-  ) {}
+  private router = inject(Router)
 
   ngOnInit(): void {
     this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')

@@ -1,12 +1,12 @@
 
 <div style="margin-left: 10px;">
       
-    <ng-container *ngIf="authService.isLogged">
+    <ng-container *ngIf="authService.getIsLogged()">
         <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 80%;">
-            <ng-container *ngIf="authService.isAdmin">
+            <ng-container *ngIf="authService.getIsAdmin()">
                 <h1 >{{titleAdmin}}</h1>
             </ng-container>
-            <ng-container *ngIf="!authService.isAdmin">
+            <ng-container *ngIf="!authService.getIsAdmin()">
                 <h1 >{{titleUtente}}</h1>
             </ng-container>
             <app-button [actionRichiesta]="logoutAction" (onClick)="logout()"/>

@@ -17,7 +17,6 @@ export class DettagliAutoComponent {
     brand: '',
     modello: ''
   }
-  passwordVisibile: boolean = false;
   goBackAction: MyActions | undefined;
   currentUrl: string = '';
 
@@ -29,8 +28,13 @@ export class DettagliAutoComponent {
   ngOnInit(): void {
     this.currentUrl = this.router.url;
     this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
-    if(this.currentUrl !== "/aggiungi-auto")
-      this.auto = history.state.elem;
+    if(this.currentUrl !== "/aggiungi-auto"){
+      const match = this.currentUrl.match(/\/dettagli-auto\/(\d+)/);
+      if (match) {
+        const numero = parseInt(match[1], 10);
+        this.autoService.getAutoById(numero);
+      }
+    }
   }
 
   async onSubmit() {

@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, inject, Input } from '@angular/core';
 import { Utente } from '../../config';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
+import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
   selector: 'app-profilo-utente',
@@ -22,23 +22,33 @@ export class ProfiloUtenteComponent {
   passwordVisibile: boolean = false;
   currentUrl: string = '';
   goBackAction: MyActions | undefined;
-  
-  
-  constructor(
-    private userService: UtentiService, 
-    private router: Router
-  ) {}
-
+  private userService = inject(UtentiService)
+  private router = inject(Router)
+  private authService = inject(AutenticazioneService)
 
   ngOnInit(): void {
     this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
     this.currentUrl = this.router.url;
-    if(this.currentUrl === "/profilo-utente"){
-      let utenteLoggatoString = sessionStorage.getItem("utenteLoggato")
-      this.user = utenteLoggatoString !== null ? JSON.parse(utenteLoggatoString) : null;
-    } 
-    else if(this.currentUrl !== "/aggiungi-utente")
-        this.user = history.state.elem;
+    if(this.currentUrl === "/profilo-utente")
+      this.user = this.authService.getUtenteLoggato() 
+    else if(this.currentUrl !== "/aggiungi-utente"){
+      const match = this.currentUrl.match(/\/dettagli-utente\/(\d+)/);
+        if (match) {
+          const numero = parseInt(match[1], 10);
+          this.getUserById(numero);
+        }
+      }
+    }
+
+  getUserById(id: number): void {
+    this.userService.getUserById(id).subscribe({
+      next: (elem: Utente) => {
+        this.user = elem;
+      },
+      error: (e) => {
+
+      }
+    })
   }
 
   togglePasswordVisibility() {

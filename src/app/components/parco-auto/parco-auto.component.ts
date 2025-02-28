@@ -10,7 +10,7 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
   styleUrl: './parco-auto.component.css'
 })
 export class ParcoAutoComponent {
-  auto: Auto[] | undefined;
+  auto: Auto[] = [];
   dettagliAuto: string = "/dettagli-auto/";
   isAdmin: boolean = false;
   headers: MyHeaders[] = [
@@ -19,6 +19,10 @@ export class ParcoAutoComponent {
     { name: "Modello", field: "modello", sorting: 'asc', visibile: true },
     { name: "Targa", field: "targa", sorting: 'asc', visibile: true },
   ];
+  tableConfig: MyTableConfig = {
+    headers: this.headers.filter(elem => elem.visibile),
+    pagination: { itemPerPage: 8 }
+  }
 
   constructor(
     private autoService: AutoService,
@@ -26,16 +30,20 @@ export class ParcoAutoComponent {
   ){ }
 
   ngOnInit(): void {
-    this.isAdmin = this.authService.isAdmin;
-      this.autoService.getAutomobili()
-          .subscribe((data : any) => {
-            this.auto = data;
-    });
+    this.isAdmin = this.authService.getIsAdmin();
+    this.getAuto();
   }
 
-  tableConfig: MyTableConfig = {
-    headers: this.headers.filter(elem => elem.visibile),
-    pagination: { itemPerPage: 8 }
+  getAuto(): void {
+    this.autoService.getAutomobili().subscribe({
+      next: (data : Auto[]) => {
+          this.auto = data;
+      },
+      error: (e) => {
+        alert(e.error.text);
+        sessionStorage.setItem("getUsersErrorMessage", e.error.text);
+        },
+    });
   }
 
 

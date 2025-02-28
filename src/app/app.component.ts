@@ -23,7 +23,7 @@ export class AppComponent {
     private router: Router
   ){}
   
-  isAdmin: boolean = false;
+  isAdmin: boolean = this.authService.getIsAdmin();
   titleAdmin = 'Benvenuto Admin';
   titleUtente = 'Benvenuto User';
   
@@ -149,8 +149,8 @@ export class AppComponent {
   ]
 
   ngOnInit(){
-    this.authService.setIsLogged();
-    this.authService.setIsAdmin();
+    /* this.authService.setIsLogged();
+    this.authService.setIsAdmin(); */
     this.logoutAction = this.actions.find(elem => elem.field === "logout")
     
     this.editAction = this.actions.find(elem => elem.field === "edit")

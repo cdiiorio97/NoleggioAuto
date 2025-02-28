@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class PrenotazioniComponent implements OnInit {
   @Input() aggiuntaConsentita?: boolean;
 
-  prenotazioni: Prenotazione[] | undefined;
+  prenotazioni: Prenotazione[] = [];
   utenteLoggato: Utente | undefined;
   backButtonVisibile: boolean = false;
   dettagliPrenotazione: string = "/dettagli-prenotazione/"

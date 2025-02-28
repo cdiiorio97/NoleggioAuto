@@ -18,27 +18,7 @@ export const AUTO_MOCK = [
     {"id":17,"brand":"Jeep","modello":"Comanche","targa":"WAUDF98E28A996294"},
     {"id":18,"brand":"Ford","modello":"Edge","targa":"WA1VYAFEXAD167722"},
     {"id":19,"brand":"Dodge","modello":"Caravan","targa":"WBAEU33442P782207"},
-    {"id":20,"brand":"Mercury","modello":"Sable","targa":"WAUKFAFL5BN666451"},
-    {"id":21,"brand":"Dodge","modello":"Ram Van B250","targa":"1LNHL9EK9FG255721"},
-    {"id":22,"brand":"Lamborghini","modello":"Countach","targa":"TRUTC28N861784971"},
-    {"id":23,"brand":"Nissan","modello":"Leaf","targa":"3C4PDCEG3CT432745"},
-    {"id":24,"brand":"Nissan","modello":"GT-R","targa":"5FRYD3H23FB260996"},
-    {"id":25,"brand":"BMW","modello":"760","targa":"WAUHGBFC9EN395606"},
-    {"id":26,"brand":"Mercedes-Benz","modello":"SL-Class","targa":"WBA6A0C59ED081723"},
-    {"id":27,"brand":"Oldsmobile","modello":"Bravada","targa":"1GYS4GEF5BR217068"},
-    {"id":28,"brand":"Mazda","modello":"B-Series Plus","targa":"2C3CDXL90FH112505"},
-    {"id":29,"brand":"Chevrolet","modello":"Suburban 2500","targa":"WAUDH78E18A312253"},
-    {"id":30,"brand":"Chevrolet","modello":"Suburban 1500","targa":"5N1AR2MM3DC253915"},
-    {"id":31,"brand":"Chevrolet","modello":"Silverado 2500","targa":"1FTNF2A50AE812412"},
-    {"id":32,"brand":"Lotus","modello":"Elan","targa":"4JGDA2EB5EA577592"},
-    {"id":33,"brand":"GMC","modello":"Yukon","targa":"3VW4A7AT6CM608281"},
-    {"id":34,"brand":"Ford","modello":"Focus","targa":"WBAPM77529N617491"},
-    {"id":35,"brand":"Cadillac","modello":"STS","targa":"1N6AF0KX0EN211641"},
-    {"id":36,"brand":"Pontiac","modello":"Sunfire","targa":"KMHGH4JF6BU117560"},
-    {"id":37,"brand":"Dodge","modello":"Charger","targa":"4JGBF2FE1AA479719"},
-    {"id":38,"brand":"Hummer","modello":"H2","targa":"1FBNE3BL2CD403766"},
-    {"id":39,"brand":"Audi","modello":"S4","targa":"WUAUUAFG9CN448635"},
-    {"id":40,"brand":"Nissan","modello":"Leaf","targa":"YV1952ASXD1638996"}         
+    {"id":20,"brand":"Mercury","modello":"Sable","targa":"WAUKFAFL5BN666451"},       
 ];
 
 

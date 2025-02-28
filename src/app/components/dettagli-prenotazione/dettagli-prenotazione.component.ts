@@ -7,7 +7,7 @@ import { AutoService } from '../../services/auto/auto.service';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { MyActions } from '../my-table/my-table-config';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
-import { UtilsService } from '../../services/utils/utils.service';
+import { DateFormatPipe } from '../../date-format.pipe';
 
 @Component({
   selector: 'app-dettagli-prenotazione',
@@ -28,7 +28,6 @@ export class DettagliPrenotazioneComponent {
     confermataDa: 0,
     cancellataDa: 0
   }
-  passwordVisibile: boolean = false;
   currentUrl: string = '';
   auto: string = '';
   autoList: Auto[] = []
@@ -46,7 +45,7 @@ export class DettagliPrenotazioneComponent {
     private location: Location,
     private prenotazioniService: PrenotazioniService,
     private authService: AutenticazioneService,
-    private utilsService: UtilsService
+    private datePipe: DateFormatPipe
   ) {}
 
 
@@ -62,29 +61,35 @@ export class DettagliPrenotazioneComponent {
       this.convertiDatePrenotazione();
       let autoTemp =  this.autoService.getAutoById(this.prenotazione.idAuto)
       this.auto = autoTemp.brand + " " + autoTemp.modello
-      this.utente = this.userService.getUserById(this.prenotazione.idUtente)
-      this.utenteName = `${this.utente.nome} ${this.utente.cognome}`
+      this.userService.getUserById(this.prenotazione.idUtente).subscribe({
+        next: (utente) => {
+          this.utente = utente;
+          this.utenteName = `${this.utente.nome} ${this.utente.cognome}`;
+        },
+        error: (e) => {
+
+        }
+      });
     }
-    this.dataMinima = this.utilsService.convertDateFormat(new Date())
+    this.dataMinima = this.datePipe.transform(new Date())
+  }
+
+  getUserById(id: number): void {
+    
   }
 
   convertiDatePrenotazione(){
-    this.prenotazione.dataCancellazione = this.prenotazione?.dataCancellazione ? this.utilsService.convertDateFormat(this.prenotazione?.dataCancellazione) : undefined
-    this.prenotazione.dataConferma = this.prenotazione?.dataConferma ? this.utilsService.convertDateFormat(this.prenotazione?.dataConferma) : undefined
-    this.prenotazione.dataInizio = this.utilsService.convertDateFormat(this.prenotazione.dataInizio)
-    this.prenotazione.dataRichiesta = this.utilsService.convertDateFormat(this.prenotazione.dataRichiesta)
-    this.prenotazione.dataFine = this.utilsService.convertDateFormat(this.prenotazione.dataFine)
+    this.prenotazione.dataCancellazione = this.prenotazione?.dataCancellazione ? this.datePipe.transform(this.prenotazione?.dataCancellazione) : undefined
+    this.prenotazione.dataConferma = this.prenotazione?.dataConferma ? this.datePipe.transform(this.prenotazione?.dataConferma) : undefined
+    this.prenotazione.dataInizio = this.datePipe.transform(this.prenotazione.dataInizio)
+    this.prenotazione.dataRichiesta = this.datePipe.transform(this.prenotazione.dataRichiesta)
+    this.prenotazione.dataFine = this.datePipe.transform(this.prenotazione.dataFine)
   }
 
-  togglePasswordVisibility() {
-    this.passwordVisibile = !this.passwordVisibile;
-    const password = document.getElementById('password') as HTMLInputElement;
-    password.type = this.passwordVisibile ? 'text' : 'password';
-  }
 
   async onSubmit() {
     if(this.currentUrl === "/aggiungi-prenotazione"){
-      this.prenotazione.dataRichiesta = this.utilsService.convertDateFormat(new Date());
+      this.prenotazione.dataRichiesta = this.datePipe.transform(new Date());
       this.prenotazione.idUtente = this.utenteLoggato?.id ?? 0;
       this.prenotazione.dataConferma = undefined;
       this.prenotazione.dataCancellazione = undefined;
@@ -111,7 +116,7 @@ export class DettagliPrenotazioneComponent {
   }
 
   goBack(): void {
-    this.authService.isAdmin ? this.location.back() : this.router.navigateByUrl('/homepage')
+    this.authService.getIsAdmin() ? this.location.back() : this.router.navigateByUrl('/homepage')
   }
 
   changeAutoScelta(event: Event){

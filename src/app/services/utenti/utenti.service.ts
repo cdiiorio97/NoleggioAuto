@@ -1,55 +1,50 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { UTENTI_MOCK } from '../../mock-data';
 import { Utente } from '../../config';
+import { HttpClient } from '@angular/common/http';
+import { UtilsService } from '../utils/utils.service';
+import { BASE_URL } from '../../costanti';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtentiService {
-  utenti: Observable<Utente[]> | undefined;
+  private baseUrl: string = `${BASE_URL}/utenti`;
 
-  constructor() { }
+  constructor (
+    private http: HttpClient, 
+    private utilsService: UtilsService
+  ) {}
 
-  getUtenti():Observable<any[]>{
-    return this.utenti = of(UTENTI_MOCK);
+  getUtenti():Observable<Utente[]>{
+    return this.http.get<Utente[]>(`${this.baseUrl}/get-all`);
   }
 
-  getUserById(id:number) : Utente {
-    let foundUser = UTENTI_MOCK.find(elem => elem.id === id) as Utente;
-    if (!foundUser) {
-      throw new Error('User not found');
-    }
-    return foundUser;
+  getUserById(id:number) : Observable<Utente> {
+    console.log(`${this.baseUrl}/get-by-id/${id}`)
+    return this.http.get<Utente>(`${this.baseUrl}/get-by-id?id=${id}`);
   }
 
   addUser(newUser: any) {
-    if (!this.utenti) {
-      this.utenti = of([]);
-    }
-    else {
-      this.getUtenti().subscribe(users => {
+    this.getUtenti().subscribe(users => {
         users.unshift(newUser);
-        this.utenti = of(users);
-      });
-    };
+        return of(users);
+    });
   }
 
-  deleteUser(id: number) {
+/*   deleteUser(id: number) {
     this.getUtenti()
         .subscribe(utenti => {
             this.utenti = of(utenti.filter(user => user.id !== id));
         });
-  }
+  } */
 
   updateUser(updatedUser: any) {
-    if (this.utenti) {
-      this.getUtenti().subscribe(users => {
-        const index = users.findIndex(user => user.id === updatedUser.id);
-        if (index !== -1) {
-          users[index] = updatedUser;
-        }
-      });
-    }
+    this.getUtenti().subscribe(users => {
+      const index = users.findIndex(user => user.id === updatedUser.id);
+      if (index !== -1) {
+        users[index] = updatedUser;
+      }
+    });
   }
 }

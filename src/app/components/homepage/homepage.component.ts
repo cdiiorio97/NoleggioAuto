@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Utente } from '../../config';
 import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { UtentiService } from '../../services/utenti/utenti.service';
@@ -9,8 +9,8 @@ import { UtentiService } from '../../services/utenti/utenti.service';
   styleUrl: './homepage.component.css'
 })
 export class HomepageComponent {
-  utenti: Utente[] | undefined;
-  prenotazioni: any[] | undefined;
+  utenti: Utente[]  = [];
+  prenotazioni: any[] = [];
   actions: MyActions[] = [{
     label: "Prenotazioni",
       field: "prenotazioni",
@@ -41,16 +41,22 @@ export class HomepageComponent {
     headers: this.headers.filter(elem => elem.visibile),
     pagination: { itemPerPage: 8 },
   }
-  isAdmin: boolean = false;
-  dettagliUtente: string = "/dettagli-utente/"
-
-  constructor( private utentiService: UtentiService ){}
+  isAdmin: boolean = sessionStorage.getItem("isAdmin") === "true" ? true : false;
+  utentiService = inject(UtentiService)
 
   ngOnInit(): void {
-    this.isAdmin = sessionStorage.getItem("isAdmin") === "true" ? true : false;
-    this.utentiService.getUtenti()
-      .subscribe((data : any) => {
-          this.utenti = data;
-      });
-    }
+    this.getUtenti()
+  }
+
+  getUtenti(): void {
+    this.utentiService.getUtenti().subscribe({
+      next: (data : Utente[]) => {
+        this.utenti = data;
+      },
+      error: (e) => {
+        alert(e.error.text)
+        sessionStorage.setItem("getUsersErrorMessage", e.error.text)
+        },
+    })
+  }
 }
