@@ -16,7 +16,8 @@ export class RichiestePrenotazioniComponent implements OnInit {
       { name: "ID Auto", field: "idAuto", sorting: 'asc', visibile: true },
       { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true },
       { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true },
-      { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true }
+      { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true },
+      { name: "Actions", field: "actions", sorting: 'asc', visibile: true }
     ];
     tableConfig: MyTableConfig = {
       headers: this.headers.filter(elem => elem.visibile),

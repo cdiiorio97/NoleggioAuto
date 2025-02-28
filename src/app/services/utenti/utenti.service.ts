@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Utente } from '../../config';
 import { HttpClient } from '@angular/common/http';
@@ -10,18 +10,13 @@ import { BASE_URL } from '../../costanti';
 })
 export class UtentiService {
   private baseUrl: string = `${BASE_URL}/utenti`;
-
-  constructor (
-    private http: HttpClient, 
-    private utilsService: UtilsService
-  ) {}
+  private http = inject(HttpClient)
 
   getUtenti():Observable<Utente[]>{
     return this.http.get<Utente[]>(`${this.baseUrl}/get-all`);
   }
 
   getUserById(id:number) : Observable<Utente> {
-    console.log(`${this.baseUrl}/get-by-id/${id}`)
     return this.http.get<Utente>(`${this.baseUrl}/get-by-id?id=${id}`);
   }
 

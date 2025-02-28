@@ -1,8 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
 import { Prenotazione, Utente } from '../../config';
 import { Router } from '@angular/router';
+import { AutenticazioneService } from '../../services/login/autenticazione.service';
+import { DatePipe } from '@angular/common';
+import { DateFormatPipe } from '../../date-format.pipe';
 
 @Component({
   selector: 'app-prenotazioni',
@@ -20,8 +23,8 @@ export class PrenotazioniComponent implements OnInit {
   goBackAction: MyActions | undefined;
   headers: MyHeaders[] = [
     { name: "ID", field: "id", sorting: 'asc', visibile: true },
-    { name: "ID Utente", field: "idUtente", sorting: 'asc', visibile: true },
-    { name: "ID Auto", field: "idAuto", sorting: 'asc', visibile: true },
+    { name: "Utente", field: "idUtente", sorting: 'asc', visibile: true },
+    { name: "Auto", field: "idAuto", sorting: 'asc', visibile: true },
     { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true },
     { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true },
     { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true },
@@ -29,24 +32,42 @@ export class PrenotazioniComponent implements OnInit {
     { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: true },
     { name: "Confermata Da", field: "confermataDa", sorting: 'asc', visibile: true },
     { name: "Data Cancellazione", field: "dataCancellazione", sorting: 'asc', visibile: true },
-    { name: "Cancellata Da", field: "cancellataDa", sorting: 'asc', visibile: true }
+    { name: "Cancellata Da", field: "cancellataDa", sorting: 'asc', visibile: true },
+    { name: "Actions", field: "actions", sorting: 'asc', visibile: true },
   ];
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
     pagination: { itemPerPage: 8 }
   };
+  private prenotazioneService = inject(PrenotazioniService);
+  private authService = inject(AutenticazioneService)
+  private router = inject(Router);
+  private datePipe = inject(DateFormatPipe);
+  currentUrl: string = this.router.url;
 
   constructor(
-    private prenotazioneService: PrenotazioniService,
-    private router: Router
-  ){}
+  ) {}
 
   ngOnInit(): void {
-    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '')
-    let utenteLoggatoString = sessionStorage.getItem("utenteLoggato");
-    this.utenteLoggato = utenteLoggatoString ? JSON.parse(utenteLoggatoString) : null;
-    let utenteTemp
-    if(history.state.utente){
+    this.goBackAction = JSON.parse(sessionStorage.getItem("goBackAction") ?? '');
+    this.utenteLoggato = this.authService.getUtenteLoggato(); 
+    if (this.currentUrl === "/prenotazioni"){
+      if(this.utenteLoggato.isAdmin)
+        this.getPrenotazioni();
+      else 
+        this.getPrenotazioniByUserId()
+    }
+    else if (this.currentUrl === "/dettagli-prenotazione"){
+    const match = this.currentUrl.match(/\/dettagli-prenotazione\/(\d+)/);
+      if (match) {
+        const numero = parseInt(match[1], 10);
+        this.getPrenotazioneById(numero);
+      }
+    }
+    else if( this.currentUrl === "/aggiungi-prenotazione"){
+
+    }
+/*     if(history.state.utente){
       utenteTemp = history.state.utente;
       this.historyUtente = history.state.utente;
     }
@@ -57,8 +78,6 @@ export class PrenotazioniComponent implements OnInit {
       .subscribe((data : Prenotazione[]) => {
         if(this.utenteLoggato){
           if(!this.utenteLoggato.isAdmin || this.historyUtente){
-            this.prenotazioni = data.filter(prenotazione => prenotazione.idUtente === utenteTemp.id);
-            this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "idUtente")
           }
           else if (this.utenteLoggato.isAdmin)
             this.prenotazioni = data;
@@ -76,7 +95,53 @@ export class PrenotazioniComponent implements OnInit {
             }
           }
         }
-      });
+      }); */
+  }
+
+  getPrenotazioni(): void {
+    this.prenotazioneService.getPrenotazioni().subscribe({
+      next: (data : Prenotazione[]) => {
+        this.prenotazioni = data;
+        console.log("1")
+        console.log(data)
+        this.prenotazioni.forEach(elem => {
+          for (const key in elem) {
+            const value = (elem as any)[key];
+            if(key === "utente" || key === "confermataDa" || key === "cancellataDa") {
+              if(elem[key]?.cognome != null && elem[key]?.cognome != null)
+                (elem as any)[key] = `${elem[key]?.nome} ${elem[key]?.cognome}`
+              else 
+                (elem as any)[key] = "";
+            }
+            if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)))) {
+              (elem as any)[key] = this.datePipe.transform(value, "dateFirst");
+            }
+          }
+          elem.editabile = true;
+        });
+        console.log("2")
+        console.log(this.prenotazioni)
+      },
+      error: (e) => {
+        alert(e.error.text)
+        sessionStorage.setItem("getErrorMessage", e.error.text)
+        },
+    })
+  }
+  getPrenotazioneById(id:number): void {
+  }
+  getPrenotazioniByUserId(): void {
+    if(this.utenteLoggato && !this.utenteLoggato.isAdmin){
+      this.prenotazioneService.getPrenotazioniUtente(this.utenteLoggato?.id).subscribe({
+        next: (response: Prenotazione[]) => {
+          this.prenotazioni = response;
+          this.prenotazioni.forEach(elem => {
+            elem.editabile = this.getDaysDifference(elem.dataInizio) > 2;
+          });
+        }
+      })
+      this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "idUtente")
+    }
   }
 
   goBack(): void {

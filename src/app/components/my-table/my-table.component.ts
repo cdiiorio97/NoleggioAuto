@@ -1,7 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from './my-table-config';
 import { Router } from '@angular/router';
-import { UtentiService } from '../../services/utenti/utenti.service';
 
 @Component({
   selector: 'app-my-table',
@@ -68,12 +67,26 @@ export class MyTableComponent implements OnInit{
       return {
         'width': '5%'
       };
-    } else {
+    }
+    else if(header.field.toLowerCase() ==="actions"){
       return {
-        'width': '20%'
+        "border":"none",
+        "background-color":"white",
+        "display":"none",
+        "max-width":"250px"
+      }
+    }
+    else {
+      return {
+        'width': '10%'
       };
     }
   }
+
+  getClass(field: string, area: string): string {
+    return `${field}-column-${area}`;
+  }
+  
 
   aggiornaCampoFiltro(): void {
     if(this.vecchioCampoFiltro !== this.campoFiltro)
@@ -102,15 +115,14 @@ export class MyTableComponent implements OnInit{
     });
   } 
 
-  aggiornaFiltro(event: Event){
-    const target = event.target as HTMLInputElement;
-    if(target.value === '') {
+  aggiornaFiltro(){
+    if(this.valoreFiltro === '') {
       delete this.filtro[this.campoFiltro.toLowerCase()];
       this.filteredData = this.orderedData;
       return;
     }
     else {
-      this.filtro[this.campoFiltro.toLowerCase()] = target.value;
+      this.filtro[this.campoFiltro.toLowerCase()] = this.valoreFiltro;
       this.filter();
     }
   }
@@ -169,11 +181,8 @@ export class MyTableComponent implements OnInit{
       case 'rifiuta':
         alert("prenotazione " + action + "ta")
         break;
-      case 'prenotazioni':
-        this.router.navigateByUrl('/prenotazioni/' + row.id,);
-        break;
       default:
-        console.log('Azione non definita:', action);
+        this.router.navigateByUrl(`/${action}/${row.id}`);
         break;
     }
   }

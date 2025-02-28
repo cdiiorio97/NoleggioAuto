@@ -46,15 +46,14 @@ export class ProfiloUtenteComponent {
         this.user = elem;
       },
       error: (e) => {
-
+        alert(e.error.text)
+        sessionStorage.setItem("getErrorMessage", e.error.text)
       }
     })
   }
 
   togglePasswordVisibility() {
     this.passwordVisibile = !this.passwordVisibile;
-    const password = document.getElementById('password') as HTMLInputElement;
-    password.type = this.passwordVisibile ? 'text' : 'password';
   }
 
   async onSubmit() {

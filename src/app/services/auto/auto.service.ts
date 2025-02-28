@@ -11,18 +11,13 @@ import { BASE_URL } from '../../costanti';
 export class AutoService {
   private baseUrl: string = `${BASE_URL}/auto`
   http = inject(HttpClient)
-  constructor() { }
 
   getAutomobili() : Observable<Auto[]> {
     return this.http.get<Auto[]>(`${this.baseUrl}/get-all`);
   }
 
-  getAutoById(id:number): Auto {
-    const auto = AUTO_MOCK.find(elem => elem.id === id);
-    if (!auto) {
-      throw new Error(`Auto with id ${id} not found`);
-    }
-    return auto;
+  getAutoById(id:number): Observable<Auto> {
+    return this.http.get<Auto>(`${this.baseUrl}/get-by-id?id=${id}`)
   }
 
   addAuto(newAuto: Auto): void{

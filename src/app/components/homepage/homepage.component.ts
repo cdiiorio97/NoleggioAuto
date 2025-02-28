@@ -35,7 +35,8 @@ export class HomepageComponent {
     { name: "Cognome", field: "cognome", sorting: 'asc', visibile: true },
     { name: "Amministratore", field: "isAdmin", sorting: 'asc', visibile: true },
     { name: "Email", field: "email", sorting: 'asc', visibile: true },
-    { name: "Password", field: "password", sorting: 'asc', visibile: false }
+    { name: "Password", field: "password", sorting: 'asc', visibile: false },
+    { name: "Actions", field: "actions", sorting: 'asc', visibile: true }
   ];
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
@@ -55,7 +56,7 @@ export class HomepageComponent {
       },
       error: (e) => {
         alert(e.error.text)
-        sessionStorage.setItem("getUsersErrorMessage", e.error.text)
+        sessionStorage.setItem("getErrorMessage", e.error.text)
         },
     })
   }

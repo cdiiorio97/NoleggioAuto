@@ -17,16 +17,28 @@ import { DateFormatPipe } from '../../date-format.pipe';
 export class DettagliPrenotazioneComponent {
   prenotazione: Prenotazione = {
     id: 0,
-    idUtente: 0,
-    idAuto: 0,
+    utente: {
+      id: 0,
+      nome: '',
+      cognome: '',
+      isAdmin: false,
+      email: '',
+      password: ''
+    },
+    auto: {
+      id: 0,
+      brand: '',
+      modello: '',
+      targa: ''
+    },
     dataInizio: new Date(),
     dataFine: new Date(),
     dataRichiesta: new Date(),
     dataConferma: new Date(),
     dataCancellazione: new Date(),
     confermata: false,
-    confermataDa: 0,
-    cancellataDa: 0
+    confermataDa: undefined,
+    cancellataDa: undefined
   }
   currentUrl: string = '';
   auto: string = '';
@@ -59,19 +71,20 @@ export class DettagliPrenotazioneComponent {
     if (this.currentUrl !== "/aggiungi-prenotazione") {
       this.prenotazione = history.state.elem;
       this.convertiDatePrenotazione();
-      let autoTemp =  this.autoService.getAutoById(this.prenotazione.idAuto)
-      this.auto = autoTemp.brand + " " + autoTemp.modello
+      /* let autoTemp =  this.autoService.getAutoById(this.prenotazione.idAuto)
+      //this.auto = autoTemp.brand + " " + autoTemp.modello
       this.userService.getUserById(this.prenotazione.idUtente).subscribe({
         next: (utente) => {
           this.utente = utente;
           this.utenteName = `${this.utente.nome} ${this.utente.cognome}`;
         },
         error: (e) => {
-
+          alert(e.error.text)
+          sessionStorage.setItem("getErrorMessage", e.error.text)
         }
-      });
+      }); */
     }
-    this.dataMinima = this.datePipe.transform(new Date())
+    this.dataMinima = this.datePipe.transform(new Date(), "yearFirst")
   }
 
   getUserById(id: number): void {
@@ -79,18 +92,18 @@ export class DettagliPrenotazioneComponent {
   }
 
   convertiDatePrenotazione(){
-    this.prenotazione.dataCancellazione = this.prenotazione?.dataCancellazione ? this.datePipe.transform(this.prenotazione?.dataCancellazione) : undefined
-    this.prenotazione.dataConferma = this.prenotazione?.dataConferma ? this.datePipe.transform(this.prenotazione?.dataConferma) : undefined
-    this.prenotazione.dataInizio = this.datePipe.transform(this.prenotazione.dataInizio)
-    this.prenotazione.dataRichiesta = this.datePipe.transform(this.prenotazione.dataRichiesta)
-    this.prenotazione.dataFine = this.datePipe.transform(this.prenotazione.dataFine)
+    this.prenotazione.dataCancellazione = this.prenotazione?.dataCancellazione ? this.datePipe.transform(this.prenotazione?.dataCancellazione, "yearFirst") : undefined
+    this.prenotazione.dataConferma = this.prenotazione?.dataConferma ? this.datePipe.transform(this.prenotazione?.dataConferma, "yearFirst") : undefined
+    this.prenotazione.dataInizio = this.datePipe.transform(this.prenotazione.dataInizio, "yearFirst")
+    this.prenotazione.dataRichiesta = this.datePipe.transform(this.prenotazione.dataRichiesta, "yearFirst")
+    this.prenotazione.dataFine = this.datePipe.transform(this.prenotazione.dataFine, "yearFirst")
   }
 
 
   async onSubmit() {
     if(this.currentUrl === "/aggiungi-prenotazione"){
       this.prenotazione.dataRichiesta = this.datePipe.transform(new Date());
-      this.prenotazione.idUtente = this.utenteLoggato?.id ?? 0;
+      //this.prenotazione.idUtente = this.utenteLoggato?.id ?? 0;
       this.prenotazione.dataConferma = undefined;
       this.prenotazione.dataCancellazione = undefined;
       this.prenotazione.confermataDa = undefined;
@@ -121,6 +134,6 @@ export class DettagliPrenotazioneComponent {
 
   changeAutoScelta(event: Event){
     let target = event.target as HTMLSelectElement;
-    this.prenotazione.idAuto = target.value as unknown as number;
+    //this.prenotazione.idAuto = target.value as unknown as number;
   }
 }

@@ -3,7 +3,7 @@
         <div class="bottoni-intestazione-tabella">
             <div class="filters-div" >  
                 <ng-container>
-                    <input type="text" [(ngModel)]="valoreFiltro" (input)="aggiornaFiltro($event);"
+                    <input type="text" [(ngModel)]="valoreFiltro" (input)="aggiornaFiltro();"
                             placeholder=" Filtra per valore" style="width: 200px;">
                     <select [(ngModel)]="campoFiltro" (change)="aggiornaCampoFiltro()">
                         <option value= "" disabled>Seleziona Campo</option>
@@ -32,8 +32,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage" style="height: 40px;">
-                        <td *ngFor="let header of tableConfig?.headers" [class.boolean-cell]="isBoolean(row[header.field])">
+                    <tr *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage" style="height: 50px; align-items: center;">
+                        <td *ngFor="let header of tableConfig?.headers" [class.boolean-cell]="isBoolean(row[header.field])" [ngClass]="getClass(header.field, 'body')">
+                            <ng-container *ngIf="header.field==='actions'">
+                                <div class="edit-delete-buttons">
+                                    <ng-container *ngFor="let button of actionsTabella">
+                                        <ng-container *ngIf="row.editabile">
+                                            <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
+                                        </ng-container>
+                                        <ng-container *ngIf="row.editabile === undefined && permessiEditRow">
+                                            <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
+                                        </ng-container>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
                             <ng-container *ngIf="isBoolean(row[header.field]); else showValue">
                                 <span *ngIf="row[header.field] === true" class="material-icons">check</span> 
                                 <span *ngIf="row[header.field] === false"class="material-icons">close</span>
@@ -42,6 +54,7 @@
                             {{row[header.field]}}
                             </ng-template>
                         </td>
+                        
                     </tr>
                 </tbody>
             </table>     
@@ -49,14 +62,14 @@
         <div style="display: flex; flex-direction: column;">
             <div style="height: 50px;"></div>                               <!-- spazio vuoto -->
             <div *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage" class="edit-delete-buttons">
-                <ng-container *ngFor="let button of actionsTabella">
+                <!-- <ng-container *ngFor="let button of actionsTabella">
                     <ng-container *ngIf="row.editabile">
                         <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
                     </ng-container>
                     <ng-container *ngIf="row.editabile === undefined && permessiEditRow">
                         <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
                     </ng-container>
-                </ng-container>
+                </ng-container> -->
             </div>
         </div>
     </div>

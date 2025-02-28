@@ -6,9 +6,11 @@
         </span>
     </div>
 </ng-container>
+<ng-container *ngIf="prenotazioni.length > 0">
 <app-my-table [data]="prenotazioni" 
             [tableConfig]="tableConfig" 
             [dettagliURL]="dettagliPrenotazione" 
             [aggiuntaConsentita]="aggiuntaConsentita"
             [aggiuntaURL]="'/aggiungi-prenotazione'"
             [permessiEditRow]="utenteLoggato?.isAdmin ?? false"/>
+</ng-container>

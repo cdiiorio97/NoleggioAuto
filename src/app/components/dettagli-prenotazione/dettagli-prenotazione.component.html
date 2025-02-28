@@ -7,20 +7,20 @@
             <input type="number" id="id" [(ngModel)]="prenotazione.id" name="id" required style="width: 70px;">
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="idUtente">idUtente:</label>
             <input type="number" id="idUtente" [(ngModel)]="prenotazione.idUtente" name="idUtente" required style="width: 40px;">
             <input type="text" id="utenteNome" [(ngModel)]="utenteName" name="utenteNome" readonly>
-        </div>
+        </div> -->
     </ng-container>
 
     
     <ng-container>
         <div class="form-group">
             <label for="auto">Auto:</label>
-            <select [(ngModel)]="prenotazione.idAuto" style="width: 200px;" (change)="changeAutoScelta($event)" name="auto">
+            <!-- <select [(ngModel)]="prenotazione.idAuto" style="width: 200px;" (change)="changeAutoScelta($event)" name="auto">
                     <option *ngFor="let auto of autoList" [value]="auto.id">{{auto.brand}} {{auto.modello}}</option>>
-            </select>
+            </select> -->
         </div>
     </ng-container>
 

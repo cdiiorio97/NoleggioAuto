@@ -27,15 +27,15 @@ export interface Utente{
 
 export interface Prenotazione{
     id: number;
-    idUtente: number;
-    idAuto: number;
+    utente: Utente;
+    auto: Auto;
     dataInizio: Date | string;
     dataFine: Date | string;
     dataRichiesta: Date | string;
     dataConferma?: Date | string;
     dataCancellazione?: Date | string;
     confermata?: boolean;
-    confermataDa?: number;
-    cancellataDa?: number;
+    confermataDa?: Utente;
+    cancellataDa?: Utente;
     editabile?: boolean;
 }

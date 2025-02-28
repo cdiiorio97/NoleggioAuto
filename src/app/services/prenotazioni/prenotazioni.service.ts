@@ -1,30 +1,32 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PRENOTAZIONI_MOCK, RICHIESTE_PRENOTAZIONI_MOCK } from '../../mock-data';
+import { RICHIESTE_PRENOTAZIONI_MOCK } from '../../mock-data';
 import { Prenotazione } from '../../config';
+import { BASE_URL } from '../../costanti';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrenotazioniService {
-  prenotazioni: Observable<Prenotazione[]> | undefined;
-  richiestePrenotazioni: Observable<Prenotazione[]> | undefined
-  constructor() { }
+  private http = inject(HttpClient)
+  baseUrl: string = `${BASE_URL}/prenotazioni`;
 
-  getPrenotazioni(): Observable<any[]> {
-    return this.prenotazioni = of(PRENOTAZIONI_MOCK)
+  getPrenotazioni(): Observable<Prenotazione[]> {
+    return this.http.get<Prenotazione[]>(`${this.baseUrl}/get-all`);
+  }
+  getPrenotazioniById(id: number): Observable<Prenotazione>{
+    return this.http.get<Prenotazione>(`${this.baseUrl}/get-by-id?id=${id}`)
+  }
+  getPrenotazioniUtente(id: number): Observable<Prenotazione[]>{
+    return this.http.get<Prenotazione[]>(`${this.baseUrl}/get-by-user-id?id=${id}`)
   }
 
   addPrenotazione(newPren: any){
-    if (!this.prenotazioni) {
-      this.prenotazioni = of([]);
-    }
-    else {
-      this.getPrenotazioni().subscribe(pren => {
-        pren.unshift(newPren);
-        this.prenotazioni = of(pren);
-      });
-    };
+    /* this.getPrenotazioni().subscribe(pren => {
+      pren.unshift(newPren);
+      this.prenotazioni = of(pren);
+    }); */
   }
 
   updatePrenotazione(prenotazione: Prenotazione): void {
@@ -37,7 +39,7 @@ export class PrenotazioniService {
   }
 
   getRichiestePrenotazioni(): Observable<any[]> {
-    return this.richiestePrenotazioni = of(RICHIESTE_PRENOTAZIONI_MOCK)
+    return of(RICHIESTE_PRENOTAZIONI_MOCK)
   }
 
   updateRichiestaPrenotazione(nuovaPren: Prenotazione): void {

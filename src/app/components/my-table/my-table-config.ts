@@ -6,8 +6,9 @@ export class MyTableConfig{
 export interface MyHeaders {
     name: string;
     field: string;
-    sorting: "asc" | "desc";
+    sorting?: "asc" | "desc";
     visibile: boolean;
+    css?: any;
 }
 
 export interface MyActions{

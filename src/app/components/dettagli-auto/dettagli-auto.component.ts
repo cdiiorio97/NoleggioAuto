@@ -1,6 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Auto } from '../../config';
-import { Location } from '@angular/common';
 import { AutoService } from '../../services/auto/auto.service';
 import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
@@ -19,11 +18,8 @@ export class DettagliAutoComponent {
   }
   goBackAction: MyActions | undefined;
   currentUrl: string = '';
-
-  constructor(
-    private autoService: AutoService,
-    private router: Router
-  ) {}
+  private carService = inject(AutoService);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.currentUrl = this.router.url;
@@ -32,15 +28,23 @@ export class DettagliAutoComponent {
       const match = this.currentUrl.match(/\/dettagli-auto\/(\d+)/);
       if (match) {
         const numero = parseInt(match[1], 10);
-        this.autoService.getAutoById(numero);
+        this.getAutoById(numero);
       }
     }
+  }
+
+  getAutoById(id:number){
+    this.carService.getAutoById(id).subscribe({
+      next: (response: Auto) => {
+        this.auto = response
+      }
+    })
   }
 
   async onSubmit() {
     if(this.currentUrl === "/aggiungi-auto"){
       try{
-        await this.autoService.addAuto(this.auto)
+        await this.carService.addAuto(this.auto)
         alert("auto aggiunta")
         this.router.navigateByUrl("/parco-auto")
       } catch (e){
@@ -49,7 +53,7 @@ export class DettagliAutoComponent {
     }
     else {
       try{
-        await this.autoService.updateAuto(this.auto);
+        await this.carService.updateAuto(this.auto);
         alert("auto aggiornata");
         this.router.navigateByUrl("/parco-auto")
       }

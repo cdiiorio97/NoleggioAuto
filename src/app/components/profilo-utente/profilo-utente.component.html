@@ -26,7 +26,8 @@
     <ng-container *ngIf="(currentUrl === '/profilo-utente' || currentUrl === '/aggiungi-utente')">
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" [(ngModel)]="user.password" name="password" required style="width: 200px;">
+            <input  type="password" id="password" name="password" [(ngModel)]="user.password" 
+                    required style="width: 200px;" [type]=" passwordVisibile ? 'text' : 'password' ">
             <button type="button" style="height: 34px;width: 50px;" (click)="togglePasswordVisibility()">
                 <i class="fa" [ngClass]="{'fa-eye': !passwordVisibile, 'fa-eye-slash': passwordVisibile}"></i>
             </button>

@@ -7,9 +7,9 @@ table, th, td {
 th {
   background-color: #150d83;
   color: white;
-  width: 150px;
+  width: fit-content;
 }
-  
+
 table tr:nth-child(odd) {
   background-color: #ccc9f3;
 }
@@ -59,22 +59,12 @@ table tr:nth-child(even) {
   flex-direction: column ;
 }
 
-.tabella-bottoni{
-  display: grid; 
-  grid-template-columns: 80% auto; 
-  gap: 10px;
-}
-
 select {
   height: 30px;
   width: 130px;
   border-radius: 5px;
 }
 
-.spazio-azioni-sopra-tabella{
-  display: grid; 
-  grid-template-columns: 80% auto; 
-}
 
 .bottoni-intestazione-tabella{
   display: flex;
@@ -96,4 +86,10 @@ select {
 .boolean-cell span {
   display: inline-block;
   line-height: normal;
+}
+
+.actions-column-body{
+  background-color: white;
+  border: none;
+  width: 1%;
 }

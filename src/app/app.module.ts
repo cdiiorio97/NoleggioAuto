@@ -38,8 +38,7 @@ import { HttpClientModule } from '@angular/common/http';
     DettagliPrenotazioneComponent,
     DettagliUtenteComponent,
     DettagliAutoComponent,
-    RichiestePrenotazioniComponent,
-    DateFormatPipe
+    RichiestePrenotazioniComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +47,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     HttpClientModule
   ],
-  providers: [AutenticazioneService, provideAnimationsAsync()],
+  providers: [AutenticazioneService, provideAnimationsAsync(), DateFormatPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
