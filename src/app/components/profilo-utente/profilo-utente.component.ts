@@ -4,7 +4,7 @@ import { UtentiService } from '../../services/utenti/utenti.service';
 import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
-import { BACK_BUTTON } from '../../costanti';
+import { BACK_BUTTON, SAVE_BUTTON, VISIBILITY_BUTTON, VISIBILITY_OFF_BUTTON } from '../../costanti';
 
 @Component({
   selector: 'app-profilo-utente',
@@ -25,7 +25,9 @@ export class ProfiloUtenteComponent {
   }
   passwordVisibile: boolean = false;
   currentUrl: string = this.router.url;
-  goBackAction: MyActions = BACK_BUTTON
+  goBackAction: MyActions = BACK_BUTTON;
+  salvaAction: MyActions = SAVE_BUTTON;
+  visibilityAction: MyActions = VISIBILITY_BUTTON;
 
   ngOnInit(): void {
     if(this.currentUrl === "/profilo-utente")
@@ -53,9 +55,10 @@ export class ProfiloUtenteComponent {
 
   togglePasswordVisibility() {
     this.passwordVisibile = !this.passwordVisibile;
+    this.visibilityAction = this.visibilityAction === VISIBILITY_BUTTON ? VISIBILITY_OFF_BUTTON : VISIBILITY_BUTTON;
   }
 
-  async onSubmit() {
+  onSubmit() {
     if(this.currentUrl === "/aggiungi-utente"){
       try{
         this.userService.addUser(this.user)
@@ -67,9 +70,9 @@ export class ProfiloUtenteComponent {
     }
     else {
       try{
-        await this.userService.updateUser(this.user);
+        this.userService.updateUser(this.user);
         alert("utente aggiornato");
-        this.router.navigateByUrl("/homepage")
+        //this.router.navigateByUrl("/homepage")
       }
       catch(e) {
         alert("errore durante l'aggiornamento dati: " + e)

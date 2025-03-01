@@ -3,7 +3,7 @@ import { Auto } from '../../config';
 import { AutoService } from '../../services/auto/auto.service';
 import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
-import { BACK_BUTTON } from '../../costanti';
+import { BACK_BUTTON, SAVE_BUTTON } from '../../costanti';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 
 @Component({
@@ -23,6 +23,7 @@ export class DettagliAutoComponent {
     modello: ''
   }
   goBackAction: MyActions = BACK_BUTTON;
+  salvaAction: MyActions = SAVE_BUTTON;
   currentUrl: string = this.router.url;
   isAdmin: boolean = this.authService.getIsAdmin();
 

@@ -28,9 +28,7 @@
             <label for="password">Password:</label>
             <input  type="password" id="password" name="password" [(ngModel)]="user.password" 
                     required style="width: 200px;" [type]=" passwordVisibile ? 'text' : 'password' ">
-            <button type="button" style="height: 34px;width: 50px;" (click)="togglePasswordVisibility()">
-                <i class="fa" [ngClass]="{'fa-eye': !passwordVisibile, 'fa-eye-slash': passwordVisibile}"></i>
-            </button>
+            <app-button [actionRichiesta]="visibilityAction" (onClick)="togglePasswordVisibility()"/>
         </div>
     </ng-container>
     
@@ -43,6 +41,6 @@
         </select>
     </div>
     
-    <button type="submit" class="save-button">Salva</button>
+    <app-button [actionRichiesta]="salvaAction" (onClick)="onSubmit()"></app-button>
   </form>
   

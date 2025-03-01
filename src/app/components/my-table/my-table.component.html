@@ -57,18 +57,13 @@
         </div>
     </div>
     <div class="paginazione-controlli" style="width: 80%;">
-        <button (click)="cambiaPagina(pagina - 1)" [disabled]="pagina === 1" class="paginazione-bottone">
-            Precedente
-        </button>
+        <app-button [actionRichiesta]="pagPrecedenteAction" (onClick)="cambiaPagina(pagina - 1)" [disabled]="paginaPrecedenteDisabled"/>
         <span>Pagina {{ pagina }}</span>
-        <button *ngFor="let numero of numeroPagine" (click)="cambiaPagina(numero)" 
-                [disabled]="numero === pagina" class="paginazione-bottone">
-            {{ numero }}
-        </button>
-        <button (click)="cambiaPagina(pagina + 1)" 
-                [disabled]="(tableConfig?.pagination?.itemPerPage ?? 0) >0 && (pagina * (tableConfig?.pagination?.itemPerPage ?? 0)) >= filteredData.length" 
-                class="paginazione-bottone">
-            Successivo
-        </button>
+        <ng-container *ngFor="let numero of numeroPagine">
+            <app-button (onClick)="cambiaPagina(numero)" [disabled]="numero === pagina" [number]="numero"/>
+        </ng-container>
+        
+        <app-button [actionRichiesta]="pagSuccessivaAction" (onClick)="cambiaPagina(pagina + 1)" [disabled]="paginaSuccessivaDisabled"/>
+
     </div>
 </div>

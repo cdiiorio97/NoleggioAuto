@@ -8,7 +8,7 @@ import { UtentiService } from '../../services/utenti/utenti.service';
 import { MyActions } from '../my-table/my-table-config';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { DateFormatPipe } from '../../date-format.pipe';
-import { BACK_BUTTON } from '../../costanti';
+import { BACK_BUTTON, SAVE_BUTTON } from '../../costanti';
 
 @Component({
   selector: 'app-dettagli-prenotazione',
@@ -55,6 +55,7 @@ export class DettagliPrenotazioneComponent {
   utenteName: string = '';
   utente: Utente | undefined;
   goBackAction: MyActions = BACK_BUTTON;
+  salvaAction: MyActions = SAVE_BUTTON;
   autoScelta: any | undefined;
   utenteLoggato: Utente = this.authService.getUtenteLoggato();
   currentUrl: string = this.router.url;

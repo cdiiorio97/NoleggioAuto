@@ -78,28 +78,12 @@ export class PrenotazioniComponent implements OnInit {
     this.prenotazioneService.getPrenotazioni().subscribe({
       next: (data : Prenotazione[]) => {
         this.prenotazioni = data;
-        this.prenotazioni.forEach(elem => {
-          for (const key in elem) {
-            const value = (elem as any)[key];
-            if(key === "utente" || key === "confermataDa" || key === "cancellataDa") {
-              if(elem[key]?.cognome != null && elem[key]?.cognome != null)
-                (elem as any)[key] = `${elem[key]?.nome} ${elem[key]?.cognome}`
-              else 
-                (elem as any)[key] = "";
-            }
-            if(key ==="auto")
-                (elem as any)[key] = `${elem[key]?.brand} ${elem[key]?.modello}`
-            if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)))) {
-              (elem as any)[key] = this.datePipe.transform(value, "dateFirst");
-            }
-          }
-          elem.editabile = true;
-        });
+        this.formattaInformazioni();
       },
       error: (e) => {
         alert(e.error.text)
         sessionStorage.setItem("getErrorMessage", e.error.text)
-        },
+      },
     })
   }
   
@@ -107,37 +91,45 @@ export class PrenotazioniComponent implements OnInit {
     this.prenotazioneService.getPrenotazioniUtente(id).subscribe({
       next: (response: Prenotazione[]) => {
         this.prenotazioni = response;
-        this.prenotazioni.forEach(elem => {
-          for (const key in elem) {
-            const value = (elem as any)[key];
-            if(key === "utente" || key === "confermataDa" || key === "cancellataDa") {
-              if(elem[key]?.cognome != null && elem[key]?.cognome != null)
-                (elem as any)[key] = `${elem[key]?.nome} ${elem[key]?.cognome}`
-              else 
-                (elem as any)[key] = "";
-            }
-            if(key ==="auto")
-                (elem as any)[key] = `${elem[key]?.brand} ${elem[key]?.modello}`
-            if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)))) {
-              (elem as any)[key] = this.datePipe.transform(value, "dateFirst");
-            }
-          }
-          elem.editabile = this.getDaysDifference(elem.dataInizio) > 2;
-        });
-      }
+        this.formattaInformazioni();
+      },
+      error: (e) => {
+        alert(e.error.text)
+        sessionStorage.setItem("getErrorMessage", e.error.text)
+      },
     })
-    this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "idUtente")
+    this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "utente")
+  }
+
+  formattaInformazioni(): void {
+    this.prenotazioni.forEach(elem => {
+      for (const key in elem) {
+        const value = (elem as any)[key];
+        if(key === "utente" || key === "confermataDa" || key === "cancellataDa") {
+          if(elem[key]?.cognome != null && elem[key]?.cognome != null)
+            (elem as any)[key] = `${elem[key]?.nome} ${elem[key]?.cognome}`
+          else 
+            (elem as any)[key] = "";
+        }
+        if(key ==="auto")
+            (elem as any)[key] = `${elem[key]?.brand} ${elem[key]?.modello}`
+        if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)))) {
+          (elem as any)[key] = this.datePipe.transform(value, "dateFirst");
+        }
+      }
+      elem.editabile = this.getDaysDifference(elem["dataInizio"]);
+    });
   }
 
   goBack(): void {
     this.router.navigateByUrl('/homepage')
   }
 
-  getDaysDifference(dataInizio: Date | string): number {
+  getDaysDifference(dataInizio: Date | string): boolean {
     let currentDate = new Date();
     const bookingDate = typeof(dataInizio) === "string" ? new Date(dataInizio) : dataInizio
     const diffTime = bookingDate.getTime() - currentDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
+    return diffDays > 2;
   }
 }

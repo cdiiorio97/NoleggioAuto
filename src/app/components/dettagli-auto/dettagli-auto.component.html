@@ -20,7 +20,7 @@
         <label for="modello">Modello:</label>
         <input type="text" id="modello" [(ngModel)]="auto.modello" name="modello" required  [readonly]="!isAdmin">
     </div>
-    
-    <button type="submit" class="save-button" [disabled]="!isAdmin">Salva</button>
+
+    <app-button [actionRichiesta]="salvaAction" (onClick)="onSubmit()"/>
   </form>
   

@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
+import { MyActions } from '../my-table/my-table-config';
+import { LOGIN_BUTTON } from '../../costanti';
 
 @Component({
   selector: 'app-login-page',
@@ -8,10 +10,11 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
   styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent {
-  username: string = "";
-  password: string = "";
   private router = inject(Router)
   private authService = inject(AutenticazioneService)
+  username: string = "";
+  password: string = "";
+  loginButton: MyActions = LOGIN_BUTTON;
 
   ngOnInit(){
     this.authService.logout()

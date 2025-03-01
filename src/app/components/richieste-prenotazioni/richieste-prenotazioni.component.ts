@@ -28,6 +28,10 @@ export class RichiestePrenotazioniComponent implements OnInit {
   };
 
   ngOnInit(){
+    this.getRichiestePrenotazione();
+  }
+
+  getRichiestePrenotazione(): void{
     this.prenotazioniService.getRichiestePrenotazioni().subscribe({
       next: (lista: Prenotazione[]) => {
         this.nuoveRichieste = lista;

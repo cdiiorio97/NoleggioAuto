@@ -10,7 +10,7 @@
 <app-my-table [data]="prenotazioni" 
             [tableConfig]="tableConfig" 
             [dettagliURL]="'/dettagli-prenotazione'" 
-            [aggiuntaConsentita]="aggiuntaConsentita"
+            [aggiuntaConsentita]="!utenteLoggato.isAdmin"
             [aggiuntaURL]="'/aggiungi-prenotazione'"
             [permessiEditRow]="utenteLoggato.isAdmin"/>
 </ng-container>
