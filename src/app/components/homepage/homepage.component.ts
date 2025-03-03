@@ -4,6 +4,7 @@ import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { Router } from '@angular/router';
+import { DELETE_BUTTON, EDIT_BUTTON } from '../../costanti';
 
 @Component({
   selector: 'app-homepage',
@@ -51,22 +52,47 @@ export class HomepageComponent {
   datiCaricati: boolean = false;
 
   ngOnInit(): void {
-    if(this.utenteLoggato.isAdmin)
+    if(this.utenteLoggato.isAdmin){
+      this.actions.push(EDIT_BUTTON)
+      this.actions.push(DELETE_BUTTON)
       this.getUtenti()
+    }
     else
       this.router.navigateByUrl(`prenotazioni-utente/${this.utenteLoggato.id}`)
   }
 
   getUtenti(): void {
     this.utentiService.getUtenti().subscribe({
-      next: (data : Utente[]) => {
-        this.utenti = data;
-      },
-      error: (e) => {
-        alert(e.error.text)
-        sessionStorage.setItem("getErrorMessage", e.error.text)
-      },
+      next: (data : Utente[]) => { this.utenti = data; },
+      error: (e) => { alert(e.error.text) },
       complete: () => { this.datiCaricati = true; }
     })
+  }
+
+  handleAction(event: {action: string, row: Utente}){
+    switch(event.action){
+      case 'delete':
+        this.onDelete(event.row)
+        break;
+      case 'edit':
+      case 'viewDetails':
+        this.router.navigateByUrl(`/dettagli-utente/${event.row.id}`)
+        break;
+      case "prenotazioni":
+        this.router.navigateByUrl(`/prenotazioni-utente/${event.row.id}`);
+        break;
+    }
+  }
+
+  onDelete(row: Utente): void {
+    if (confirm(`Sei sicuro di voler eliminare l'utente con ID ${row.id}?`)) {
+      this.utentiService.deleteUtente(row.id).subscribe({
+        next: (response) => {
+          alert(response) 
+          window.location.reload();
+        },
+        error: (error) => { alert(error.error) }
+      });
+    }
   }
 }

@@ -1,5 +1,4 @@
 <ng-container *ngIf="utenteLoggato.isAdmin && datiCaricati">
-    <app-my-table [data]="utenti" [tableConfig]="tableConfig" [dettagliURL]="'/dettagli-utente'" 
-                    [actionsTabella]="actions" [aggiuntaConsentita]="true" [aggiuntaURL]="'/aggiungi-utente'" 
-                    [permessiEditRow]="true" [datiCaricati]="datiCaricati"/> 
+    <app-my-table   [data]="utenti" [tableConfig]="tableConfig" [actionsTabella]="actions" [aggiuntaConsentita]="true" 
+                    [aggiuntaURL]="'/aggiungi-utente'"  [permessiEditRow]="true" [datiCaricati]="datiCaricati" (actionClick)="handleAction($event)"/> 
 </ng-container>

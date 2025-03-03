@@ -29,12 +29,9 @@ export class UtentiService {
     return this.http.delete(`${this.baseUrl}/elimina-utente?id=${id}`, { responseType: "text"});;
   }
 
-  updateUser(updatedUser: any) {
-    this.getUtenti().subscribe(users => {
-      const index = users.findIndex(user => user.id === updatedUser.id);
-      if (index !== -1) {
-        users[index] = updatedUser;
-      }
-    });
+  updateUser(updatedUser: Utente): Observable<any> {
+    const url = `${this.baseUrl}/modifica-utente`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<Utente>(url, updatedUser, { headers, responseType: 'text' as 'json' })
   }
 }

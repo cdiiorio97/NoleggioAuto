@@ -6,10 +6,11 @@
 <ng-container *ngIf="datiCaricati" >
     <app-my-table [data]="prenotazioni" 
             [tableConfig]="tableConfig" 
+            [actionsTabella]="actionsTabella"
             [dettagliURL]="'/dettagli-prenotazione'" 
             [aggiuntaConsentita]="!utenteLoggato.isAdmin"
             [aggiuntaURL]="'/aggiungi-prenotazione'"
             [permessiEditRow]="utenteLoggato.isAdmin"
-            (deleteClick)="handleAction($event)" 
+            (actionClick)="handleAction($event)" 
             [datiCaricati]="datiCaricati"/>
 </ng-container>

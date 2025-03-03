@@ -22,7 +22,7 @@ export class MyTableComponent implements OnInit{
   @Input() permessiEditRow: boolean = false;
   @Input() eliminazione?: any;
   @Input() datiCaricati?: boolean;
-  @Output() deleteClick = new EventEmitter<{ action: string, row: any }>();
+  @Output() actionClick = new EventEmitter<{ action: string, row: any }>();
 
   originalData: any[] = [];
   sortedColumn: string = '';
@@ -52,21 +52,28 @@ export class MyTableComponent implements OnInit{
     this.filtro = {};
     this.datiCaricati
 
-    if(this.router.url !== "/richieste-prenotazioni"){
+    /* if(this.router.url !== "/richieste-prenotazioni"){
         this.actionsTabella?.push(this.modificaAction);
         if(this.isAdmin || this.router.url !== "/parco-auto")
           this.actionsTabella?.push(this.eliminaAction)
-    } else {
+        if(this.router.url === "/prenotazioni"){
+            this.actionsTabella?.push(this.modificaAction);
+            if(this.isAdmin)
+              this.actionsTabella?.push(this.eliminaAction)
+          } 
+    }
+     else {
         this.actionsTabella?.push(this.accettaAction);
         this.actionsTabella?.push(this.rifiutaAction);
-    }
+    } */
     if(this.numeroPagine.length === 1)
       this.paginaSuccessivaDisabled = true;
     
   }
 
   getStyle(header: MyHeaders){
-    if (header.field.toLowerCase() === 'id' || header.field.toLowerCase() === 'isadmin' ) {
+    if (header.field.toLowerCase() === 'id' || header.field.toLowerCase() === 'isadmin' ||
+         header.field.toLowerCase() === 'confermata' || header.field.toLowerCase() === 'rifiutata' || header.field.toLowerCase() === 'isAdmin') {
       return {
         'width': '5%',
         "align-items": "center"
@@ -161,32 +168,11 @@ export class MyTableComponent implements OnInit{
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
-  modifica(row: any){
-    this.router.navigateByUrl(`${this.dettagliURL}/${row.id}`);
-  }
-
   isBoolean(value: any): boolean {
     return typeof value === 'boolean';
   }
 
   handleActionsClick(action: string, row: any){
-    switch(action) {
-      case 'edit':
-        this.modifica(row);
-        break;
-      case 'delete':
-        this.deleteClick.emit({action, row})
-        break;
-      case 'accetta':
-      case 'rifiuta':
-        alert("prenotazione " + action + "ta")
-        break;
-      case 'prenotazioni':
-        this.router.navigateByUrl(`/prenotazioni-utente/${row.id}`);
-        break;
-      default:
-        this.router.navigateByUrl(`/${action}/${row.id}`);
-        break;
-    }
+    this.actionClick.emit({action, row})
   }
 }

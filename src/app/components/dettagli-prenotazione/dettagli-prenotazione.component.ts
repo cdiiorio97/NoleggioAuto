@@ -42,16 +42,17 @@ export class DettagliPrenotazioneComponent {
     dataFine: undefined,
     dataRichiesta: new Date(),
     dataConferma: undefined,
-    dataCancellazione: undefined,
     confermata: undefined,
     confermataDa: undefined,
-    cancellata: undefined,
-    cancellataDa: undefined
+    rifiutata: undefined,
+    rifiutataDa: undefined,
+    dataRifiuto: undefined
   }
   auto: string = '';
   autoList: Auto[] = []
   utenteName: string = '';
   utente: Utente | undefined;
+  isAdmin: boolean = this.authService.getIsAdmin();
   goBackAction: MyActions = BACK_BUTTON;
   salvaAction: MyActions = SAVE_BUTTON;
   autoScelta: any | undefined;
@@ -103,8 +104,8 @@ export class DettagliPrenotazioneComponent {
 
   convertiDatePrenotazione(){
     this.prenotazione.dataRichiesta = this.datePipe.transform(this.prenotazione.dataRichiesta, "yyyy-MM-dd", "yyyy-MM-dd")
-    this.prenotazione.dataCancellazione = !this.prenotazione?.dataCancellazione ? undefined
-                                        : this.datePipe.transform(this.prenotazione?.dataCancellazione, "yyyy-MM-dd", "yyyy-MM-dd") 
+    this.prenotazione.dataRifiuto = !this.prenotazione?.dataRifiuto ? undefined
+                                        : this.datePipe.transform(this.prenotazione?.dataRifiuto, "yyyy-MM-dd", "yyyy-MM-dd") 
     this.prenotazione.dataConferma = !this.prenotazione?.dataConferma ? undefined
                                         : this.datePipe.transform(this.prenotazione?.dataConferma, "yyyy-MM-dd", "yyyy-MM-dd") 
     this.prenotazione.dataInizio = !this.prenotazione?.dataInizio ? undefined
@@ -116,30 +117,26 @@ export class DettagliPrenotazioneComponent {
   async onSubmit() {
     if(this.currentUrl === "/aggiungi-prenotazione"){
       this.prenotazione.utente = this.utenteLoggato;
-      this.prenotazione.dataInizio = this.prenotazione.dataInizio ? new Date(this.prenotazione.dataInizio).toISOString().split('T')[0] 
-                                                                  : undefined;
-      this.prenotazione.dataFine = this.prenotazione.dataFine ? new Date(this.prenotazione.dataFine).toISOString().split('T')[0] 
-                                                              : undefined;
-
+      this.prenotazione.dataInizio = !this.prenotazione.dataInizio ? undefined 
+                                          : new Date(this.prenotazione.dataInizio).toISOString().split('T')[0];
+      this.prenotazione.dataFine = !this.prenotazione.dataFine ? undefined 
+                                          : new Date(this.prenotazione.dataFine).toISOString().split('T')[0];
       this.prenotazioniService.inserisciRichiestaPrenotazione(this.prenotazione).subscribe({
         next: () => {
           alert(`Richiesta prenotazione inoltrata correttamente`)
-          this.router.navigateByUrl('/homepage');
+          this.goBack();
         },
-        error: (e) => {
-          alert(`errore durante l'aggiunta: ${e}`)
-        }
+        error: (e) => { alert(`errore durante l'aggiunta: ${e}`) }
       })
     }
     else {
-      try{
-        await this.prenotazioniService.updatePrenotazione(this.prenotazione);
-        alert("utente aggiornato");
-        this.router.navigateByUrl(`/prenotazioni-utente?id=${this.utenteLoggato.id}`)
-      }
-      catch(e) {
-        alert(`errore durante l'aggiornamento dati: ${e}`)
-      }
+      this.prenotazioniService.updatePrenotazione(this.prenotazione).subscribe({
+        next: () =>{
+          alert("prenotazione aggiornata");
+          window.location.reload();
+        },
+        error: (e) => { alert(e.error) }
+      });
     }
   }
  

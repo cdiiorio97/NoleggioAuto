@@ -5,7 +5,7 @@ import { Prenotazione, Utente } from '../../config';
 import { Router } from '@angular/router';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { DateFormatPipe } from '../../date-format.pipe';
-import { BACK_BUTTON } from '../../costanti';
+import { BACK_BUTTON, DELETE_BUTTON, EDIT_BUTTON, VIEW_DETAILS_BUTTON, VISIBILITY_BUTTON } from '../../costanti';
 import { UtentiService } from '../../services/utenti/utenti.service';
 
 @Component({
@@ -31,22 +31,26 @@ export class PrenotazioniComponent implements OnInit {
     { name: "Auto", field: "auto", sorting: 'asc', visibile: true },
     { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true },
     { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true },
-    { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true },
+    /* { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true }, */
     { name: "Confermata", field: "confermata", sorting: 'asc', visibile: true },
     { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: true },
     { name: "Confermata Da", field: "confermataDa", sorting: 'asc', visibile: true },
-    { name: "Data Cancellazione", field: "dataCancellazione", sorting: 'asc', visibile: true },
-    { name: "Cancellata Da", field: "cancellataDa", sorting: 'asc', visibile: true },
+    { name: "Rifiutata", field: "rifiutata", sorting: 'asc', visibile: true },
+    { name: "Data Rifiuto", field: "dataRifiuto", sorting: 'asc', visibile: true },
+    { name: "Rifiutata Da", field: "rifiutataDa", sorting: 'asc', visibile: true },
     { name: "Actions", field: "actions", sorting: 'asc', visibile: true },
   ];
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
     pagination: { itemPerPage: 8 }
   };
+  actionsTabella: MyActions[] = []
   currentUrl: string = this.router.url;
   datiCaricati: boolean = false;
 
   ngOnInit(): void {
+    this.actionsTabella.push( this.authService.getIsAdmin() ? EDIT_BUTTON : VIEW_DETAILS_BUTTON )
+    this.actionsTabella.push(DELETE_BUTTON)
     this.caricaPrenotazioni()
   }
 
@@ -70,7 +74,7 @@ export class PrenotazioniComponent implements OnInit {
               this.utenteSelezionato = user 
               this.getPrenotazioniByUserId(this.utenteSelezionato?.id);
             },
-            error: (e) => {console.log(e.error.text)}
+            error: (e) => { alert(e.error) }
           });
         }
       } 
@@ -85,10 +89,7 @@ export class PrenotazioniComponent implements OnInit {
         this.prenotazioni = data;
         this.formattaInformazioni();
       },
-      error: (e) => {
-        alert(e.error.text)
-        sessionStorage.setItem("getErrorMessage", e.error.text)
-      },
+      error: (e) => { alert(e.error.text) },
       complete: ()=>{ this.datiCaricati = true }
     })
   }
@@ -99,10 +100,7 @@ export class PrenotazioniComponent implements OnInit {
         this.prenotazioni = response;
         this.formattaInformazioni();
       },
-      error: (e) => {
-        alert(e.error.text)
-        sessionStorage.setItem("getErrorMessage", e.error.text)
-      },
+      error: (e) => { alert(e.error.text) },
       complete: ()=>{ this.datiCaricati = true }
     })
     this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "utente")
@@ -113,14 +111,14 @@ export class PrenotazioniComponent implements OnInit {
     this.prenotazioni.forEach(elem => {
       for (const key in elem) {
         const value = (elem as any)[key];
-        if(key === "utente" || key === "confermataDa" || key === "cancellataDa") {
-          if(elem[key]?.cognome != null && elem[key]?.cognome != null)
-            (elem as any)[key] = `${elem[key]?.nome} ${elem[key]?.cognome}`
+        if(key === "utente" || key === "confermataDa" || key === "rifiutataDa" ) {
+          if(value?.cognome != null && value?.cognome != null)
+            (elem as any)[key] = `${value?.nome} ${value?.cognome}`
           else 
             (elem as any)[key] = "";
         }
         if(key ==="auto")
-            (elem as any)[key] = `${elem[key]?.brand} ${elem[key]?.modello}`
+            (elem as any)[key] = `${value?.brand} ${value?.modello}`
         if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)))) {
           (elem as any)[key] = this.datePipe.transform(value, "yyyy-MM-dd", "dd-MM-yyyy");
         }
@@ -132,6 +130,8 @@ export class PrenotazioniComponent implements OnInit {
                         : typeof elem["dataInizio"] === 'string' 
                             ? this.getDaysDifference(new Date(dataInizio)) 
                             : false;
+      /* if(elem.rifiutata || elem.confermata)
+        elem.editabile = false */
     });
   }
 
@@ -159,8 +159,15 @@ export class PrenotazioniComponent implements OnInit {
   }
 
   handleAction(event: { action: string, row: Prenotazione }): void {
-    if (event.action === 'delete') 
-      this.onDelete(event.row);
+    switch(event.action){
+      case 'delete':
+        this.onDelete(event.row)
+        break;
+      case 'edit':
+      case 'viewDetails':
+        this.router.navigateByUrl(`/dettagli-prenotazione/${event.row.id}`)
+        break;
+    }
   }
 
   onDelete(row: Prenotazione): void {

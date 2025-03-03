@@ -4,11 +4,6 @@
 
 <form class="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
-        <label for="id">Id:</label>
-        <input type="number" id="id" [(ngModel)]="user.id" name="id" required style="width: 50px;" disabled>
-    </div>
-
-    <div class="form-group">
         <label for="name">Nome:</label>
         <input type="text" id="name" [(ngModel)]="user.nome" name="nome" required>
     </div>

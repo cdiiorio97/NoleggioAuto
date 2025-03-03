@@ -21,17 +21,14 @@ export class PrenotazioniService {
     return this.http.get<Prenotazione[]>(`${this.baseUrl}/get-by-user-id?id=${id}`)
   }
 
-  updatePrenotazione(prenotazione: Prenotazione): void {
-    this.getPrenotazioni().subscribe(prenotazioni => {
-      const index = prenotazioni.findIndex(elem => elem.id === prenotazione.id);
-      if (index !== -1) {
-        prenotazioni[index] = prenotazione;
-      }
-    });
+  updatePrenotazione(prenotazione: Prenotazione): Observable<any> {
+    const url = `${this.baseUrl}/modifica-prenotazione`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<Prenotazione>(url, prenotazione, { headers, responseType: 'text' as 'json' })
   }
 
   deletePrenotazione(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/elimina-prenotazione?id=${id}`, { responseType: "text"});;
+    return this.http.delete(`${this.baseUrl}/elimina-prenotazione?id=${id}`, { responseType: "text"});
   }
 
   getRichiestePrenotazioni(): Observable<any[]> {
@@ -41,15 +38,18 @@ export class PrenotazioniService {
   inserisciRichiestaPrenotazione(newPren: Prenotazione): Observable<any>{
     const url = `${this.baseUrl}/aggiungi-richiesta-prenotazione`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(url, newPren, { headers, responseType: 'text' as 'json' })
+    return this.http.post<Prenotazione>(url, newPren, { headers, responseType: 'text' as 'json' })
   }
 
-  updateRichiestaPrenotazione(nuovaPren: Prenotazione): void {
-    this.getRichiestePrenotazioni().subscribe(richieste => {
-      const index = richieste.findIndex(elem => elem.id === nuovaPren.id);
-      if (index !== -1) {
-        richieste[index] = nuovaPren;
-      }
-    });
+  accettaPrenotazione(prenotazione: Prenotazione): Observable<any>{
+    const url = `${this.baseUrl}/conferma-prenotazione`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<Prenotazione>(url, prenotazione, { headers, responseType: 'text' as 'json' });
+  }
+
+  rifiutaPrenotazione(prenotazione: Prenotazione): Observable<any>{
+    const url = `${this.baseUrl}/rifiuta-prenotazione`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<Prenotazione>(url, prenotazione, { headers, responseType: 'text' as 'json' });
   }
 }

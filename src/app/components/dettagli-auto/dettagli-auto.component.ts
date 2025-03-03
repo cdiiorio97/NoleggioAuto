@@ -48,26 +48,20 @@ export class DettagliAutoComponent {
     if(this.currentUrl === "/aggiungi-auto"){
       this.carService.addAuto(this.auto).subscribe({
         next: () => {
-          
-        }
+          alert("auto aggiunta");
+          this.goBack();
+        },
+        error:(e) => { alert(e.error) }
       })
-      try{
-        this.carService.addAuto(this.auto)
-        alert("auto aggiunta")
-        this.router.navigateByUrl("/parco-auto")
-      } catch (e){
-        alert(`errore durante l'aggiunta: ${e}`)
-      }
     }
     else {
-      try{
-        this.carService.updateAuto(this.auto);
-        alert("auto aggiornata");
-        this.router.navigateByUrl("/parco-auto")
-      }
-      catch(e) {
-        alert(`errore durante l'aggiornamento dati: ${e}`)
-      }
+      this.carService.updateAuto(this.auto).subscribe({
+        next: () => {
+          alert("auto aggiornata");
+          window.location.reload();
+        },
+        error: (e) => { alert(e.error) }
+      })
     }
   }
 

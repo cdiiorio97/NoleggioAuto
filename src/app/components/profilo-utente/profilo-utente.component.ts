@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Utente } from '../../config';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { Router } from '@angular/router';
@@ -43,13 +43,8 @@ export class ProfiloUtenteComponent {
 
   getUserById(id: number): void {
     this.userService.getUserById(id).subscribe({
-      next: (elem: Utente) => {
-        this.user = elem;
-      },
-      error: (e) => {
-        alert(e.error.text)
-        sessionStorage.setItem("getErrorMessage", e.error.text)
-      }
+      next: (elem: Utente) => { this.user = elem; },
+      error: (e) => { alert(e.error.text) }
     })
   }
 
@@ -60,23 +55,23 @@ export class ProfiloUtenteComponent {
 
   onSubmit() {
     if(this.currentUrl === "/aggiungi-utente"){
-      try{
-        this.userService.addUser(this.user)
-        alert("utente aggiunto")
-        this.router.navigateByUrl("/homepage")
-      } catch (e){
-        alert("errore durante l'aggiunta: " + e)
-      }
+      this.userService.addUtente(this.user).subscribe({
+        next: () => { 
+          alert("utente aggiunto correttamente"); 
+          this.goBack();
+        },
+        error: (e) => { alert(e.error); }
+      })
     }
     else {
-      try{
-        this.userService.updateUser(this.user);
-        alert("utente aggiornato");
-        //this.router.navigateByUrl("/homepage")
-      }
-      catch(e) {
-        alert("errore durante l'aggiornamento dati: " + e)
-      }
+      this.userService.updateUser(this.user).subscribe({
+        next: () => { 
+          alert("utente aggiornato");
+          this.authService.setUtenteLoggato(this.user)
+          window.location.reload() 
+        },
+        error: (e) => { alert(e.error) }
+      });
     }
   }
 

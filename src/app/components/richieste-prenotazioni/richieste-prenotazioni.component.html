@@ -1,3 +1,4 @@
 <ng-container *ngIf="datiCaricati">
-    <app-my-table [data]="nuoveRichieste" [tableConfig]="tableConfig" [permessiEditRow]="true" [datiCaricati]="datiCaricati" />
+    <app-my-table [data]="nuoveRichieste" [tableConfig]="tableConfig" [permessiEditRow]="true" [datiCaricati]="datiCaricati" 
+                (actionClick)="handleAction($event)" [actionsTabella]="actionsTabella"/>
 </ng-container>

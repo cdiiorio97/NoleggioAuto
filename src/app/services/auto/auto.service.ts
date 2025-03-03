@@ -22,18 +22,13 @@ export class AutoService {
   addAuto(newAuto: Auto): Observable<any>{
     const url = `${this.baseUrl}/aggiungi-auto`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(url, newAuto, { headers, responseType: 'text' as 'json' })
+    return this.http.post<Auto>(url, newAuto, { headers, responseType: 'text' as 'json' })
   }
 
-  updateAuto(auto: Auto){
-    if (auto) {
-      this.getAutomobili().subscribe(automobili => {
-        const index = automobili.findIndex(car => car.id === auto.id);
-        if (index !== -1) {
-          automobili[index] = auto;
-        }
-      });
-    }
+  updateAuto(auto: Auto): Observable<any>{
+    const url = `${this.baseUrl}/modifica-auto`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<Auto>(url, auto, { headers, responseType: 'text' as 'json' })
   }
 
   deleteAuto(id:number): Observable<any>{

@@ -4,12 +4,12 @@
     <ng-container *ngIf="utenteLoggato?.isAdmin">
         <div class="form-group">
             <label for="id">Id Prenotazione:</label>
-            <input type="number" id="id" [(ngModel)]="prenotazione.id" name="id" readonly style="width: 70px;">
+            <input type="number" id="id" [(ngModel)]="prenotazione.id" name="id" readonly style="width: 70px;" disabled>
         </div>
 
         <div class="form-group">
             <label for="utente">Utente:</label>
-            <input type="number" id="idUtente" [(ngModel)]="prenotazione.utente.id" name="utente" required style="width: 40px;">
+            <!-- <input type="number" id="idUtente" [(ngModel)]="prenotazione.utente.id" name="utente" required style="width: 40px;"> -->
             <input type="text" id="utenteNome" [value]="prenotazione.utente.nome +' '+prenotazione.utente.cognome" name="utenteNome" readonly>
         </div>
     </ng-container>
@@ -17,7 +17,7 @@
     <ng-container>
         <div class="form-group">
             <label for="auto">Auto:</label>
-            <select [(ngModel)]="prenotazione.auto.id" style="width: 200px;" name="auto">
+            <select [(ngModel)]="prenotazione.auto.id" style="width: 200px;" name="auto" [disabled]="isAdmin">
                     <option *ngFor="let auto of autoList" [value]="auto.id">{{auto.brand}} {{auto.modello}}</option>>
             </select>
         </div>
@@ -26,45 +26,44 @@
     <ng-container *ngIf='this.currentUrl !== "/aggiungi-prenotazione"'>
         <div class="form-group">    
             <label for="dataRichiesta">Data Richiesta:</label>
-            <input type="date" id="dataRichiesta" [(ngModel)]="prenotazione.dataRichiesta" 
-                    name="dataRichiesta" [min]="dataMinima" readonly>
+            <input type="date" id="dataRichiesta" [(ngModel)]="prenotazione.dataRichiesta" name="dataRichiesta" [min]="dataMinima" readonly>
         </div>
     </ng-container>
     <div class="form-group">    
         <label for="dataInizio">Data Inizio:</label>
-        <input type="date" id="dataInizio" [(ngModel)]="prenotazione.dataInizio" name="dataInizio" required [min]="dataMinima">
+        <input type="date" id="dataInizio" [(ngModel)]="prenotazione.dataInizio" name="dataInizio" required [min]="dataMinima" [readonly]="isAdmin">
     </div>
     <div class="form-group">    
         <label for="dataFine">Data Fine:</label>
-        <input type="date" id="dataFine" [(ngModel)]="prenotazione.dataFine" name="dataFine" required [min]="prenotazione.dataInizio">
+        <input type="date" id="dataFine" [(ngModel)]="prenotazione.dataFine" name="dataFine" required [min]="prenotazione.dataInizio" [readonly]="isAdmin">
     </div>
 
     <ng-container *ngIf='this.currentUrl !== "/aggiungi-prenotazione"'>
-        <ng-container>
-            <div class="form-group" *ngIf="!prenotazione.cancellata">
+        <!-- <ng-container>
+            <div class="form-group" *ngIf="!prenotazione.rifiutata">
                 <label for="confermata">Confermata:</label>
                 <input id="confermata" name="confermata" [value]="prenotazione.confermata ? 'Si' : 'No'" readonly style="width: 30px;">
             </div>
-        </ng-container>
+        </ng-container> -->
         <div class="form-group" *ngIf="prenotazione.confermata">    
             <label for="dataConferma">data Conferma:</label>
             <input type="date" id="dataConferma" [(ngModel)]="prenotazione.dataConferma" name="dataConferma" readonly>
         </div>
-        <div *ngIf="prenotazione.cancellata" style="display:flex; flex-direction:column; gap: 10px;"> 
-            <div class="form-group">
-                <label for="cancellata">Cancellata:</label>
-                <input id="cancellata" name="cancellata" [value]="prenotazione.cancellata ? 'Si' : 'No'" readonly style="width: 30px;">
-            </div>
+        <div *ngIf="prenotazione.rifiutata" style="display:flex; flex-direction:column; gap: 10px;"> 
+            <!-- <div class="form-group">
+                <label for="rifiutata">Rifiutata:</label>
+                <input id="rifiutata" name="rifiutata" [value]="prenotazione.rifiutata ? 'Si' : 'No'" readonly style="width: 30px;">
+            </div> -->
             <div class="form-group">    
-                <label for="dataCancellazione">data Cancellazione:</label>
-                <input type="date" id="dataCancellazione" [(ngModel)]="prenotazione.dataCancellazione" 
-                        name="dataCancellazione" readonly>
+                <label for="dataRifiuto">data Cancellazione:</label>
+                <input type="date" id="dataRifiuto" [(ngModel)]="prenotazione.dataRifiuto" 
+                        name="dataRifiuto" readonly>
             </div>
-            <div class="form-group">    
-                <label for="cancellataDa">cancellata Da:</label>
-                <input  [value]="prenotazione.cancellataDa?.nome + ' ' + prenotazione.cancellataDa?.cognome" 
-                        name="cancellataDa" readonly type="text" id="cancellataDa"> 
-            </div>
+            <!-- <div class="form-group">    
+                <label for="rifiutataDa">Respinta Da:</label>
+                <input  [value]="prenotazione.rifiutataDa?.nome + ' ' + prenotazione.rifiutataDa?.cognome" 
+                        name="rifiutataDa" readonly type="text" id="rifiutataDa"> 
+            </div> -->
         </div>
     </ng-container>
 

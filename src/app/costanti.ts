@@ -227,3 +227,17 @@ export const LOGIN_BUTTON = {
         "transition": "background-color 0.3s"
     }
 }
+
+export const VIEW_DETAILS_BUTTON = { 
+    field: "viewDetails",
+    icon: "visibility",
+    iconPosition: "left",
+    css: {
+    "margin-top": "5px", 
+    "height": "30px", 
+    "margin-right": "5px", 
+    "border-radius": "10px",
+    "border-color": "lightblue", 
+    "background-color": "lightblue"
+    } 
+}

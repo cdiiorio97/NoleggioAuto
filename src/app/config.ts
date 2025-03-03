@@ -33,10 +33,10 @@ export interface Prenotazione{
     dataFine?: Date | string;
     dataRichiesta: Date | string;
     dataConferma?: Date | string;
-    dataCancellazione?: Date | string;
     confermata?: boolean;
     confermataDa?: Utente;
-    cancellata?: boolean;
-    cancellataDa?: Utente;
+    rifiutata?: boolean;
+    rifiutataDa?: Utente;
+    dataRifiuto?: Date | string;
     editabile?: boolean;
 }
