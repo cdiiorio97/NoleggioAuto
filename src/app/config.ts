@@ -29,8 +29,8 @@ export interface Prenotazione{
     id: number;
     utente: Utente;
     auto: Auto;
-    dataInizio: Date | string;
-    dataFine: Date | string;
+    dataInizio?: Date | string;
+    dataFine?: Date | string;
     dataRichiesta: Date | string;
     dataConferma?: Date | string;
     dataCancellazione?: Date | string;

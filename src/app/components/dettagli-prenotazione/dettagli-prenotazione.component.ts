@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { Auto, Prenotazione, Utente } from '../../config';
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
 import { AutoService } from '../../services/auto/auto.service';
@@ -19,7 +18,6 @@ export class DettagliPrenotazioneComponent {
   private autoService = inject(AutoService)
   private userService = inject(UtentiService)
   private router = inject(Router)
-  private location = inject(Location)
   private prenotazioniService = inject(PrenotazioniService)
   private authService = inject(AutenticazioneService)
   private datePipe = inject(DateFormatPipe)
@@ -40,14 +38,14 @@ export class DettagliPrenotazioneComponent {
       modello: '',
       targa: ''
     },
-    dataInizio: new Date(),
-    dataFine: new Date(),
+    dataInizio: undefined,
+    dataFine: undefined,
     dataRichiesta: new Date(),
-    dataConferma: new Date(),
-    dataCancellazione: new Date(),
-    confermata: false,
+    dataConferma: undefined,
+    dataCancellazione: undefined,
+    confermata: undefined,
     confermataDa: undefined,
-    cancellata: false,
+    cancellata: undefined,
     cancellataDa: undefined
   }
   auto: string = '';
@@ -59,7 +57,7 @@ export class DettagliPrenotazioneComponent {
   autoScelta: any | undefined;
   utenteLoggato: Utente = this.authService.getUtenteLoggato();
   currentUrl: string = this.router.url;
-  dataMinima: string = this.datePipe.transform(new Date(), "yearFirst");
+  dataMinima: string = this.datePipe.transform(new Date(), "yyyy-MM-dd", "yyyy-MM-dd");
 
 
   ngOnInit(): void {
@@ -104,28 +102,34 @@ export class DettagliPrenotazioneComponent {
   }
 
   convertiDatePrenotazione(){
-    this.prenotazione.dataCancellazione = this.prenotazione?.dataCancellazione ? this.datePipe.transform(this.prenotazione?.dataCancellazione, "yearFirst") : undefined
-    this.prenotazione.dataConferma = this.prenotazione?.dataConferma ? this.datePipe.transform(this.prenotazione?.dataConferma, "yearFirst") : undefined
-    this.prenotazione.dataInizio = this.datePipe.transform(this.prenotazione.dataInizio, "yearFirst")
-    this.prenotazione.dataRichiesta = this.datePipe.transform(this.prenotazione.dataRichiesta, "yearFirst")
-    this.prenotazione.dataFine = this.datePipe.transform(this.prenotazione.dataFine, "yearFirst")
+    this.prenotazione.dataRichiesta = this.datePipe.transform(this.prenotazione.dataRichiesta, "yyyy-MM-dd", "yyyy-MM-dd")
+    this.prenotazione.dataCancellazione = !this.prenotazione?.dataCancellazione ? undefined
+                                        : this.datePipe.transform(this.prenotazione?.dataCancellazione, "yyyy-MM-dd", "yyyy-MM-dd") 
+    this.prenotazione.dataConferma = !this.prenotazione?.dataConferma ? undefined
+                                        : this.datePipe.transform(this.prenotazione?.dataConferma, "yyyy-MM-dd", "yyyy-MM-dd") 
+    this.prenotazione.dataInizio = !this.prenotazione?.dataInizio ? undefined
+                                        : this.datePipe.transform(this.prenotazione?.dataInizio, "yyyy-MM-dd", "yyyy-MM-dd")
+    this.prenotazione.dataFine = !this.prenotazione?.dataFine ? undefined
+                                        : this.datePipe.transform(this.prenotazione?.dataFine, "yyyy-MM-dd", "yyyy-MM-dd")                 
   }
 
   async onSubmit() {
     if(this.currentUrl === "/aggiungi-prenotazione"){
-      this.prenotazione.dataRichiesta = this.datePipe.transform(new Date());
-      //this.prenotazione.idUtente = this.utenteLoggato?.id ?? 0;
-      this.prenotazione.dataConferma = undefined;
-      this.prenotazione.dataCancellazione = undefined;
-      this.prenotazione.confermataDa = undefined;
-      this.prenotazione.cancellataDa = undefined;
-      try{
-        this.prenotazioniService.addPrenotazione(this.prenotazione)
-        alert("Richiesta di prenotazione inoltrata")
-        this.router.navigateByUrl("/homepage")
-      } catch (e){
-        alert(`errore durante l'aggiunta: ${e}`)
-      }
+      this.prenotazione.utente = this.utenteLoggato;
+      this.prenotazione.dataInizio = this.prenotazione.dataInizio ? new Date(this.prenotazione.dataInizio).toISOString().split('T')[0] 
+                                                                  : undefined;
+      this.prenotazione.dataFine = this.prenotazione.dataFine ? new Date(this.prenotazione.dataFine).toISOString().split('T')[0] 
+                                                              : undefined;
+
+      this.prenotazioniService.inserisciRichiestaPrenotazione(this.prenotazione).subscribe({
+        next: () => {
+          alert(`Richiesta prenotazione inoltrata correttamente`)
+          this.router.navigateByUrl('/homepage');
+        },
+        error: (e) => {
+          alert(`errore durante l'aggiunta: ${e}`)
+        }
+      })
     }
     else {
       try{
@@ -138,7 +142,7 @@ export class DettagliPrenotazioneComponent {
       }
     }
   }
-
+ 
   goBack(): void {
     this.authService.getIsAdmin() ? this.router.navigateByUrl("/prenotazioni") : this.router.navigateByUrl('/homepage')
   }

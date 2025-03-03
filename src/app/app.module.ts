@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavHeadersComponent } from './components/nav-headers/nav-headers.component';
@@ -47,7 +46,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     HttpClientModule
   ],
-  providers: [AutenticazioneService, provideAnimationsAsync(), DateFormatPipe],
+  providers: [AutenticazioneService, provideAnimationsAsync(), DateFormatPipe ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

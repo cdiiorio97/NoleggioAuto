@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Auto } from '../../config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BASE_URL } from '../../costanti';
 
 @Injectable({
@@ -19,11 +19,10 @@ export class AutoService {
     return this.http.get<Auto>(`${this.baseUrl}/get-by-id?id=${id}`)
   }
 
-  addAuto(newAuto: Auto): void{
-    this.getAutomobili().subscribe(auto => {
-        auto.unshift(newAuto);
-        //this.automobili = of(auto);
-    });
+  addAuto(newAuto: Auto): Observable<any>{
+    const url = `${this.baseUrl}/aggiungi-auto`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(url, newAuto, { headers, responseType: 'text' as 'json' })
   }
 
   updateAuto(auto: Auto){
@@ -37,7 +36,7 @@ export class AutoService {
     }
   }
 
-  deleteAuto(id:number){
-    this.getAutomobili().subscribe(elem => of(elem.filter(auto => auto.id !== id)));
+  deleteAuto(id:number): Observable<any>{
+    return this.http.delete(`${this.baseUrl}/elimina-auto?id=${id}`, { responseType: "text"});;
   }
 }

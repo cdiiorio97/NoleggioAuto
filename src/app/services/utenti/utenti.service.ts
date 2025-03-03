@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Utente } from '../../config';
-import { HttpClient } from '@angular/common/http';
-import { UtilsService } from '../utils/utils.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BASE_URL } from '../../costanti';
 
 @Injectable({
@@ -20,19 +19,15 @@ export class UtentiService {
     return this.http.get<Utente>(`${this.baseUrl}/get-by-id?id=${id}`);
   }
 
-  addUser(newUser: any) {
-    this.getUtenti().subscribe(users => {
-        users.unshift(newUser);
-        return of(users);
-    });
+  addUtente(newUser: Utente): Observable<any>{
+    const url = `${this.baseUrl}/aggiungi-utente`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(url, newUser, { headers, responseType: 'text' as 'json' })
   }
 
-/*   deleteUser(id: number) {
-    this.getUtenti()
-        .subscribe(utenti => {
-            this.utenti = of(utenti.filter(user => user.id !== id));
-        });
-  } */
+  deleteUtente(id:number): Observable<any>{
+    return this.http.delete(`${this.baseUrl}/elimina-utente?id=${id}`, { responseType: "text"});;
+  }
 
   updateUser(updatedUser: any) {
     this.getUtenti().subscribe(users => {

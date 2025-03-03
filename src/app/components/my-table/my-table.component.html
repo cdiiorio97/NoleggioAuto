@@ -1,69 +1,60 @@
 <div class="container">
     <div class="spazio-azioni-sopra-tabella">
         <div class="bottoni-intestazione-tabella">
-            <div class="filters-div" >  
-                <ng-container>
-                    <input type="text" [(ngModel)]="valoreFiltro" (input)="aggiornaFiltro();"
-                            placeholder=" Filtra per valore" style="width: 200px;">
-                    <select [(ngModel)]="campoFiltro" (change)="aggiornaCampoFiltro()">
-                        <option value= "" disabled>Seleziona Campo</option>
-                        <option *ngFor="let option of tableConfig?.headers" [value]="option.name">{{ option.name }}</option>
-                    </select>
-                </ng-container>
+            <div class="filters-div" > 
+                <input type="text" [(ngModel)]="valoreFiltro" (input)="aggiornaFiltro();"
+                        placeholder=" Filtra per valore" style="width: 200px;">
+                <select [(ngModel)]="campoFiltro" (change)="aggiornaCampoFiltro()">
+                    <option value= "" disabled> Seleziona Campo </option>
+                    <option *ngFor="let option of tableConfig?.headers" [value]="option.name">{{ option.name }}</option>
+                </select>
             </div>
-            <ng-container *ngIf="aggiuntaConsentita">
-                <app-button [actionRichiesta]="aggiungiAction" [addButton]="true" [routerLink]="aggiuntaURL"/>
-            </ng-container>
+            <app-button *ngIf="aggiuntaConsentita" [actionRichiesta]="aggiungiAction" [addButton]="true" [routerLink]="aggiuntaURL"/>
         </div>
-        <div></div>     <!--spazio vuoto-->
     </div>
     <div class="tabella-bottoni">  
-        <div style="display: flex; flex-direction: column;">      
-            <table >
-                <thead>     
-                    <tr style="height: 50px;">
-                        <th *ngFor="let header of tableConfig?.headers" (click)="ordinaColonna(header)" 
-                            [ngStyle]="getStyle(header)"> 
+        <table>
+            <thead>     
+                <tr>
+                    <th *ngFor="let header of tableConfig?.headers" (click)="ordinaColonna(header)" [ngStyle]="getStyle(header)"> 
+                        <div class="table-header">
                             {{header.name}}
-                            <span *ngIf="sortedColumn === header.field">
-                                {{ order === 'asc' ? '⬆️' : '⬇️' }}
-                            </span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage" style="height: 50px; align-items: center;">
-                        <td *ngFor="let header of tableConfig?.headers" [class.boolean-cell]="isBoolean(row[header.field])" [ngClass]="getClass(header.field, 'body')">
-                            <ng-container *ngIf="header.field==='actions'">
-                                <div class="edit-delete-buttons">
-                                    <ng-container *ngFor="let button of actionsTabella">
-                                        <ng-container *ngIf="row.editabile || row.editabile === undefined && permessiEditRow || isAdmin">
-                                            <app-button [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
-                                        </ng-container>
-                                    </ng-container>
-                                </div>
-                            </ng-container>
-                            <ng-container *ngIf="isBoolean(row[header.field]); else showValue">
-                                <span *ngIf="row[header.field] === true" class="material-icons">check</span> 
-                                <span *ngIf="row[header.field] === false"class="material-icons">close</span>
-                            </ng-container>
-                            <ng-template #showValue>
-                            {{row[header.field]}}
-                            </ng-template>
+                            <mat-icon *ngIf="sortedColumn === header.field">
+                                {{ order === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                            </mat-icon>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="datiCaricati && datiCaricati && data.length === 0">
+                    <tr>  
+                        <td [attr.colspan]="tableConfig?.headers?.length" style="text-align: center;">
+                            Nessun elemento disponibile
                         </td>
                     </tr>
-                </tbody>
-            </table>     
-        </div>
+                </ng-container>
+                <tr *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage;">
+                    <td *ngFor="let header of tableConfig?.headers" [class.boolean-cell]="isBoolean(row[header.field])" [ngClass]="getClass(header.field, 'body')">
+                        <ng-container *ngIf="header.field==='actions'">
+                            <div class="edit-delete-buttons">
+                                <ng-container *ngFor="let button of actionsTabella">
+                                    <app-button *ngIf="isAdmin || row.editabile || row.editabile === undefined && permessiEditRow"
+                                                [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                        <mat-icon *ngIf="isBoolean(row[header.field]); else showValue">{{row[header.field] === true ? 'check' : 'close'}}</mat-icon>
+                        <ng-template #showValue> {{row[header.field]}} </ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>  
     </div>
-    <div class="paginazione-controlli" style="width: 80%;">
+    <div class="paginazione-controlli">
         <app-button [actionRichiesta]="pagPrecedenteAction" (onClick)="cambiaPagina(pagina - 1)" [disabled]="paginaPrecedenteDisabled"/>
-        <span>Pagina {{ pagina }}</span>
-        <ng-container *ngFor="let numero of numeroPagine">
-            <app-button (onClick)="cambiaPagina(numero)" [disabled]="numero === pagina" [number]="numero"/>
-        </ng-container>
-        
-        <app-button [actionRichiesta]="pagSuccessivaAction" (onClick)="cambiaPagina(pagina + 1)" [disabled]="paginaSuccessivaDisabled"/>
-
+        <app-button *ngFor="let numero of numeroPagine" (onClick)="cambiaPagina(numero)" [disabled]="numero === pagina" [number]="numero"/>
+        <app-button [actionRichiesta]="pagSuccessivaAction" (onClick)="cambiaPagina(pagina + 1)" 
+                    [disabled]="paginaSuccessivaDisabled || data.length <= (tableConfig?.pagination?.itemPerPage || 0)"/>
     </div>
 </div>

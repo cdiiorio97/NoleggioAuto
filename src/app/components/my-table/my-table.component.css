@@ -10,12 +10,25 @@ th {
   width: fit-content;
 }
 
+.table-header{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+tr{
+  height: 50px;
+  align-items: center;
+}
+
 table tr:nth-child(odd) {
-  background-color: #ccc9f3;
+  background-color: #ffffff;
 }
 
 table tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: #ccc9f3;
 }
 
 .paginazione-controlli {
@@ -24,22 +37,6 @@ table tr:nth-child(even) {
   align-items: center;
   margin-top: 20px;
   gap: 5px;
-}
-
-.paginazione-bottone {
-  background-color: #150d83;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  margin: 0 2px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-  
-.paginazione-bottone:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
 }
 
 .paginazione-controlli span {
@@ -56,12 +53,12 @@ table tr:nth-child(even) {
 
 .container{
   display:flex; 
-  flex-direction: column ;
+  flex-direction: column;
 }
 
 select {
   height: 30px;
-  width: 130px;
+  width: 150px;
   border-radius: 5px;
 }
 

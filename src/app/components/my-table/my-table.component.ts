@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output, TrackByFunction } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from './my-table-config';
 import { Router } from '@angular/router';
 import { ACCEPT_BUTTON, ADD_BUTTON, DELETE_BUTTON, EDIT_BUTTON, PAGINA_PRECEDENTE_BUTTON, PAGINA_SUCCESSIVA_BUTTON, REFUSE_BUTTON } from '../../costanti';
@@ -20,6 +20,9 @@ export class MyTableComponent implements OnInit{
   @Input() actionsTabella?: MyActions[] = [];
   @Input() aggiuntaConsentita?: boolean = false;
   @Input() permessiEditRow: boolean = false;
+  @Input() eliminazione?: any;
+  @Input() datiCaricati?: boolean;
+  @Output() deleteClick = new EventEmitter<{ action: string, row: any }>();
 
   originalData: any[] = [];
   sortedColumn: string = '';
@@ -47,6 +50,7 @@ export class MyTableComponent implements OnInit{
     this.filteredData = this.data || [];
     this.orderedData = this.data || [];
     this.filtro = {};
+    this.datiCaricati
 
     if(this.router.url !== "/richieste-prenotazioni"){
         this.actionsTabella?.push(this.modificaAction);
@@ -64,7 +68,8 @@ export class MyTableComponent implements OnInit{
   getStyle(header: MyHeaders){
     if (header.field.toLowerCase() === 'id' || header.field.toLowerCase() === 'isadmin' ) {
       return {
-        'width': '5%'
+        'width': '5%',
+        "align-items": "center"
       };
     }
     else if(header.field.toLowerCase() ==="actions"){
@@ -77,7 +82,8 @@ export class MyTableComponent implements OnInit{
     }
     else {
       return {
-        'width': '10%'
+        'width': '10%',
+        "align-items": "center"
       };
     }
   }
@@ -159,14 +165,6 @@ export class MyTableComponent implements OnInit{
     this.router.navigateByUrl(`${this.dettagliURL}/${row.id}`);
   }
 
-  async elimina(row: any){
-    try{
-      alert(`L'oggetto ${row.id} è stato eliminato`);
-    } catch (error){
-      alert(error)
-    }
-  }
-
   isBoolean(value: any): boolean {
     return typeof value === 'boolean';
   }
@@ -177,7 +175,7 @@ export class MyTableComponent implements OnInit{
         this.modifica(row);
         break;
       case 'delete':
-        this.elimina(row);
+        this.deleteClick.emit({action, row})
         break;
       case 'accetta':
       case 'rifiuta':

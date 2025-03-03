@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Auto } from '../../config';
 import { MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { AutoService } from '../../services/auto/auto.service';
@@ -10,6 +10,8 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
   styleUrl: './parco-auto.component.css'
 })
 export class ParcoAutoComponent {
+  private carService = inject(AutoService)
+  private authService = inject(AutenticazioneService)
   automobili: Auto[] = [];
   isAdmin: boolean = false;
   headers: MyHeaders[] = [
@@ -23,8 +25,7 @@ export class ParcoAutoComponent {
     headers: this.headers.filter(elem => elem.visibile),
     pagination: { itemPerPage: 8 }
   }
-  private carService = inject(AutoService)
-  private authService = inject(AutenticazioneService)
+  datiCaricati: boolean = false;
 
   ngOnInit(): void {
     this.isAdmin = this.authService.getIsAdmin();
@@ -33,14 +34,11 @@ export class ParcoAutoComponent {
 
   getAuto(): void {
     this.carService.getAutomobili().subscribe({
-      next: (data : Auto[]) => {
-        console.log(data)
-        this.automobili = data;
-      },
+      next: (data : Auto[]) => { this.automobili = data; },
       error: (e) => {
         alert(e.error.text);
-        sessionStorage.setItem("getErrorMessage", e.error.text);
         },
+      complete: () => { this.datiCaricati = true}
     });
   }
 

@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Prenotazione } from '../../config';
 import { BASE_URL } from '../../costanti';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -21,13 +21,6 @@ export class PrenotazioniService {
     return this.http.get<Prenotazione[]>(`${this.baseUrl}/get-by-user-id?id=${id}`)
   }
 
-  addPrenotazione(newPren: any){
-    /* this.getPrenotazioni().subscribe(pren => {
-      pren.unshift(newPren);
-      this.prenotazioni = of(pren);
-    }); */
-  }
-
   updatePrenotazione(prenotazione: Prenotazione): void {
     this.getPrenotazioni().subscribe(prenotazioni => {
       const index = prenotazioni.findIndex(elem => elem.id === prenotazione.id);
@@ -37,8 +30,18 @@ export class PrenotazioniService {
     });
   }
 
+  deletePrenotazione(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/elimina-prenotazione?id=${id}`, { responseType: "text"});;
+  }
+
   getRichiestePrenotazioni(): Observable<any[]> {
-    return this.http.get<Prenotazione[]>(`${this.baseUrl}/richieste-prenotazioni`);
+    return this.http.get<Prenotazione[]>(`${this.baseUrl}/get-richieste-prenotazioni`);
+  }
+  
+  inserisciRichiestaPrenotazione(newPren: Prenotazione): Observable<any>{
+    const url = `${this.baseUrl}/aggiungi-richiesta-prenotazione`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(url, newPren, { headers, responseType: 'text' as 'json' })
   }
 
   updateRichiestaPrenotazione(nuovaPren: Prenotazione): void {

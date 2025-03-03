@@ -26,6 +26,7 @@ export class RichiestePrenotazioniComponent implements OnInit {
     headers: this.headers.filter(elem => elem.visibile),
     pagination: { itemPerPage: 8 }
   };
+  datiCaricati: boolean = false;
 
   ngOnInit(){
     this.getRichiestePrenotazione();
@@ -47,12 +48,14 @@ export class RichiestePrenotazioniComponent implements OnInit {
             if(key ==="auto")
                 (elem as any)[key] = `${elem[key]?.brand} ${elem[key]?.modello}`
             if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)))) {
-              (elem as any)[key] = this.datePipe.transform(value, "dateFirst");
+              (elem as any)[key] = this.datePipe.transform(value, "yyyy-MM-dd", "dd-MM-yyyy");
             }
           }
           elem.editabile = true;
         });
-      }
+      },
+      error: (e) => { alert(e.error)},
+      complete: () => { this.datiCaricati = true}
     })
   }
 

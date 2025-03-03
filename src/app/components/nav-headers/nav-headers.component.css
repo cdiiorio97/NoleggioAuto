@@ -1,7 +1,7 @@
 nav {
     display: flex;
     gap: 10px;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
 }
 
 .nav-buttons{
@@ -10,10 +10,9 @@ nav {
     border-radius: 10px;
     border: none;
     background-color: #6db1fa; 
-    text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    transition: background-color 0.3s;
+    transition: background-color 0.2s;
     cursor: pointer;
   }
   

@@ -48,6 +48,7 @@ export class HomepageComponent {
     pagination: { itemPerPage: 8 },
   }
   utenteLoggato: Utente = this.authService.getUtenteLoggato();
+  datiCaricati: boolean = false;
 
   ngOnInit(): void {
     if(this.utenteLoggato.isAdmin)
@@ -64,7 +65,8 @@ export class HomepageComponent {
       error: (e) => {
         alert(e.error.text)
         sessionStorage.setItem("getErrorMessage", e.error.text)
-        },
+      },
+      complete: () => { this.datiCaricati = true; }
     })
   }
 }

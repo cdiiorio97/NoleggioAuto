@@ -1,16 +1,15 @@
-<ng-container *ngIf="backButtonVisibile" >
-    <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 15px; gap: 5px">
-        <app-button [actionRichiesta]="goBackAction" (onClick)="goBack()"/>
-        <span style="font-size: 25px; margin-top: 5px;">
-            Prenotazioni di <b>{{utenteSelezionato?.nome}} {{utenteSelezionato?.cognome}}</b>
-        </span>
-    </div>
-</ng-container>
-<ng-container *ngIf="prenotazioni.length > 0">
-<app-my-table [data]="prenotazioni" 
+
+<div *ngIf="backButtonVisibile" >
+    <app-button [actionRichiesta]="goBackAction" (onClick)="goBack()"/>
+    <span> Prenotazioni di <b>{{utenteSelezionato?.nome}} {{utenteSelezionato?.cognome}}</b> </span>
+</div>
+<ng-container *ngIf="datiCaricati" >
+    <app-my-table [data]="prenotazioni" 
             [tableConfig]="tableConfig" 
             [dettagliURL]="'/dettagli-prenotazione'" 
             [aggiuntaConsentita]="!utenteLoggato.isAdmin"
             [aggiuntaURL]="'/aggiungi-prenotazione'"
-            [permessiEditRow]="utenteLoggato.isAdmin"/>
+            [permessiEditRow]="utenteLoggato.isAdmin"
+            (deleteClick)="handleAction($event)" 
+            [datiCaricati]="datiCaricati"/>
 </ng-container>

@@ -1,4 +1,4 @@
-<ng-container *ngIf="automobili.length > 0">
+<ng-container *ngIf="datiCaricati">
     <app-my-table   [data]="automobili" [tableConfig]="tableConfig" [dettagliURL]="'/dettagli-auto'" 
-                    [aggiuntaConsentita]="isAdmin" [aggiuntaURL]="'/aggiungi-auto'" [permessiEditRow]="true"/> 
+                    [aggiuntaConsentita]="isAdmin" [aggiuntaURL]="'/aggiungi-auto'" [permessiEditRow]="true" [datiCaricati]="datiCaricati"/> 
 </ng-container>

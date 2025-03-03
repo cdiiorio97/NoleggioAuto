@@ -6,10 +6,6 @@ button{
   cursor: pointer;
 }
 
-button:hover{
-  background-color: darken(20%);
-}
-
 mat-icon{
   font-size: 25px;
 }  

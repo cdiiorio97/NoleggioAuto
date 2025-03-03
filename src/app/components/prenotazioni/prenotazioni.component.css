@@ -1,0 +1,12 @@
+div{
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    margin-bottom: 15px; 
+    gap: 5px
+}
+
+span{
+    font-size: 25px; 
+    margin: 5px 0 0 0;
+}

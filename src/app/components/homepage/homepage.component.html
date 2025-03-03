@@ -1,5 +1,5 @@
-<ng-container *ngIf="utenteLoggato.isAdmin && utenti.length>0">
+<ng-container *ngIf="utenteLoggato.isAdmin && datiCaricati">
     <app-my-table [data]="utenti" [tableConfig]="tableConfig" [dettagliURL]="'/dettagli-utente'" 
                     [actionsTabella]="actions" [aggiuntaConsentita]="true" [aggiuntaURL]="'/aggiungi-utente'" 
-                    [permessiEditRow]="true" /> 
+                    [permessiEditRow]="true" [datiCaricati]="datiCaricati"/> 
 </ng-container>

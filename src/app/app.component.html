@@ -1,19 +1,11 @@
 
-<div style="margin-left: 10px;">
-      
+<div class="full-app">
     <ng-container *ngIf="authService.getIsLogged()">
-        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 80%;">
-            <ng-container *ngIf="authService.getIsAdmin()">
-                <h1 >{{titleAdmin}}</h1>
-            </ng-container>
-            <ng-container *ngIf="!authService.getIsAdmin()">
-                <h1 >{{titleUtente}}</h1>
-            </ng-container>
+        <div class="welcome-message-logout">
+            <h1>{{authService.getIsAdmin() ? titleAdmin : titleUtente}}</h1>
             <app-button [actionRichiesta]="logoutAction" (onClick)="logout()"/>
         </div>
-        <div>
-            <app-nav-headers [navHeaders]="config.navHeaders"/>
-        </div>
+        <app-nav-headers [navHeaders]="config.navHeaders"/>
     </ng-container>
     <router-outlet></router-outlet>
 </div>

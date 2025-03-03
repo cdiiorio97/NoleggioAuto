@@ -10,13 +10,11 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
 export class NavHeadersComponent {
   @Input() navHeaders: NavHeader[] | undefined;
   private authService = inject(AutenticazioneService)
-
-  isAdmin: boolean = this.authService.getIsAdmin();
-
+  
   ngOnInit(){
     this.navHeaders?.map(elem => {
         if(elem.field === "prenotazioni" || elem.field === "richieste-prenotazioni")
-          elem.visibile = this.isAdmin;
+          elem.visibile = this.authService.getIsAdmin();
     })
   }
 }

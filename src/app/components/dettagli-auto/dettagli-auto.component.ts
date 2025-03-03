@@ -39,14 +39,20 @@ export class DettagliAutoComponent {
 
   getAutoById(id:number){
     this.carService.getAutoById(id).subscribe({
-      next: (response: Auto) => { this.auto = response }
+      next: (response: Auto) => { this.auto = response },
+      error: (e) => { alert(e.error) }
     })
   }
 
-  async onSubmit() {
+  onSubmit() {
     if(this.currentUrl === "/aggiungi-auto"){
+      this.carService.addAuto(this.auto).subscribe({
+        next: () => {
+          
+        }
+      })
       try{
-        await this.carService.addAuto(this.auto)
+        this.carService.addAuto(this.auto)
         alert("auto aggiunta")
         this.router.navigateByUrl("/parco-auto")
       } catch (e){
@@ -55,7 +61,7 @@ export class DettagliAutoComponent {
     }
     else {
       try{
-        await this.carService.updateAuto(this.auto);
+        this.carService.updateAuto(this.auto);
         alert("auto aggiornata");
         this.router.navigateByUrl("/parco-auto")
       }

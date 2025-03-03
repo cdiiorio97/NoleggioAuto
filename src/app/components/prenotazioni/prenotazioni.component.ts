@@ -44,14 +44,19 @@ export class PrenotazioniComponent implements OnInit {
     pagination: { itemPerPage: 8 }
   };
   currentUrl: string = this.router.url;
+  datiCaricati: boolean = false;
 
   ngOnInit(): void {
+    this.caricaPrenotazioni()
+  }
+
+  caricaPrenotazioni(){
     if (this.currentUrl === "/prenotazioni"){
       if(this.utenteLoggato.isAdmin){
         this.tableConfig.headers?.splice(1,0,
           { name: "Utente", field: "utente", sorting: 'asc', visibile: true },
         )
-        this.getPrenotazioni();
+        this.getPrenotazioniAdmin();
       }
     }
     else {
@@ -74,7 +79,7 @@ export class PrenotazioniComponent implements OnInit {
     }
   }
 
-  getPrenotazioni(): void {
+  getPrenotazioniAdmin(): void {
     this.prenotazioneService.getPrenotazioni().subscribe({
       next: (data : Prenotazione[]) => {
         this.prenotazioni = data;
@@ -84,6 +89,7 @@ export class PrenotazioniComponent implements OnInit {
         alert(e.error.text)
         sessionStorage.setItem("getErrorMessage", e.error.text)
       },
+      complete: ()=>{ this.datiCaricati = true }
     })
   }
   
@@ -97,11 +103,13 @@ export class PrenotazioniComponent implements OnInit {
         alert(e.error.text)
         sessionStorage.setItem("getErrorMessage", e.error.text)
       },
+      complete: ()=>{ this.datiCaricati = true }
     })
     this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "utente")
   }
 
   formattaInformazioni(): void {
+    console.log(this.prenotazioni)
     this.prenotazioni.forEach(elem => {
       for (const key in elem) {
         const value = (elem as any)[key];
@@ -114,10 +122,16 @@ export class PrenotazioniComponent implements OnInit {
         if(key ==="auto")
             (elem as any)[key] = `${elem[key]?.brand} ${elem[key]?.modello}`
         if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)))) {
-          (elem as any)[key] = this.datePipe.transform(value, "dateFirst");
+          (elem as any)[key] = this.datePipe.transform(value, "yyyy-MM-dd", "dd-MM-yyyy");
         }
       }
-      elem.editabile = this.getDaysDifference(elem["dataInizio"]);
+      let dataInizio = elem["dataInizio"] ? this.parseDateString(elem["dataInizio"].toString()) : null;
+      if(dataInizio)
+        elem.editabile = elem["dataInizio"] instanceof Date 
+                        ? this.getDaysDifference(elem["dataInizio"]) 
+                        : typeof elem["dataInizio"] === 'string' 
+                            ? this.getDaysDifference(new Date(dataInizio)) 
+                            : false;
     });
   }
 
@@ -125,11 +139,41 @@ export class PrenotazioniComponent implements OnInit {
     this.router.navigateByUrl('/homepage')
   }
 
-  getDaysDifference(dataInizio: Date | string): boolean {
+  parseDateString(dateString: string): Date | null {
+    const parts = dateString.split('-');
+    if (parts.length !== 3) {
+      return null;
+    }
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+  
+    return new Date(year, month, day);
+  }
+
+  getDaysDifference(dataInizio: Date): boolean {
     let currentDate = new Date();
-    const bookingDate = typeof(dataInizio) === "string" ? new Date(dataInizio) : dataInizio
-    const diffTime = bookingDate.getTime() - currentDate.getTime();
+    const diffTime = dataInizio.getTime() - currentDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays > 2;
+  }
+
+  handleAction(event: { action: string, row: Prenotazione }): void {
+    if (event.action === 'delete') 
+      this.onDelete(event.row);
+  }
+
+  onDelete(row: Prenotazione): void {
+    if (confirm(`Sei sicuro di voler eliminare la prenotazione con ID ${row.id}?`)) {
+      this.prenotazioneService.deletePrenotazione(row.id).subscribe({
+        next: (response) => {
+          alert(response) 
+          window.location.reload();
+        },
+        error: (error) => {
+          alert(error.error)
+        }
+      });
+    }
   }
 }
