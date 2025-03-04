@@ -67,6 +67,6 @@
         </div>
     </ng-container>
 
-    <app-button [actionRichiesta]="salvaAction" (onClick)="onSubmit()"/>
+    <app-button *ngIf="!isAdmin" [actionRichiesta]="salvaAction" (onClick)="onSubmit()"/>
   </form>
   

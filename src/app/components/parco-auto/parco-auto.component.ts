@@ -5,6 +5,7 @@ import { AutoService } from '../../services/auto/auto.service';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { Router } from '@angular/router';
 import { DELETE_BUTTON, EDIT_BUTTON, VIEW_DETAILS_BUTTON } from '../../costanti';
+import { elementAt } from 'rxjs';
 
 @Component({
   selector: 'app-parco-auto',
@@ -43,7 +44,13 @@ export class ParcoAutoComponent {
 
   getAuto(): void {
     this.carService.getAutomobili().subscribe({
-      next: (data : Auto[]) => { this.automobili = data; },
+      next: (data : Auto[]) => { 
+        this.automobili = data;
+        if(!this.isAdmin)
+          this.automobili.map((elem) => { elem.viewOnly = true; }) 
+        else 
+          this.automobili.map((elem) => { elem.editabile = true; })
+      },
       error: (e) => { alert(e.error.text); },
       complete: () => { this.datiCaricati = true}
     });

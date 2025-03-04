@@ -10,7 +10,6 @@
             [dettagliURL]="'/dettagli-prenotazione'" 
             [aggiuntaConsentita]="!utenteLoggato.isAdmin"
             [aggiuntaURL]="'/aggiungi-prenotazione'"
-            [permessiEditRow]="utenteLoggato.isAdmin"
             (actionClick)="handleAction($event)" 
             [datiCaricati]="datiCaricati"/>
 </ng-container>

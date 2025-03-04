@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output, TrackByFunction } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from './my-table-config';
 import { Router } from '@angular/router';
 import { ACCEPT_BUTTON, ADD_BUTTON, DELETE_BUTTON, EDIT_BUTTON, PAGINA_PRECEDENTE_BUTTON, PAGINA_SUCCESSIVA_BUTTON, REFUSE_BUTTON } from '../../costanti';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
+import { Prenotazione } from '../../config';
 
 @Component({
   selector: 'app-my-table',
@@ -150,6 +151,10 @@ export class MyTableComponent implements OnInit{
       });
     });
 
+    arrayRisposta.map((elem) => { 
+      if(this.isPrenotazione(elem))
+        elem.viewOnly = elem.editabile ? false : true })
+
     return (arrayRisposta.length === 0 && Object.keys(this.filtro).length !== 0)
         ? [] 
         : this.filteredData = arrayRisposta;
@@ -174,5 +179,9 @@ export class MyTableComponent implements OnInit{
 
   handleActionsClick(action: string, row: any){
     this.actionClick.emit({action, row})
+  }
+
+  private isPrenotazione(elem: any): elem is Prenotazione {
+    return 'editabile' in elem;
   }
 }

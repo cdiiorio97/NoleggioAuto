@@ -49,8 +49,11 @@ export class PrenotazioniComponent implements OnInit {
   datiCaricati: boolean = false;
 
   ngOnInit(): void {
-    this.actionsTabella.push( this.authService.getIsAdmin() ? EDIT_BUTTON : VIEW_DETAILS_BUTTON )
-    this.actionsTabella.push(DELETE_BUTTON)
+    this.actionsTabella.push(VIEW_DETAILS_BUTTON)
+    if(!this.authService.getIsAdmin()){
+        this.actionsTabella.push(EDIT_BUTTON)
+        this.actionsTabella.push(DELETE_BUTTON)
+    }
     this.caricaPrenotazioni()
   }
 
@@ -124,14 +127,14 @@ export class PrenotazioniComponent implements OnInit {
         }
       }
       let dataInizio = elem["dataInizio"] ? this.parseDateString(elem["dataInizio"].toString()) : null;
-      if(dataInizio)
+      if(dataInizio && !this.authService.getIsAdmin())
         elem.editabile = elem["dataInizio"] instanceof Date 
                         ? this.getDaysDifference(elem["dataInizio"]) 
                         : typeof elem["dataInizio"] === 'string' 
                             ? this.getDaysDifference(new Date(dataInizio)) 
                             : false;
-      /* if(elem.rifiutata || elem.confermata)
-        elem.editabile = false */
+      else 
+        elem.viewOnly = true
     });
   }
 

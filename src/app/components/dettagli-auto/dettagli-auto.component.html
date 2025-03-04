@@ -21,6 +21,6 @@
         <input type="text" id="modello" [(ngModel)]="auto.modello" name="modello" required  [readonly]="!isAdmin">
     </div>
 
-    <app-button [actionRichiesta]="salvaAction" (onClick)="onSubmit()"/>
+    <app-button *ngIf="isAdmin" [actionRichiesta]="salvaAction" (onClick)="onSubmit()"/>
   </form>
   

@@ -14,6 +14,8 @@ export interface Auto {
     targa: string;
     brand: string;
     modello: string;
+    editabile?: boolean;
+    viewOnly?: boolean;
 }
 
 export interface Utente{
@@ -39,4 +41,5 @@ export interface Prenotazione{
     rifiutataDa?: Utente;
     dataRifiuto?: Date | string;
     editabile?: boolean;
+    viewOnly?: boolean;
 }

@@ -39,8 +39,14 @@
                         <ng-container *ngIf="header.field==='actions'">
                             <div class="edit-delete-buttons">
                                 <ng-container *ngFor="let button of actionsTabella">
-                                    <app-button *ngIf="isAdmin || row.editabile || row.editabile === undefined && permessiEditRow"
+                                    <ng-container *ngIf="row.editabile || permessiEditRow; else viewOnly">
+                                        <app-button *ngIf="button.field !== 'viewDetails'"
                                                 [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
+                                    </ng-container>
+                                    <ng-template #viewOnly>
+                                        <app-button *ngIf="button.field === 'viewDetails' && row.viewOnly"
+                                                [actionRichiesta]="button" (onClick)="handleActionsClick(button?.field || '', row)"/>
+                                    </ng-template>
                                 </ng-container>
                             </div>
                         </ng-container>
