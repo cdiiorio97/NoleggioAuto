@@ -4,6 +4,7 @@ import { MyActions } from './components/my-table/my-table-config';
 import { AutenticazioneService } from './services/login/autenticazione.service';
 import { Router } from '@angular/router';
 import { ACCEPT_BUTTON, ADD_BUTTON, BACK_BUTTON, DELETE_BUTTON, EDIT_BUTTON, LOGOUT_BUTTON, REFUSE_BUTTON } from './costanti';
+import { StorageService } from './services/storage/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { ACCEPT_BUTTON, ADD_BUTTON, BACK_BUTTON, DELETE_BUTTON, EDIT_BUTTON, LOG
 
 export class AppComponent {
   public authService = inject(AutenticazioneService)
+  public storageService = inject(StorageService)
   private router = inject(Router)
   logoutAction: MyActions = LOGOUT_BUTTON;
   editAction: MyActions = EDIT_BUTTON;
@@ -22,7 +24,7 @@ export class AppComponent {
   accettaAction: MyActions = ACCEPT_BUTTON;
   rifiutaAction: MyActions = REFUSE_BUTTON;
   
-  isAdmin: boolean = this.authService.getIsAdmin();
+  isAdmin: boolean = this.storageService.getIsAdmin();
   titleAdmin = 'Benvenuto Admin';
   titleUtente = 'Benvenuto User';
 

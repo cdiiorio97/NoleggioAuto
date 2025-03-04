@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { MyActions } from '../my-table/my-table-config';
 import { LOGIN_BUTTON } from '../../costanti';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-login-page',
@@ -12,6 +13,7 @@ import { LOGIN_BUTTON } from '../../costanti';
 export class LoginPageComponent {
   private router = inject(Router)
   private authService = inject(AutenticazioneService)
+  private storageService = inject(StorageService)
   username: string = "";
   password: string = "";
   loginButton: MyActions = LOGIN_BUTTON;
@@ -24,17 +26,17 @@ export class LoginPageComponent {
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
         if(response){
-          this.authService.setIsLogged("true");
-          this.authService.setIsAdmin(response.isAdmin ? "true" : "false");
-          this.authService.setUtenteLoggato(response);
+          this.storageService.setIsLogged(true);
+          this.storageService.setIsAdmin(response.isAdmin ? true : false);
+          this.storageService.setUtenteLoggato(response);
           this.router.navigate(['/homepage']);
         }
       },
       error: (e) => {
         alert(e.error.text)
         sessionStorage.setItem("loginErrorMessage", e.error.text)
-        this.authService.setIsLogged("false");
-        this.authService.setIsAdmin("false")
+        this.storageService.setIsLogged(false);
+        this.storageService.setIsAdmin(false)
       },
     });
   }

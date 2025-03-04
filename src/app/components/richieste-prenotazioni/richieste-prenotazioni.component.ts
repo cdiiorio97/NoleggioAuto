@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Auto, Prenotazione, Utente } from '../../config';
+import { Prenotazione, Utente } from '../../config';
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
 import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { DateFormatPipe } from '../../date-format.pipe';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { ACCEPT_BUTTON, REFUSE_BUTTON } from '../../costanti';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-richieste-prenotazioni',
@@ -14,7 +14,7 @@ import { ACCEPT_BUTTON, REFUSE_BUTTON } from '../../costanti';
 export class RichiestePrenotazioniComponent implements OnInit {
   private prenotazioniService = inject(PrenotazioniService)
   private datePipe = inject(DateFormatPipe)
-  private authService = inject(AutenticazioneService)
+  public storageService = inject(StorageService)
 
   nuoveRichieste: Prenotazione[] = [];
   headers: MyHeaders[] = [
@@ -32,7 +32,7 @@ export class RichiestePrenotazioniComponent implements OnInit {
   };
   actionsTabella: MyActions[] = []
   datiCaricati: boolean = false;
-  utenteOperazione?: Utente = this.authService.getUtenteLoggato();
+  utenteOperazione?: Utente = this.storageService.getUtenteLoggato();
 
   ngOnInit(){
     this.actionsTabella.push(ACCEPT_BUTTON)
@@ -71,11 +71,11 @@ export class RichiestePrenotazioniComponent implements OnInit {
     prenotazione.id = event.row.id;
     switch(event.action){
       case 'rifiuta': 
-        prenotazione.rifiutataDa = this.authService.getUtenteLoggato();
+        prenotazione.rifiutataDa = this.storageService.getUtenteLoggato();
         this.onDecline(prenotazione);
         break;
       case "accetta":
-        prenotazione.confermataDa = this.authService.getUtenteLoggato();
+        prenotazione.confermataDa = this.storageService.getUtenteLoggato();
         this.onAccept(prenotazione);
         break;
     }

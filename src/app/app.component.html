@@ -1,8 +1,8 @@
 
 <div class="full-app">
-    <ng-container *ngIf="authService.getIsLogged()">
+    <ng-container *ngIf="storageService.getIsLogged()">
         <div class="welcome-message-logout">
-            <h1>{{authService.getIsAdmin() ? titleAdmin : titleUtente}}</h1>
+            <h1>{{storageService.getIsAdmin() ? titleAdmin : titleUtente}}</h1>
             <app-button [actionRichiesta]="logoutAction" (onClick)="logout()"/>
         </div>
         <app-nav-headers [navHeaders]="config.navHeaders"/>

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ACCEPT_BUTTON, ADD_BUTTON, DELETE_BUTTON, EDIT_BUTTON, PAGINA_PRECEDENTE_BUTTON, PAGINA_SUCCESSIVA_BUTTON, REFUSE_BUTTON } from '../../costanti';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { Prenotazione } from '../../config';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-my-table',
@@ -13,7 +14,7 @@ import { Prenotazione } from '../../config';
 
 export class MyTableComponent implements OnInit{
   private router = inject(Router);
-  private authService = inject(AutenticazioneService)
+  public storageService = inject(StorageService)
   @Input() data: any[] = [];
   @Input() tableConfig: MyTableConfig | undefined;
   @Input() dettagliURL?: string;
@@ -44,7 +45,7 @@ export class MyTableComponent implements OnInit{
   paginaPrecedenteDisabled: boolean = true;
   paginaSuccessivaDisabled: boolean = false;
   pagSuccessivaAction: MyActions = PAGINA_SUCCESSIVA_BUTTON;
-  isAdmin: boolean = this.authService.getIsAdmin();
+  isAdmin: boolean = this.storageService.getIsAdmin();
 
   ngOnInit(): void {
     this.originalData = this.data;

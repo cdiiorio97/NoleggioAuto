@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { NavHeader } from '../../config';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-nav-headers',
@@ -9,12 +9,12 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
 })
 export class NavHeadersComponent {
   @Input() navHeaders: NavHeader[] | undefined;
-  private authService = inject(AutenticazioneService)
+  public storageService = inject(StorageService)
   
   ngOnInit(){
     this.navHeaders?.map(elem => {
         if(elem.field === "prenotazioni" || elem.field === "richieste-prenotazioni")
-          elem.visibile = this.authService.getIsAdmin();
+          elem.visibile = this.storageService.getIsAdmin();
     })
   }
 }

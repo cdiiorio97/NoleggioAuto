@@ -2,49 +2,39 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BASE_URL } from '../../costanti';
-import { Utente } from '../../config';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AutenticazioneService {
   private baseUrl: string = `${BASE_URL}/auth`;
+  private httpOptions = new HttpHeaders({ 'Content-Type': 'application/json' });
   private http = inject(HttpClient)
-
-  setIsAdmin(isAdmin: string): void {
-    sessionStorage.setItem("isAdmin", isAdmin);
-  }
-  setIsLogged(isLogged: string): void {
-    sessionStorage.setItem("isLogged", isLogged);
-  }
-  setUtenteLoggato(utenteLoggato: Utente){
-    sessionStorage.setItem('utenteLoggato', JSON.stringify(utenteLoggato))
-  }
-
-  getIsAdmin(): boolean {
-    return sessionStorage.getItem("isAdmin") === "true" ? true : false;
-  }
-  getIsLogged(): boolean {
-    return sessionStorage.getItem("isLogged") === "true" ? true : false;
-  }
-  getUtenteLoggato(): Utente {
-    let utenteLoggatoString = sessionStorage.getItem("utenteLoggato");
-    return utenteLoggatoString ? JSON.parse(utenteLoggatoString) : ''
-  }
+  public storageService = inject(StorageService)
 
   login(username: string, password: string): Observable<any> {
     const url = `${this.baseUrl}/login`;
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const body = { username: username, password: password };
 
-    return this.http.post(url, body, { headers });
+    return this.http.post(url, {username, password}, { headers: this.httpOptions }); 
+
   }
   
-  logout(): void {
-    sessionStorage.removeItem('isAdmin');
-    sessionStorage.removeItem('isLogged');
-    sessionStorage.removeItem('utenteLoggato')
-    this.setIsAdmin("false");
-    this.setIsLogged("false");
+  logout(): void /*Observable<any>*/{
+    this.storageService.clean()
+    //return this.http.post(`${this.baseUrl}/logout`, { }, httpOptions);
+  }
+
+  signUp(username: string, email: string, password: string): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/signup`,
+      {
+        username,
+        email,
+        password,
+      },
+      {headers: this.httpOptions}
+    );
   }
 }

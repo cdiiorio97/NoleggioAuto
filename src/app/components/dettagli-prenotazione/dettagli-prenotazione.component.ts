@@ -5,9 +5,9 @@ import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.se
 import { AutoService } from '../../services/auto/auto.service';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { MyActions } from '../my-table/my-table-config';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { DateFormatPipe } from '../../date-format.pipe';
 import { BACK_BUTTON, SAVE_BUTTON } from '../../costanti';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-dettagli-prenotazione',
@@ -19,8 +19,8 @@ export class DettagliPrenotazioneComponent {
   private userService = inject(UtentiService)
   private router = inject(Router)
   private prenotazioniService = inject(PrenotazioniService)
-  private authService = inject(AutenticazioneService)
   private datePipe = inject(DateFormatPipe)
+  public storageService = inject(StorageService)
 
   prenotazione: Prenotazione = {
     id: 0,
@@ -52,11 +52,11 @@ export class DettagliPrenotazioneComponent {
   autoList: Auto[] = []
   utenteName: string = '';
   utente: Utente | undefined;
-  isAdmin: boolean = this.authService.getIsAdmin();
+  isAdmin: boolean = this.storageService.getIsAdmin();
   goBackAction: MyActions = BACK_BUTTON;
   salvaAction: MyActions = SAVE_BUTTON;
   autoScelta: any | undefined;
-  utenteLoggato: Utente = this.authService.getUtenteLoggato();
+  utenteLoggato: Utente = this.storageService.getUtenteLoggato();
   currentUrl: string = this.router.url;
   dataMinima: string = this.datePipe.transform(new Date(), "yyyy-MM-dd", "yyyy-MM-dd");
 
@@ -141,6 +141,6 @@ export class DettagliPrenotazioneComponent {
   }
  
   goBack(): void {
-    this.authService.getIsAdmin() ? this.router.navigateByUrl("/prenotazioni") : this.router.navigateByUrl('/homepage')
+    this.storageService.getIsAdmin() ? this.router.navigateByUrl("/prenotazioni") : this.router.navigateByUrl('/homepage')
   }
 }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { BACK_BUTTON, SAVE_BUTTON, VISIBILITY_BUTTON, VISIBILITY_OFF_BUTTON } from '../../costanti';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-profilo-utente',
@@ -14,7 +15,7 @@ import { BACK_BUTTON, SAVE_BUTTON, VISIBILITY_BUTTON, VISIBILITY_OFF_BUTTON } fr
 export class ProfiloUtenteComponent {
   private userService = inject(UtentiService)
   private router = inject(Router)
-  private authService = inject(AutenticazioneService)
+  public storageService = inject(StorageService)
   user: Utente = {
     id: 0,
     nome: '',
@@ -31,7 +32,7 @@ export class ProfiloUtenteComponent {
 
   ngOnInit(): void {
     if(this.currentUrl === "/profilo-utente")
-      this.user = this.authService.getUtenteLoggato() 
+      this.user = this.storageService.getUtenteLoggato() 
     else if(this.currentUrl !== "/aggiungi-utente"){
       const match = this.currentUrl.match(/\/dettagli-utente\/(\d+)/);
         if (match) {
@@ -67,7 +68,7 @@ export class ProfiloUtenteComponent {
       this.userService.updateUser(this.user).subscribe({
         next: () => { 
           alert("utente aggiornato");
-          this.authService.setUtenteLoggato(this.user)
+          this.storageService.setUtenteLoggato(this.user)
           window.location.reload() 
         },
         error: (e) => { alert(e.error) }

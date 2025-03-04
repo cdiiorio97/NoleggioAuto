@@ -4,6 +4,15 @@ table, th, td {
   padding: 5px;
 }
 
+td.actions, td.actions div.edit-delete-buttons{
+  background-color: white;
+  border: none;
+  width: 1%;
+}
+table{
+  border: none;
+}
+
 th {
   background-color: #150d83;
   color: white;
@@ -85,8 +94,8 @@ select {
   line-height: normal;
 }
 
-.actions-column-body{
+/* .actions-column-body{
   background-color: white;
   border: none;
   width: 1%;
-}
+} */

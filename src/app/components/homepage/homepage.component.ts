@@ -5,6 +5,7 @@ import { UtentiService } from '../../services/utenti/utenti.service';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { Router } from '@angular/router';
 import { DELETE_BUTTON, EDIT_BUTTON } from '../../costanti';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-homepage',
@@ -13,7 +14,7 @@ import { DELETE_BUTTON, EDIT_BUTTON } from '../../costanti';
 })
 export class HomepageComponent {
   utentiService = inject(UtentiService)
-  private authService = inject(AutenticazioneService)
+  public storageService = inject(StorageService)
   private router = inject(Router);
   utenti: Utente[]  = [];
   prenotazioni: any[] = [];
@@ -48,7 +49,7 @@ export class HomepageComponent {
     headers: this.headers.filter(elem => elem.visibile),
     pagination: { itemPerPage: 8 },
   }
-  utenteLoggato: Utente = this.authService.getUtenteLoggato();
+  utenteLoggato: Utente = this.storageService.getUtenteLoggato();
   datiCaricati: boolean = false;
 
   ngOnInit(): void {

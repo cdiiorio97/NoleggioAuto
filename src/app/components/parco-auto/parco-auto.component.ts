@@ -6,6 +6,7 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
 import { Router } from '@angular/router';
 import { DELETE_BUTTON, EDIT_BUTTON, VIEW_DETAILS_BUTTON } from '../../costanti';
 import { elementAt } from 'rxjs';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-parco-auto',
@@ -14,10 +15,10 @@ import { elementAt } from 'rxjs';
 })
 export class ParcoAutoComponent {
   private carService = inject(AutoService)
-  private authService = inject(AutenticazioneService)
+  public storageService = inject(StorageService)
   private router = inject(Router)
   automobili: Auto[] = [];
-  isAdmin: boolean = this.authService.getIsAdmin();
+  isAdmin: boolean = this.storageService.getIsAdmin();
   headers: MyHeaders[] = [
     { name: "ID", field: "id", sorting: 'asc', visibile: true },
     { name: "Produttore", field: "brand", sorting: 'asc', visibile: true },

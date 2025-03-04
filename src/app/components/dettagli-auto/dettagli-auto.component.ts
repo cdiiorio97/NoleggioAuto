@@ -4,7 +4,7 @@ import { AutoService } from '../../services/auto/auto.service';
 import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
 import { BACK_BUTTON, SAVE_BUTTON } from '../../costanti';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-dettagli-auto',
@@ -13,8 +13,8 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
 })
 export class DettagliAutoComponent {
   private carService = inject(AutoService);
-  private authService = inject(AutenticazioneService)
   private router = inject(Router);
+  public storageService = inject(StorageService)
 
   auto: Auto = {
     id: 0,
@@ -25,7 +25,7 @@ export class DettagliAutoComponent {
   goBackAction: MyActions = BACK_BUTTON;
   salvaAction: MyActions = SAVE_BUTTON;
   currentUrl: string = this.router.url;
-  isAdmin: boolean = this.authService.getIsAdmin();
+  isAdmin: boolean = this.storageService.getIsAdmin();
 
   ngOnInit(): void {
     if(this.currentUrl !== "/aggiungi-auto"){

@@ -3,10 +3,10 @@ import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
 import { Prenotazione, Utente } from '../../config';
 import { Router } from '@angular/router';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { DateFormatPipe } from '../../date-format.pipe';
 import { BACK_BUTTON, DELETE_BUTTON, EDIT_BUTTON, VIEW_DETAILS_BUTTON, VISIBILITY_BUTTON } from '../../costanti';
 import { UtentiService } from '../../services/utenti/utenti.service';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-prenotazioni',
@@ -16,13 +16,13 @@ import { UtentiService } from '../../services/utenti/utenti.service';
 export class PrenotazioniComponent implements OnInit {
   @Input() aggiuntaConsentita?: boolean;
   private prenotazioneService = inject(PrenotazioniService);
-  private authService = inject(AutenticazioneService);
   private userService = inject(UtentiService);
   private router = inject(Router);
   private datePipe = inject(DateFormatPipe);
+  public storageService = inject(StorageService)
 
   prenotazioni: Prenotazione[] = [];
-  utenteLoggato: Utente = this.authService.getUtenteLoggato();
+  utenteLoggato: Utente = this.storageService.getUtenteLoggato();
   utenteSelezionato: Utente | undefined;
   backButtonVisibile: boolean = false;
   goBackAction: MyActions = BACK_BUTTON;
@@ -50,7 +50,7 @@ export class PrenotazioniComponent implements OnInit {
 
   ngOnInit(): void {
     this.actionsTabella.push(VIEW_DETAILS_BUTTON)
-    if(!this.authService.getIsAdmin()){
+    if(!this.storageService.getIsAdmin()){
         this.actionsTabella.push(EDIT_BUTTON)
         this.actionsTabella.push(DELETE_BUTTON)
     }
@@ -127,7 +127,7 @@ export class PrenotazioniComponent implements OnInit {
         }
       }
       let dataInizio = elem["dataInizio"] ? this.parseDateString(elem["dataInizio"].toString()) : null;
-      if(dataInizio && !this.authService.getIsAdmin())
+      if(dataInizio && !this.storageService.getIsAdmin())
         elem.editabile = elem["dataInizio"] instanceof Date 
                         ? this.getDaysDifference(elem["dataInizio"]) 
                         : typeof elem["dataInizio"] === 'string' 
