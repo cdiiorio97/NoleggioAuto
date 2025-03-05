@@ -9,6 +9,7 @@ td.actions, td.actions div.edit-delete-buttons{
   border: none;
   width: 1%;
 }
+
 table{
   border: none;
 }
@@ -93,9 +94,3 @@ select {
   display: inline-block;
   line-height: normal;
 }
-
-/* .actions-column-body{
-  background-color: white;
-  border: none;
-  width: 1%;
-} */

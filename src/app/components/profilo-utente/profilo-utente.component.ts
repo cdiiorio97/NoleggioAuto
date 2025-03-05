@@ -31,8 +31,11 @@ export class ProfiloUtenteComponent {
   visibilityAction: MyActions = VISIBILITY_BUTTON;
 
   ngOnInit(): void {
-    if(this.currentUrl === "/profilo-utente")
-      this.user = this.storageService.getUtenteLoggato() 
+    if(this.currentUrl === "/profilo-utente"){
+      this.userService.getUserByEmail(this.storageService.getEmail()).subscribe({
+        next: (response) => { this.user = response; }
+      })
+    }
     else if(this.currentUrl !== "/aggiungi-utente"){
       const match = this.currentUrl.match(/\/dettagli-utente\/(\d+)/);
         if (match) {
@@ -68,7 +71,6 @@ export class ProfiloUtenteComponent {
       this.userService.updateUser(this.user).subscribe({
         next: () => { 
           alert("utente aggiornato");
-          this.storageService.setUtenteLoggato(this.user)
           window.location.reload() 
         },
         error: (e) => { alert(e.error) }

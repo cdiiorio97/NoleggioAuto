@@ -3,7 +3,7 @@ import { Prenotazione, Utente } from '../../config';
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
 import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { DateFormatPipe } from '../../date-format.pipe';
-import { ACCEPT_BUTTON, REFUSE_BUTTON } from '../../costanti';
+import { ACCEPT_BUTTON, REFUSE_BUTTON, UTENTE_VUOTO } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
@@ -32,7 +32,6 @@ export class RichiestePrenotazioniComponent implements OnInit {
   };
   actionsTabella: MyActions[] = []
   datiCaricati: boolean = false;
-  utenteOperazione?: Utente = this.storageService.getUtenteLoggato();
 
   ngOnInit(){
     this.actionsTabella.push(ACCEPT_BUTTON)
@@ -69,13 +68,14 @@ export class RichiestePrenotazioniComponent implements OnInit {
   handleAction(event: { action: string, row: Prenotazione }): void {
     let prenotazione: Prenotazione = {} as Prenotazione;
     prenotazione.id = event.row.id;
+    let utenteTemp = UTENTE_VUOTO;
     switch(event.action){
       case 'rifiuta': 
-        prenotazione.rifiutataDa = this.storageService.getUtenteLoggato();
+        prenotazione.rifiutataDa = utenteTemp;
         this.onDecline(prenotazione);
         break;
       case "accetta":
-        prenotazione.confermataDa = this.storageService.getUtenteLoggato();
+        prenotazione.confermataDa = utenteTemp;
         this.onAccept(prenotazione);
         break;
     }

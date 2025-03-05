@@ -21,6 +21,7 @@ import { ButtonComponent } from './components/button/button.component';
 import { RichiestePrenotazioniComponent } from './components/richieste-prenotazioni/richieste-prenotazioni.component';
 import { DateFormatPipe } from './date-format.pipe';
 import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from './HttpRequestInterceptor';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     HttpClientModule
   ],
-  providers: [AutenticazioneService, provideAnimationsAsync(), DateFormatPipe ],
+  providers: [AutenticazioneService, provideAnimationsAsync(), DateFormatPipe, httpInterceptorProviders ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

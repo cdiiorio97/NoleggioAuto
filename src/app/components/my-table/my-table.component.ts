@@ -1,8 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from './my-table-config';
-import { Router } from '@angular/router';
 import { ACCEPT_BUTTON, ADD_BUTTON, DELETE_BUTTON, EDIT_BUTTON, PAGINA_PRECEDENTE_BUTTON, PAGINA_SUCCESSIVA_BUTTON, REFUSE_BUTTON } from '../../costanti';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { Prenotazione } from '../../config';
 import { StorageService } from '../../services/storage/storage.service';
 
@@ -13,7 +11,6 @@ import { StorageService } from '../../services/storage/storage.service';
 })
 
 export class MyTableComponent implements OnInit{
-  private router = inject(Router);
   public storageService = inject(StorageService)
   @Input() data: any[] = [];
   @Input() tableConfig: MyTableConfig | undefined;
@@ -26,7 +23,7 @@ export class MyTableComponent implements OnInit{
   @Input() datiCaricati?: boolean;
   @Output() actionClick = new EventEmitter<{ action: string, row: any }>();
 
-  originalData: any[] = [];
+  originalData: any[] = this.data;
   sortedColumn: string = '';
   order: string = '';
   filteredData: any[] = [];
@@ -43,34 +40,14 @@ export class MyTableComponent implements OnInit{
   rifiutaAction: MyActions = REFUSE_BUTTON;
   pagPrecedenteAction: MyActions = PAGINA_PRECEDENTE_BUTTON;
   paginaPrecedenteDisabled: boolean = true;
-  paginaSuccessivaDisabled: boolean = false;
+  paginaSuccessivaDisabled: boolean = this.numeroPagine.length === 1 ? true : false;
   pagSuccessivaAction: MyActions = PAGINA_SUCCESSIVA_BUTTON;
   isAdmin: boolean = this.storageService.getIsAdmin();
 
   ngOnInit(): void {
-    this.originalData = this.data;
     this.filteredData = this.data || [];
     this.orderedData = this.data || [];
     this.filtro = {};
-    this.datiCaricati
-
-    /* if(this.router.url !== "/richieste-prenotazioni"){
-        this.actionsTabella?.push(this.modificaAction);
-        if(this.isAdmin || this.router.url !== "/parco-auto")
-          this.actionsTabella?.push(this.eliminaAction)
-        if(this.router.url === "/prenotazioni"){
-            this.actionsTabella?.push(this.modificaAction);
-            if(this.isAdmin)
-              this.actionsTabella?.push(this.eliminaAction)
-          } 
-    }
-     else {
-        this.actionsTabella?.push(this.accettaAction);
-        this.actionsTabella?.push(this.rifiutaAction);
-    } */
-    if(this.numeroPagine.length === 1)
-      this.paginaSuccessivaDisabled = true;
-    
   }
 
   getStyle(header: MyHeaders){
@@ -95,10 +72,6 @@ export class MyTableComponent implements OnInit{
         "align-items": "center"
       };
     }
-  }
-
-  getClass(field: string, area: string): string {
-    return `${field}-column-${area}`;
   }
   
   aggiornaCampoFiltro(): void {

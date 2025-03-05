@@ -35,8 +35,7 @@
                     </tr>
                 </ng-container>
                 <tr *ngFor="let row of (filter() || []) | paginazione:pagina:tableConfig?.pagination?.itemPerPage;">
-                    <td *ngFor="let header of tableConfig?.headers" [class.boolean-cell]="isBoolean(row[header.field])" 
-                                [ngClass]="getClass(header.field, 'body')" [class.actions]="header.field === 'actions'">
+                    <td *ngFor="let header of tableConfig?.headers" [class.boolean-cell]="isBoolean(row[header.field])" [class.actions]="header.field === 'actions'">
                         <ng-container *ngIf="header.field==='actions'">
                             <div class="edit-delete-buttons">
                                 <ng-container *ngFor="let button of actionsTabella">

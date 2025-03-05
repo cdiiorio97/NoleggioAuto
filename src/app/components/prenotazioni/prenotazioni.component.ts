@@ -4,7 +4,7 @@ import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.se
 import { Prenotazione, Utente } from '../../config';
 import { Router } from '@angular/router';
 import { DateFormatPipe } from '../../date-format.pipe';
-import { BACK_BUTTON, DELETE_BUTTON, EDIT_BUTTON, VIEW_DETAILS_BUTTON, VISIBILITY_BUTTON } from '../../costanti';
+import { BACK_BUTTON, DELETE_BUTTON, EDIT_BUTTON, UTENTE_VUOTO, VIEW_DETAILS_BUTTON, VISIBILITY_BUTTON } from '../../costanti';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { StorageService } from '../../services/storage/storage.service';
 
@@ -22,7 +22,7 @@ export class PrenotazioniComponent implements OnInit {
   public storageService = inject(StorageService)
 
   prenotazioni: Prenotazione[] = [];
-  utenteLoggato: Utente = this.storageService.getUtenteLoggato();
+  utenteLoggato: Utente = UTENTE_VUOTO;
   utenteSelezionato: Utente | undefined;
   backButtonVisibile: boolean = false;
   goBackAction: MyActions = BACK_BUTTON;
@@ -59,7 +59,7 @@ export class PrenotazioniComponent implements OnInit {
 
   caricaPrenotazioni(){
     if (this.currentUrl === "/prenotazioni"){
-      if(this.utenteLoggato.isAdmin){
+      if(this.storageService.getIsAdmin()){
         this.tableConfig.headers?.splice(1,0,
           { name: "Utente", field: "utente", sorting: 'asc', visibile: true },
         )
@@ -67,7 +67,7 @@ export class PrenotazioniComponent implements OnInit {
       }
     }
     else {
-      if(this.utenteLoggato.isAdmin){
+      if(this.storageService.getIsAdmin()){
         this.backButtonVisibile = true;
         const match = this.currentUrl.match(/\/prenotazioni-utente\/(\d+)/);
         if (match) {
@@ -75,14 +75,14 @@ export class PrenotazioniComponent implements OnInit {
           this.userService.getUserById(numero).subscribe({
             next: (user: Utente) => { 
               this.utenteSelezionato = user 
-              this.getPrenotazioniByUserId(this.utenteSelezionato?.id);
+              this.getPrenotazioniByUserEmail(this.storageService.getEmail());
             },
             error: (e) => { alert(e.error) }
           });
         }
       } 
       else
-        this.getPrenotazioniByUserId(this.utenteLoggato.id);
+        this.getPrenotazioniByUserEmail(this.storageService.getEmail());
     }
   }
 
@@ -97,8 +97,8 @@ export class PrenotazioniComponent implements OnInit {
     })
   }
   
-  getPrenotazioniByUserId(id: number): void {
-    this.prenotazioneService.getPrenotazioniUtente(id).subscribe({
+  getPrenotazioniByUserEmail(email: string): void {
+    this.prenotazioneService.getPrenotazioniUtente(email).subscribe({
       next: (response: Prenotazione[]) => {
         this.prenotazioni = response;
         this.formattaInformazioni();

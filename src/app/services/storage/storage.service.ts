@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-const UTENTE_LOGGATO = 'utenteLoggato';
 const IS_ADMIN = 'isAdmin';
 const IS_LOGGED = 'isLogged';
 
@@ -9,22 +8,7 @@ const IS_LOGGED = 'isLogged';
 })
 export class StorageService {
 
-  clean(): void {
-    window.sessionStorage.clear();
-  }
-
-  public setUtenteLoggato(user: any): void {
-    window.sessionStorage.removeItem(UTENTE_LOGGATO);
-    window.sessionStorage.setItem(UTENTE_LOGGATO, JSON.stringify(user));
-  }
-
-  public getUtenteLoggato(): any {
-    const user = window.sessionStorage.getItem(UTENTE_LOGGATO);
-    if (user) {
-      return JSON.parse(user);
-    }
-    return {};
-  }
+  clean(): void {  window.sessionStorage.clear(); }
 
   setIsLogged(isLogged: boolean): void{
     window.sessionStorage.setItem(IS_LOGGED, JSON.stringify(isLogged))
@@ -40,5 +24,21 @@ export class StorageService {
 
   public getIsAdmin(): boolean {
     return window.sessionStorage.getItem(IS_ADMIN) === "true" ? true : false;
+  }
+
+  setToken(token: string): void{
+    window.sessionStorage.setItem('token', token)
+  }
+
+  public getToken(): string {
+    return window.sessionStorage.getItem('token') || '';
+  }
+
+  setEmail(email: string): void{
+    window.sessionStorage.setItem('email', email)
+  }
+
+  public getEmail(): string {
+    return window.sessionStorage.getItem('email') || '';
   }
 }

@@ -6,7 +6,7 @@ import { AutoService } from '../../services/auto/auto.service';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { MyActions } from '../my-table/my-table-config';
 import { DateFormatPipe } from '../../date-format.pipe';
-import { BACK_BUTTON, SAVE_BUTTON } from '../../costanti';
+import { BACK_BUTTON, PRENOTAZIONE_VUOTA, SAVE_BUTTON, UTENTE_VUOTO } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
@@ -22,32 +22,7 @@ export class DettagliPrenotazioneComponent {
   private datePipe = inject(DateFormatPipe)
   public storageService = inject(StorageService)
 
-  prenotazione: Prenotazione = {
-    id: 0,
-    utente: {
-      id: 0,
-      nome: '',
-      cognome: '',
-      isAdmin: false,
-      email: '',
-      password: ''
-    },
-    auto: {
-      id: 0,
-      brand: '',
-      modello: '',
-      targa: ''
-    },
-    dataInizio: undefined,
-    dataFine: undefined,
-    dataRichiesta: new Date(),
-    dataConferma: undefined,
-    confermata: undefined,
-    confermataDa: undefined,
-    rifiutata: undefined,
-    rifiutataDa: undefined,
-    dataRifiuto: undefined
-  }
+  prenotazione: Prenotazione = PRENOTAZIONE_VUOTA;
   auto: string = '';
   autoList: Auto[] = []
   utenteName: string = '';
@@ -56,12 +31,16 @@ export class DettagliPrenotazioneComponent {
   goBackAction: MyActions = BACK_BUTTON;
   salvaAction: MyActions = SAVE_BUTTON;
   autoScelta: any | undefined;
-  utenteLoggato: Utente = this.storageService.getUtenteLoggato();
+  utenteLoggato: Utente = UTENTE_VUOTO;
   currentUrl: string = this.router.url;
   dataMinima: string = this.datePipe.transform(new Date(), "yyyy-MM-dd", "yyyy-MM-dd");
+  prenotazioneOriginale: Prenotazione = PRENOTAZIONE_VUOTA;
 
 
   ngOnInit(): void {
+    this.userService.getUserByEmail(this.storageService.getEmail()).subscribe({
+      next:(response)=> {this.utenteLoggato = response}
+    })
     this.getAutoList();
     if (this.currentUrl !== "/aggiungi-prenotazione"){
       const match = this.currentUrl.match(/\/dettagli-prenotazione\/(\d+)/);
@@ -95,6 +74,7 @@ export class DettagliPrenotazioneComponent {
     this.prenotazioniService.getPrenotazioniById(id).subscribe({
       next: (response: Prenotazione) => {
         this.prenotazione = response;
+        this.prenotazioneOriginale = this.prenotazione; // per avere una copia della prenotazione prima delle modifiche
         this.convertiDatePrenotazione();
         this.autoScelta = this.prenotazione.auto;
         this.utente = this.prenotazione.utente;

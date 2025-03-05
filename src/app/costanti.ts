@@ -1,4 +1,42 @@
+import { Prenotazione, Utente } from "./config"
+
 export const BASE_URL = "http://localhost:8080"
+
+export const UTENTE_VUOTO: Utente = {
+    id: 0,
+    nome: "",
+    cognome: "",
+    isAdmin: false,
+    email: "",
+    password: ""
+}
+
+export const  PRENOTAZIONE_VUOTA: Prenotazione = {
+    id: 0,
+    utente: {
+      id: 0,
+      nome: '',
+      cognome: '',
+      isAdmin: false,
+      email: '',
+      password: ''
+    },
+    auto: {
+      id: 0,
+      brand: '',
+      modello: '',
+      targa: ''
+    },
+    dataInizio: undefined,
+    dataFine: undefined,
+    dataRichiesta: new Date(),
+    dataConferma: undefined,
+    confermata: undefined,
+    confermataDa: undefined,
+    rifiutata: undefined,
+    rifiutataDa: undefined,
+    dataRifiuto: undefined
+  }
 
 export const EDIT_BUTTON = { 
     field: "edit",

@@ -14,7 +14,7 @@
         </div>
     </ng-container>
 
-    <ng-container>
+    <ng-container *ngIf="prenotazione.dataInizio && prenotazione.dataFine">
         <div class="form-group">
             <label for="auto">Auto:</label>
             <select [(ngModel)]="prenotazione.auto.id" style="width: 200px;" name="auto" [disabled]="isAdmin">

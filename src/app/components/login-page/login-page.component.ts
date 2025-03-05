@@ -4,6 +4,7 @@ import { AutenticazioneService } from '../../services/login/autenticazione.servi
 import { MyActions } from '../my-table/my-table-config';
 import { LOGIN_BUTTON } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-login-page',
@@ -14,6 +15,7 @@ export class LoginPageComponent {
   private router = inject(Router)
   private authService = inject(AutenticazioneService)
   private storageService = inject(StorageService)
+  private helper = new JwtHelperService();
   username: string = "";
   password: string = "";
   loginButton: MyActions = LOGIN_BUTTON;
@@ -27,8 +29,10 @@ export class LoginPageComponent {
       next: (response) => {
         if(response){
           this.storageService.setIsLogged(true);
-          this.storageService.setIsAdmin(response.isAdmin ? true : false);
-          this.storageService.setUtenteLoggato(response);
+          this.storageService.setToken(response.token);
+          let decodedToken = this.helper.decodeToken(response.token);
+          this.storageService.setEmail(decodedToken.sub);
+          this.storageService.setIsAdmin(decodedToken.isAdmin);
           this.router.navigate(['/homepage']);
         }
       },

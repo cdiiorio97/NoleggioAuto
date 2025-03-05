@@ -4,7 +4,7 @@ import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { Router } from '@angular/router';
-import { DELETE_BUTTON, EDIT_BUTTON } from '../../costanti';
+import { DELETE_BUTTON, EDIT_BUTTON, UTENTE_VUOTO } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class HomepageComponent {
   public storageService = inject(StorageService)
   private router = inject(Router);
   utenti: Utente[]  = [];
+  utenteLoggato: Utente = UTENTE_VUOTO;
   prenotazioni: any[] = [];
   actions: MyActions[] = [{
     label: "Prenotazioni",
@@ -49,17 +50,23 @@ export class HomepageComponent {
     headers: this.headers.filter(elem => elem.visibile),
     pagination: { itemPerPage: 8 },
   }
-  utenteLoggato: Utente = this.storageService.getUtenteLoggato();
   datiCaricati: boolean = false;
 
   ngOnInit(): void {
-    if(this.utenteLoggato.isAdmin){
-      this.actions.push(EDIT_BUTTON)
-      this.actions.push(DELETE_BUTTON)
-      this.getUtenti()
-    }
-    else
-      this.router.navigateByUrl(`prenotazioni-utente/${this.utenteLoggato.id}`)
+    this.utentiService.getUserByEmail(this.storageService.getEmail()).subscribe({
+      next: (response) => {
+        this.utenteLoggato = response;
+
+        if(response.isAdmin){
+          this.actions.push(EDIT_BUTTON)  
+          this.actions.push(DELETE_BUTTON)
+          this.getUtenti()
+        }
+        else
+          this.router.navigateByUrl(`prenotazioni-utente/${response.id}`)
+      }
+    })
+    
   }
 
   getUtenti(): void {
