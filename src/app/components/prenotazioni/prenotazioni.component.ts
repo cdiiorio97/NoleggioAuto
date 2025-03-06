@@ -16,7 +16,6 @@ import { StorageService } from '../../services/storage/storage.service';
 export class PrenotazioniComponent implements OnInit {
   @Input() aggiuntaConsentita?: boolean;
   private prenotazioneService = inject(PrenotazioniService);
-  private userService = inject(UtentiService);
   private router = inject(Router);
   private datePipe = inject(DateFormatPipe);
   public storageService = inject(StorageService)
@@ -72,13 +71,15 @@ export class PrenotazioniComponent implements OnInit {
         const match = this.currentUrl.match(/\/prenotazioni-utente\/(\d+)/);
         if (match) {
           const numero = parseInt(match[1], 10);
-          this.userService.getUserById(numero).subscribe({
-            next: (user: Utente) => { 
-              this.utenteSelezionato = user 
-              this.getPrenotazioniByUserEmail(this.storageService.getEmail());
+          this.prenotazioneService.getPrenotazioniByUtenteId(numero).subscribe({ 
+            next: (response: Prenotazione[]) => {
+              this.prenotazioni = response;
+              this.formattaInformazioni();
             },
-            error: (e) => { alert(e.error) }
-          });
+            error: (e) => { alert(e.error.text) },
+            complete: ()=>{ this.datiCaricati = true }
+          })
+          this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "utente")
         }
       } 
       else

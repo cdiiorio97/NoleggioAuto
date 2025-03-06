@@ -83,7 +83,7 @@ export class RichiestePrenotazioniComponent implements OnInit {
 
   onDecline(row: Prenotazione): void {
     if (confirm(`Sei sicuro di voler respingere la prenotazione con ID ${row.id}?`)) {
-      this.prenotazioniService.rifiutaPrenotazione(row).subscribe({
+      this.prenotazioniService.rifiutaPrenotazione(row.id).subscribe({
         next: (response) => {
           alert(response) 
           window.location.reload();
@@ -95,7 +95,7 @@ export class RichiestePrenotazioniComponent implements OnInit {
 
   onAccept(row: Prenotazione): void {
     if (confirm(`Sei sicuro di voler accettare la prenotazione con ID ${row.id}?`)) {
-      this.prenotazioniService.accettaPrenotazione(row).subscribe({
+      this.prenotazioniService.accettaPrenotazione(row.id).subscribe({
         next: (response) => {
           alert(response) 
           window.location.reload();

@@ -24,7 +24,8 @@ export class DettagliPrenotazioneComponent {
 
   prenotazione: Prenotazione = PRENOTAZIONE_VUOTA;
   auto: string = '';
-  autoList: Auto[] = []
+  autoList: Auto[] = [];
+  autoCaricate: boolean = false;
   utenteName: string = '';
   utente: Utente | undefined;
   isAdmin: boolean = this.storageService.getIsAdmin();
@@ -34,12 +35,10 @@ export class DettagliPrenotazioneComponent {
   utenteLoggato: Utente = UTENTE_VUOTO;
   currentUrl: string = this.router.url;
   dataMinima: string = this.datePipe.transform(new Date(), "yyyy-MM-dd", "yyyy-MM-dd");
-  prenotazioneOriginale: Prenotazione = PRENOTAZIONE_VUOTA;
-
 
   ngOnInit(): void {
     this.userService.getUserByEmail(this.storageService.getEmail()).subscribe({
-      next:(response)=> {this.utenteLoggato = response}
+      next:(response)=> { this.utenteLoggato = response }
     })
     this.getAutoList();
     if (this.currentUrl !== "/aggiungi-prenotazione"){
@@ -63,10 +62,7 @@ export class DettagliPrenotazioneComponent {
         this.utente = utente;
         this.utenteName = `${this.utente.nome} ${this.utente.cognome}`;
       },
-      error: (e) => {
-        alert(e.error.text)
-        sessionStorage.setItem("getErrorMessage", e.error.text)
-      }
+      error: (e) => { alert(e.error.text) }
     }); 
   }
 
@@ -74,7 +70,6 @@ export class DettagliPrenotazioneComponent {
     this.prenotazioniService.getPrenotazioniById(id).subscribe({
       next: (response: Prenotazione) => {
         this.prenotazione = response;
-        this.prenotazioneOriginale = this.prenotazione; // per avere una copia della prenotazione prima delle modifiche
         this.convertiDatePrenotazione();
         this.autoScelta = this.prenotazione.auto;
         this.utente = this.prenotazione.utente;
@@ -96,31 +91,48 @@ export class DettagliPrenotazioneComponent {
 
   async onSubmit() {
     if(this.currentUrl === "/aggiungi-prenotazione"){
-      this.prenotazione.utente = this.utenteLoggato;
-      this.prenotazione.dataInizio = !this.prenotazione.dataInizio ? undefined 
-                                          : new Date(this.prenotazione.dataInizio).toISOString().split('T')[0];
-      this.prenotazione.dataFine = !this.prenotazione.dataFine ? undefined 
-                                          : new Date(this.prenotazione.dataFine).toISOString().split('T')[0];
-      this.prenotazioniService.inserisciRichiestaPrenotazione(this.prenotazione).subscribe({
-        next: () => {
-          alert(`Richiesta prenotazione inoltrata correttamente`)
-          this.goBack();
-        },
-        error: (e) => { alert(`errore durante l'aggiunta: ${e}`) }
-      })
+      let dataInizio = !this.prenotazione.dataInizio ? undefined 
+                                          : this.datePipe.transform(this.prenotazione?.dataInizio, "yyyy-MM-dd", "yyyy-MM-dd");
+      let dataFine = !this.prenotazione.dataFine ? undefined 
+                                          : this.datePipe.transform(this.prenotazione?.dataFine, "yyyy-MM-dd", "yyyy-MM-dd");
+      if(dataInizio && dataFine)
+        this.prenotazioniService.inserisciRichiestaPrenotazione(this.prenotazione.auto.id, dataInizio, dataFine).subscribe({
+          next: () => {
+            alert(`Richiesta prenotazione inoltrata correttamente`)
+            this.goBack();
+          },
+          error: (e) => { alert(`errore durante l'aggiunta: ${e.message}`) }
+        })
     }
-    else {
-      this.prenotazioniService.updatePrenotazione(this.prenotazione).subscribe({
-        next: () =>{
-          alert("prenotazione aggiornata");
-          window.location.reload();
-        },
-        error: (e) => { alert(e.error) }
-      });
+      else {
+        this.prenotazioniService.updatePrenotazione(this.prenotazione).subscribe({
+          next: () =>{
+            alert("prenotazione aggiornata");
+            window.location.reload();
+          },
+          error: (e) => { alert(e.error) }
+        });
+      }
+  }
+
+  onDateChange(): void{
+    if(this.prenotazione.dataInizio && this.prenotazione.dataFine){
+      let dataInizio = this.prenotazione.dataInizio instanceof Date ? this.datePipe.transform(this.prenotazione?.dataInizio, "yyyy-MM-dd", "yyyy-MM-dd") : this.prenotazione.dataInizio
+      let dataFine = this.prenotazione.dataFine instanceof Date ? this.datePipe.transform(this.prenotazione?.dataFine, "yyyy-MM-dd", "yyyy-MM-dd") : this.prenotazione.dataFine
+      this.autoService.getAutoDisponibili(dataInizio,dataFine).subscribe({
+        next: (response) => {
+          this.autoList = response;
+          this.autoCaricate = true;
+        }
+      })
     }
   }
  
   goBack(): void {
+    if(this.currentUrl === "/aggiungi-prenotazione"){
+      this.prenotazione.dataInizio = "";
+      this.prenotazione.dataFine = "";
+    }
     this.storageService.getIsAdmin() ? this.router.navigateByUrl("/prenotazioni") : this.router.navigateByUrl('/homepage')
   }
 }

@@ -29,7 +29,7 @@
     
     <div class="form-group">
         <label for="is-admin">Tipo Utente:</label>
-        <select id="is-admin" name="isAdmin" [(ngModel)]="user.isAdmin" [disabled]="!user.isAdmin">
+        <select id="is-admin" name="isAdmin" [(ngModel)]="user.isAdmin" [disabled]="!storageService.getIsAdmin()">
             <option value= "null" [defaultSelected]="true"></option>
             <option [value]="false">Utente</option>
             <option [value]="true">Admin</option>

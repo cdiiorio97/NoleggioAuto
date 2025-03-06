@@ -1,6 +1,7 @@
-import { Prenotazione, Utente } from "./config"
+import { Auto, Prenotazione, Utente } from "./config"
 
 export const BASE_URL = "http://localhost:8080"
+export const ENCRYPTION_KEY = "abcdefghijklmnopqrstuvxyz1234567"
 
 export const UTENTE_VUOTO: Utente = {
     id: 0,
@@ -10,23 +11,17 @@ export const UTENTE_VUOTO: Utente = {
     email: "",
     password: ""
 }
+export const AUTO_VUOTA: Auto = {
+    id: 0,
+    brand: '',
+    modello: '',
+    targa: ''
+  }
 
 export const  PRENOTAZIONE_VUOTA: Prenotazione = {
     id: 0,
-    utente: {
-      id: 0,
-      nome: '',
-      cognome: '',
-      isAdmin: false,
-      email: '',
-      password: ''
-    },
-    auto: {
-      id: 0,
-      brand: '',
-      modello: '',
-      targa: ''
-    },
+    utente: UTENTE_VUOTO,
+    auto: AUTO_VUOTA,
     dataInizio: undefined,
     dataFine: undefined,
     dataRichiesta: new Date(),

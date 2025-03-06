@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { Utente } from '../../config';
 import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { UtentiService } from '../../services/utenti/utenti.service';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { Router } from '@angular/router';
 import { DELETE_BUTTON, EDIT_BUTTON, UTENTE_VUOTO } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';

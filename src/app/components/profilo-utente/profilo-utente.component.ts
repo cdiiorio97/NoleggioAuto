@@ -3,9 +3,9 @@ import { Utente } from '../../config';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
-import { BACK_BUTTON, SAVE_BUTTON, VISIBILITY_BUTTON, VISIBILITY_OFF_BUTTON } from '../../costanti';
+import { BACK_BUTTON, ENCRYPTION_KEY, SAVE_BUTTON, UTENTE_VUOTO, VISIBILITY_BUTTON, VISIBILITY_OFF_BUTTON } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
+import { CryptoService } from '../../services/crypto/crypto.service';
 
 @Component({
   selector: 'app-profilo-utente',
@@ -16,14 +16,8 @@ export class ProfiloUtenteComponent {
   private userService = inject(UtentiService)
   private router = inject(Router)
   public storageService = inject(StorageService)
-  user: Utente = {
-    id: 0,
-    nome: '',
-    cognome: '',
-    isAdmin: false,
-    email: '',
-    password: ''
-  }
+  cryptoService = inject(CryptoService)
+  user: Utente = UTENTE_VUOTO;
   passwordVisibile: boolean = false;
   currentUrl: string = this.router.url;
   goBackAction: MyActions = BACK_BUTTON;

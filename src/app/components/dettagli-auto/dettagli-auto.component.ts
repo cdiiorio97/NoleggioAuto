@@ -3,7 +3,7 @@ import { Auto } from '../../config';
 import { AutoService } from '../../services/auto/auto.service';
 import { Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
-import { BACK_BUTTON, SAVE_BUTTON } from '../../costanti';
+import { AUTO_VUOTA, BACK_BUTTON, SAVE_BUTTON } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
@@ -16,12 +16,7 @@ export class DettagliAutoComponent {
   private router = inject(Router);
   public storageService = inject(StorageService)
 
-  auto: Auto = {
-    id: 0,
-    targa: '',
-    brand: '',
-    modello: ''
-  }
+  auto: Auto = AUTO_VUOTA;
   goBackAction: MyActions = BACK_BUTTON;
   salvaAction: MyActions = SAVE_BUTTON;
   currentUrl: string = this.router.url;

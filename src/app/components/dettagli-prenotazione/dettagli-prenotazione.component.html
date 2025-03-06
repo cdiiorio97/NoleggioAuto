@@ -14,13 +14,8 @@
         </div>
     </ng-container>
 
-    <ng-container *ngIf="prenotazione.dataInizio && prenotazione.dataFine">
-        <div class="form-group">
-            <label for="auto">Auto:</label>
-            <select [(ngModel)]="prenotazione.auto.id" style="width: 200px;" name="auto" [disabled]="isAdmin">
-                    <option *ngFor="let auto of autoList" [value]="auto.id">{{auto.brand}} {{auto.modello}}</option>>
-            </select>
-        </div>
+    <ng-container *ngIf="!(prenotazione.dataInizio && prenotazione.dataFine)">
+        <h2>Seleziona le date di inizio e fine noleggio per visualizzare le auto disponibili</h2>
     </ng-container>
 
     <ng-container *ngIf='this.currentUrl !== "/aggiungi-prenotazione"'>
@@ -31,12 +26,21 @@
     </ng-container>
     <div class="form-group">    
         <label for="dataInizio">Data Inizio:</label>
-        <input type="date" id="dataInizio" [(ngModel)]="prenotazione.dataInizio" name="dataInizio" required [min]="dataMinima" [readonly]="isAdmin">
+        <input type="date" id="dataInizio" [(ngModel)]="prenotazione.dataInizio" name="dataInizio" required [min]="dataMinima" [readonly]="isAdmin"  (change)="onDateChange()">
     </div>
     <div class="form-group">    
         <label for="dataFine">Data Fine:</label>
-        <input type="date" id="dataFine" [(ngModel)]="prenotazione.dataFine" name="dataFine" required [min]="prenotazione.dataInizio" [readonly]="isAdmin">
+        <input type="date" id="dataFine" [(ngModel)]="prenotazione.dataFine" name="dataFine" required [min]="prenotazione.dataInizio" [readonly]="isAdmin" (change)="onDateChange()">
     </div>
+
+    <ng-container *ngIf="prenotazione.dataInizio && prenotazione.dataFine && autoCaricate || currentUrl !== '/aggiungi-prenotazione'">
+        <div class="form-group">
+            <label for="auto">Auto:</label>
+            <select [(ngModel)]="prenotazione.auto.id" style="width: 200px;" name="auto" [disabled]="isAdmin">
+                    <option *ngFor="let auto of autoList" [value]="auto.id">{{auto.brand}} {{auto.modello}}</option>>
+            </select>
+        </div>
+    </ng-container>
 
     <ng-container *ngIf='this.currentUrl !== "/aggiungi-prenotazione"'>
         <!-- <ng-container>
