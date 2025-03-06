@@ -111,7 +111,6 @@ export class PrenotazioniComponent implements OnInit {
   }
 
   formattaInformazioni(): void {
-    console.log(this.prenotazioni)
     this.prenotazioni.forEach(elem => {
       for (const key in elem) {
         const value = (elem as any)[key];

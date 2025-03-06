@@ -29,7 +29,6 @@ export class LoginPageComponent {
   onLogin() : void {
     let encryptedPw = this.cryptoService.encryptData(this.password, ENCRYPTION_KEY);
     this.authService.login(this.username,encryptedPw).subscribe({
-    //this.authService.login(this.username, this.password).subscribe({
       next: (token) => {
         if(token){
           this.storageService.setIsLogged(true);
