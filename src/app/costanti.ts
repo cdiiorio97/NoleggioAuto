@@ -1,7 +1,7 @@
 import { Auto, Prenotazione, Utente } from "./config"
 
 export const BASE_URL = "http://localhost:8080"
-export const ENCRYPTION_KEY = "abcdefghijklmnopqrstuvxyz1234567"
+export const ENCRYPTION_KEY = "12345678901234567890123456789012"
 
 export const UTENTE_VUOTO: Utente = {
     id: 0,

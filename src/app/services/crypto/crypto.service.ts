@@ -6,7 +6,13 @@ import * as CryptoJS from 'crypto-js';
 })
 export class CryptoService {
   encryptData(data: string, key: string): string {
-    return CryptoJS.AES.encrypt(data, key).toString();
+    const iv = CryptoJS.lib.WordArray.random(16);
+    const encrypted = CryptoJS.AES.encrypt(data, CryptoJS.enc.Utf8.parse(key), {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return iv.toString(CryptoJS.enc.Base64) + ':' + encrypted.toString();
   }
 
   decryptData(data: string, key: string): string {
