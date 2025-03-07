@@ -1,3 +1,4 @@
+import { MyActions } from "./components/my-table/my-table-config"
 import { Auto, Prenotazione, Utente } from "./config"
 
 export const BASE_URL = "http://localhost:8080"
@@ -32,6 +33,26 @@ export const  PRENOTAZIONE_VUOTA: Prenotazione = {
     rifiutataDa: undefined,
     dataRifiuto: undefined
   }
+
+export const PRENOTAZIONI_BUTTON: MyActions = {
+    label: "Prenotazioni",
+    field: "prenotazioni",
+    icon: "view_list",
+    iconPosition: "left",
+    css: {
+    "display": "flex",
+    "flex-direction": "row",
+    "margin-top": "5px", 
+    "height": "30px", 
+    "width": "fit-content",
+    "padding": "10px",
+    "margin-right": "5px", 
+    "border-radius": "10px",
+    "background-color": "grey",
+    "color": "white",
+    "align-items":"center"
+    }
+}
 
 export const EDIT_BUTTON = { 
     field: "edit",

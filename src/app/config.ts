@@ -25,6 +25,7 @@ export interface Utente{
     isAdmin: boolean;
     email: string;
     password: string;
+    editabile?: boolean;
 }
 
 export interface Prenotazione{
