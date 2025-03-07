@@ -4,15 +4,15 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { ParcoAutoComponent } from './components/parco-auto/parco-auto.component';
 import { ProfiloUtenteComponent } from './components/profilo-utente/profilo-utente.component';
 import { PrenotazioniComponent } from './components/prenotazioni/prenotazioni.component';
-import { LoginPageComponent } from './components/login-page/login-page.component';
 import { DettagliPrenotazioneComponent } from './components/dettagli-prenotazione/dettagli-prenotazione.component';
 import { DettagliUtenteComponent } from './components/dettagli-utente/dettagli-utente.component';
 import { DettagliAutoComponent } from './components/dettagli-auto/dettagli-auto.component';
 import { RichiestePrenotazioniComponent } from './components/richieste-prenotazioni/richieste-prenotazioni.component';
+import { AppComponent } from './app.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginPageComponent },
+  { path: 'login', component: AppComponent },
   { path: 'homepage', component: HomepageComponent },
   { path: 'parco-auto', component: ParcoAutoComponent },
   { path: 'profilo-utente', component: ProfiloUtenteComponent },

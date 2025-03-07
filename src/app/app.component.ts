@@ -28,19 +28,38 @@ export class AppComponent {
   titleAdmin = 'Benvenuto Admin';
   titleUtente = 'Benvenuto User';
 
-  config: Config = {
+  config: Config ={
     navHeaders: [
       { label: 'HomePage', field: 'homepage', link: '/homepage', visibile: true },
       { label: 'Parco Auto', field: 'parco-auto', link: '/parco-auto', visibile: true },
-      { label: 'Profilo Utente', field: 'profilo-utente', link: '/profilo-utente', visibile: true },
-      { label: 'Prenotazioni', field: 'prenotazioni', link: '/prenotazioni', visibile: true },
-      { label: 'Nuove Richieste', field: 'richieste-prenotazioni', link:'/richieste-prenotazioni', visibile: true}
+      { label: 'Profilo Utente', field: 'profilo-utente', link: '/profilo-utente', visibile: true }
     ]
   }
 
   logout(){
+    this.rimuoviTabAdmin();
     this.authService.logout();
+    this.storageService.clean()
     this.router.navigate(["/login"]);
   }
    
+  impostaNavBar(isAdmin: any): void {
+    if(isAdmin){
+        this.config.navHeaders?.push(
+          { label: 'Prenotazioni', field: 'prenotazioni', link: '/prenotazioni', visibile: true },
+          { label: 'Nuove Richieste', field: 'richieste-prenotazioni', link:'/richieste-prenotazioni', visibile: true }
+        );
+    }
+    else
+      this.rimuoviTabAdmin();
+  }
+
+  rimuoviTabAdmin(){
+    if(this.config.navHeaders){
+      for(let i = this.config.navHeaders.length - 1; i >= 0; i--) {
+        if ( this.config.navHeaders[i].field === 'prenotazioni' || this.config.navHeaders[i].field === 'richieste-prenotazioni' ) 
+          this.config.navHeaders.splice(i, 1);
+      }
+    }
+  }
 }

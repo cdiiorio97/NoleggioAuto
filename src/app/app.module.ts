@@ -8,7 +8,7 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { PrenotazioniComponent } from './components/prenotazioni/prenotazioni.component';
 import { ProfiloUtenteComponent } from './components/profilo-utente/profilo-utente.component';
 import { MyTableComponent } from './components/my-table/my-table.component';
-import { PaginazionePipe } from './paginazione.pipe';
+import { PaginazionePipe } from './pipes/paginazione.pipe';
 import { FormsModule } from '@angular/forms';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { AutenticazioneService } from './services/login/autenticazione.service';
@@ -19,7 +19,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonComponent } from './components/button/button.component';
 import { RichiestePrenotazioniComponent } from './components/richieste-prenotazioni/richieste-prenotazioni.component';
-import { DateFormatPipe } from './date-format.pipe';
+import { DateFormatPipe } from './pipes/date-format.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from './HttpRequestInterceptor';
 

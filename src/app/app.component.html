@@ -1,11 +1,13 @@
-
 <div class="full-app">
-    <ng-container *ngIf="storageService.getIsLogged()">
+    <ng-container *ngIf="storageService.getIsLogged(); else showLoginTemplate">
         <div class="welcome-message-logout">
             <h1>{{storageService.getIsAdmin() ? titleAdmin : titleUtente}}</h1>
             <app-button [actionRichiesta]="logoutAction" (onClick)="logout()"/>
         </div>
         <app-nav-headers [navHeaders]="config.navHeaders"/>
+        <router-outlet/>
     </ng-container>
-    <router-outlet></router-outlet>
+    <ng-template #showLoginTemplate>
+        <app-login-page (loginSuccess)="impostaNavBar($event)"/>
+    </ng-template>
 </div>
