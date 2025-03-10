@@ -1,11 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { Auto } from '../../config';
-import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
+import { MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { AutoService } from '../../services/auto/auto.service';
-import { AutenticazioneService } from '../../services/login/autenticazione.service';
 import { Router } from '@angular/router';
 import { DELETE_BUTTON, EDIT_BUTTON, VIEW_DETAILS_BUTTON } from '../../costanti';
-import { elementAt } from 'rxjs';
 import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
@@ -20,26 +18,29 @@ export class ParcoAutoComponent {
   automobili: Auto[] = [];
   isAdmin: boolean = this.storageService.getIsAdmin();
   headers: MyHeaders[] = [
-    { name: "ID", field: "id", sorting: 'asc', visibile: true },
-    { name: "Produttore", field: "brand", sorting: 'asc', visibile: true },
-    { name: "Modello", field: "modello", sorting: 'asc', visibile: true },
-    { name: "Targa", field: "targa", sorting: 'asc', visibile: true },
-    { name: "Actions", field: "actions", sorting: 'asc', visibile: true }
+    { name: "ID", field: "id", sorting: 'asc', visibile: true, css:{'width': '5%', "align-items": "center"}, type: "string" },
+    { name: "Brand", field: "brand", sorting: 'asc', visibile: true, type: "string" },
+    { name: "Modello", field: "modello", sorting: 'asc', visibile: true, type: "string" },
+    { name: "Targa", field: "targa", sorting: 'asc', visibile: true, type: "string" },
+    { name: "Actions", field: "actions", sorting: 'asc', visibile: true, css:{ "border":"none", "background-color":"white", "display":"none", "max-width":"250px" } }
   ];
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
-    pagination: { itemPerPage: 8 }
+    pagination: { itemPerPage: 8, numeroPagine: [1] },
+    myActions: [],
+    aggiuntaUrl: ""
   }
-  actionsTabella: MyActions[] = []
   datiCaricati: boolean = false;
 
   ngOnInit(): void {
-    if(this.isAdmin){
-      this.actionsTabella.push(EDIT_BUTTON)
-      this.actionsTabella.push(DELETE_BUTTON)
+    if(this.tableConfig.myActions){
+      if(this.isAdmin){
+        this.tableConfig.myActions.push(EDIT_BUTTON, DELETE_BUTTON)
+        this.tableConfig.aggiuntaUrl = '/dettagli-auto/ADD'
+      }
+      else
+        this.tableConfig.myActions.push(VIEW_DETAILS_BUTTON)
     }
-    else
-      this.actionsTabella.push(VIEW_DETAILS_BUTTON)
     this.getAuto();
   }
 
@@ -48,9 +49,9 @@ export class ParcoAutoComponent {
       next: (data : Auto[]) => { 
         this.automobili = data;
         if(!this.isAdmin)
-          this.automobili.map((elem) => { elem.viewOnly = true; }) 
+          this.automobili.forEach((elem) => { elem.viewOnly = true; }) 
         else 
-          this.automobili.map((elem) => { elem.editabile = true; })
+          this.automobili.forEach((elem) => { elem.editabile = true; })
       },
       error: (e) => { alert(e.error.text); },
       complete: () => { this.datiCaricati = true}
@@ -63,8 +64,10 @@ export class ParcoAutoComponent {
         this.onDelete(event.row)
         break;
       case 'edit':
+        this.router.navigateByUrl(`/dettagli-auto/EDIT/${event.row.id}`)
+        break;
       case 'viewDetails':
-        this.router.navigateByUrl(`/dettagli-auto/${event.row.id}`)
+        this.router.navigateByUrl(`/dettagli-auto/VIEW/${event.row.id}`)
         break;
     }
   }

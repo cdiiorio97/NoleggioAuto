@@ -20,22 +20,23 @@ export class AutoService {
     return this.http.get<Auto>(`${this.baseUrl}/all/get-by-id?id=${id}`)
   }
 
-  addAuto(newAuto: Auto): Observable<any>{
-    const url = `${this.baseUrl}/admin/aggiungi-auto`;
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<Auto>(url, newAuto, { headers: this.headers, responseType: 'text' as 'json' })
-  }
-
-  updateAuto(auto: Auto): Observable<any>{
-    const url = `${this.baseUrl}/admin/modifica-auto`;
-    return this.http.put<Auto>(url, auto, { headers: this.headers, responseType: 'text' as 'json' })
+  gestioneAuto(auto: Auto, action: string): Observable<any>{
+    if(action === "ADD"){
+      const url = `${this.baseUrl}/admin/aggiungi-auto`;
+      return this.http.post<Auto>(url, auto, { headers: this.headers, responseType: 'text' as 'json' })
+    }
+    else{
+      const url = `${this.baseUrl}/admin/modifica-auto`;
+      return this.http.put<Auto>(url, auto, { headers: this.headers, responseType: 'text' as 'json' })
+    }
   }
 
   deleteAuto(id:number): Observable<any>{
     return this.http.delete(`${this.baseUrl}/admin/elimina-auto?id=${id}`, { responseType: "text"});;
   }
 
-  getAutoDisponibili(dataInizio: string, dataFine: string): Observable<any> {
-    return this.http.get<Auto[]>(`${this.baseUrl}/all/trova-auto-disponibili?dataInizio=${dataInizio}&dataFine=${dataFine}`);
+  getAutoDisponibili(dataInizio: Date, dataFine: Date): Observable<any> {
+    const url = `${this.baseUrl}/all/trova-auto-disponibili?dataInizio=${dataInizio.toISOString()}&dataFine=${dataFine.toISOString()}`;
+    return this.http.get<Auto[]>(url);
   }
 }

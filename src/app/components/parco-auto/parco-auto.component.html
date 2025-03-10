@@ -1,4 +1,3 @@
 <ng-container *ngIf="datiCaricati">
-    <app-my-table   [data]="automobili" [tableConfig]="tableConfig" [aggiuntaConsentita]="isAdmin" [aggiuntaURL]="'/aggiungi-auto'" 
-                    [datiCaricati]="datiCaricati" (actionClick)="handleAction($event)" [actionsTabella]="actionsTabella"/> 
+    <app-my-table [data]="automobili" [tableConfig]="tableConfig" (actionClick)="handleAction($event)"/> 
 </ng-container>

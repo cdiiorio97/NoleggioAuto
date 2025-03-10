@@ -1,29 +1,33 @@
-<ng-container *ngIf="currentUrl === '/aggiungi-utente'">
-    <app-button [actionRichiesta]="goBackAction" (onClick)="goBack()"/>
-</ng-container>
-
 <form class="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label for="name">Nome:</label>
-        <input type="text" id="name" [(ngModel)]="user.nome" name="nome" required>
+        <input type="text" id="name" [(ngModel)]="user.nome" name="nome" required [disabled]="disabledFields">
     </div>
 
     <div class="form-group">
         <label for="cognome">Cognome:</label>
-        <input type="text" id="cognome" [(ngModel)]="user.cognome" name="cognome" required>
+        <input type="text" id="cognome" [(ngModel)]="user.cognome" name="cognome" required [disabled]="disabledFields">
     </div>
 
     <div class="form-group">    
         <label for="email">Email:</label>
-        <input type="email" id="email" [(ngModel)]="user.email" name="email" required>
+        <input type="email" id="email" [(ngModel)]="user.email" name="email" required [disabled]="disabledFields">
     </div>
 
-    <ng-container *ngIf="(currentUrl === '/profilo-utente' || currentUrl === '/aggiungi-utente')">
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input  type="password" id="password" name="password" [(ngModel)]="user.password" 
-                    required style="width: 200px;" [type]=" passwordVisibile ? 'text' : 'password' ">
-            <app-button [actionRichiesta]="visibilityAction" (onClick)="togglePasswordVisibility()"/>
+    <ng-container *ngIf="viewPasswordForm">
+        <div class="form-group-password-change">
+            <div *ngIf="actionAllowed === 'EDIT'" class="form-group">
+                <label for="password">Vecchia password:</label>
+                <input  type="password" id="password" name="password" [(ngModel)]="user.oldPassword" 
+                        style="width: 200px;" [type]=" oldPasswordVisibile ? 'text' : 'password' ">
+                <app-button [actionRichiesta]="oldVisibilityAction" (onClick)="togglePasswordVisibility('oldPassword')"/>
+            </div>
+            <div class="form-group">
+                <label for="newPassword">Nuova password:</label>
+                <input  type="newPassword" id="newPassword" name="newPassword" [(ngModel)]="user.newPassword" 
+                        style="width: 200px;" [type]=" newPasswordVisibile ? 'text' : 'password' ">
+                <app-button [actionRichiesta]="newVisibilityAction" (onClick)="togglePasswordVisibility('newPassword')"/>
+            </div>
         </div>
     </ng-container>
     

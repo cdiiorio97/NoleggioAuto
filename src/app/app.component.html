@@ -4,7 +4,7 @@
             <h1>{{storageService.getIsAdmin() ? titleAdmin : titleUtente}}</h1>
             <app-button [actionRichiesta]="logoutAction" (onClick)="logout()"/>
         </div>
-        <app-nav-headers [navHeaders]="config.navHeaders"/>
+        <app-nav-headers [navHeaders]="navHeaders"/>
         <router-outlet/>
     </ng-container>
     <ng-template #showLoginTemplate>

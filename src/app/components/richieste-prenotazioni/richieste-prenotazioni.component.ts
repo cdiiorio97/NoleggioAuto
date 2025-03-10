@@ -1,10 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Prenotazione, Utente } from '../../config';
+import { Prenotazione } from '../../config';
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
-import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
-import { DateFormatPipe } from '../../date-format.pipe';
+import { MyHeaders, MyTableConfig } from '../my-table/my-table-config';
+import { DateFormatPipe } from '../../pipes/date-format.pipe';
 import { ACCEPT_BUTTON, REFUSE_BUTTON, UTENTE_VUOTO } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
+import { DtoPrenotazioneTabella } from '../../dto/DtoPrenotazioneTabella';
 
 @Component({
   selector: 'app-richieste-prenotazioni',
@@ -17,25 +18,25 @@ export class RichiestePrenotazioniComponent implements OnInit {
   public storageService = inject(StorageService)
 
   nuoveRichieste: Prenotazione[] = [];
+  nuoveRichiesteTabella: DtoPrenotazioneTabella[] = [];
   headers: MyHeaders[] = [
-      { name: "ID", field: "id", sorting: 'asc', visibile: true },
-      { name: "Utente", field: "utente", sorting: 'asc', visibile: true },
-      { name: "Auto", field: "auto", sorting: 'asc', visibile: true },
-      { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true },
-      { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true },
-      { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true },
-      { name: "Actions", field: "actions", sorting: 'asc', visibile: true }
+      { name: "ID", field: "id", sorting: 'asc', visibile: true, css:{'width': '5%', "align-items": "center"}, type: "string" },
+      { name: "Utente", field: "utente", sorting: 'asc', visibile: true, type: "string" },
+      { name: "Auto", field: "auto", sorting: 'asc', visibile: true, type: "string" },
+      { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true, type: "boolean" },
+      { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true, type: "boolean" },
+      { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true, type: "date" },
+      { name: "Actions", field: "actions", sorting: 'asc', visibile: true, css:{ "border":"none", "background-color":"white", "display":"none", "max-width":"250px" } }
     ];
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
-    pagination: { itemPerPage: 8 }
+    pagination: { itemPerPage: 8, numeroPagine: [1] },
+    myActions: [ACCEPT_BUTTON, REFUSE_BUTTON],
+    aggiuntaUrl: ""
   };
-  actionsTabella: MyActions[] = []
   datiCaricati: boolean = false;
 
   ngOnInit(){
-    this.actionsTabella.push(ACCEPT_BUTTON)
-    this.actionsTabella.push(REFUSE_BUTTON)
     this.getRichiestePrenotazione();
   }
 
@@ -44,20 +45,14 @@ export class RichiestePrenotazioniComponent implements OnInit {
       next: (lista: Prenotazione[]) => {
         this.nuoveRichieste = lista;
         this.nuoveRichieste.forEach(elem => {
-          for (const key in elem) {
-            const value = (elem as any)[key];
-            if(key === "utente") {
-              if(elem[key]?.cognome != null && elem[key]?.cognome != null)
-                (elem as any)[key] = `${elem[key]?.nome} ${elem[key]?.cognome}`
-              else 
-                (elem as any)[key] = "";
-            }
-            if(key === "auto")
-              (elem as any)[key] = `${elem[key]?.brand} ${elem[key]?.modello}`
-            if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value))))
-              (elem as any)[key] = this.datePipe.transform(value, "yyyy-MM-dd", "dd-MM-yyyy");
-          }
-          elem.editabile = true;
+          let temp = new DtoPrenotazioneTabella(elem);
+          temp.dataRichiesta = temp.dataRichiesta ? this.datePipe.transform(temp.dataRichiesta, "dd-MM-yyyy") : "";
+          temp.dataInizio = temp.dataInizio ? this.datePipe.transform(temp.dataInizio, "dd-MM-yyyy") : "";
+          temp.dataFine = temp.dataFine ? this.datePipe.transform(temp.dataFine, "dd-MM-yyyy") : "";
+          temp.dataConferma = temp.dataConferma ? this.datePipe.transform(temp.dataConferma, "dd-MM-yyyy") : "";
+          temp.dataRifiuto = temp.dataRifiuto ? this.datePipe.transform(temp.dataRifiuto, "dd-MM-yyyy") : "";
+          temp.editabile = true;
+          this.nuoveRichiesteTabella.push(temp)
         });
       },
       error: (e) => { alert(e.error)},
@@ -104,5 +99,4 @@ export class RichiestePrenotazioniComponent implements OnInit {
       });
     }
   }
-
 }

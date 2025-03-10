@@ -1,8 +1,6 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from './my-table-config';
-import { ACCEPT_BUTTON, ADD_BUTTON, DELETE_BUTTON, EDIT_BUTTON, PAGINA_PRECEDENTE_BUTTON, PAGINA_SUCCESSIVA_BUTTON, REFUSE_BUTTON } from '../../costanti';
-import { Prenotazione } from '../../config';
-import { StorageService } from '../../services/storage/storage.service';
+import { ADD_BUTTON, NUM_PAGINA_BUTTON, PAGINA_PRECEDENTE_BUTTON, PAGINA_SUCCESSIVA_BUTTON } from '../../costanti';
 
 @Component({
   selector: 'app-my-table',
@@ -11,16 +9,8 @@ import { StorageService } from '../../services/storage/storage.service';
 })
 
 export class MyTableComponent implements OnInit{
-  public storageService = inject(StorageService)
   @Input() data: any[] = [];
   @Input() tableConfig: MyTableConfig | undefined;
-  @Input() dettagliURL?: string;
-  @Input() aggiuntaURL?: string;
-  @Input() actionsTabella?: MyActions[] = [];
-  @Input() aggiuntaConsentita?: boolean = false;
-  @Input() permessiEditRow: boolean = false;
-  @Input() eliminazione?: any;
-  @Input() datiCaricati?: boolean;
   @Output() actionClick = new EventEmitter<{ action: string, row: any }>();
 
   originalData: any[] = this.data;
@@ -28,57 +18,27 @@ export class MyTableComponent implements OnInit{
   order: string = '';
   filteredData: any[] = [];
   orderedData: any[] = [];
+  campiFiltri: MyHeaders[] = []
   filtro: { [key: string]: string } = {};
-  valoreFiltro: string = '';
-  campoFiltro: string = '';
-  vecchioCampoFiltro: string = '';
+  filtroRange: { [key: string]: string } = {};
   pagina: number = 1;
-  modificaAction: MyActions = EDIT_BUTTON;
   aggiungiAction: MyActions = ADD_BUTTON;
-  eliminaAction: MyActions = DELETE_BUTTON;
-  accettaAction: MyActions = ACCEPT_BUTTON;
-  rifiutaAction: MyActions = REFUSE_BUTTON;
-  pagPrecedenteAction: MyActions = PAGINA_PRECEDENTE_BUTTON;
+  pageNumberButton: MyActions = NUM_PAGINA_BUTTON;
   paginaPrecedenteDisabled: boolean = true;
-  paginaSuccessivaDisabled: boolean = this.numeroPagine.length === 1 ? true : false;
+  paginaSuccessivaDisabled: boolean = false; 
+  pagPrecedenteAction: MyActions = PAGINA_PRECEDENTE_BUTTON;
   pagSuccessivaAction: MyActions = PAGINA_SUCCESSIVA_BUTTON;
-  isAdmin: boolean = this.storageService.getIsAdmin();
 
   ngOnInit(): void {
     this.filteredData = this.data || [];
     this.orderedData = this.data || [];
-    this.filtro = {};
+    this.filtro = {}
+    this.paginaSuccessivaDisabled = this.numeroPagine?.length === 1 ? true : false;
+    this.campiFiltri = this.tableConfig?.headers?.filter(elem => elem.field !== "actions") || [];
   }
 
   getStyle(header: MyHeaders){
-    if (header.field.toLowerCase() === 'id' || header.field.toLowerCase() === 'isadmin' ||
-         header.field.toLowerCase() === 'confermata' || header.field.toLowerCase() === 'rifiutata' || header.field.toLowerCase() === 'isAdmin') {
-      return {
-        'width': '5%',
-        "align-items": "center"
-      };
-    }
-    else if(header.field.toLowerCase() ==="actions"){
-      return {
-        "border":"none",
-        "background-color":"white",
-        "display":"none",
-        "max-width":"250px"
-      }
-    }
-    else {
-      return {
-        'width': '10%',
-        "align-items": "center"
-      };
-    }
-  }
-  
-  aggiornaCampoFiltro(): void {
-    if(this.vecchioCampoFiltro !== this.campoFiltro)
-      delete this.filtro[this.vecchioCampoFiltro.toLowerCase()];
-    this.vecchioCampoFiltro = this.campoFiltro;
-    this.valoreFiltro= '';
+      return header.css;
   }
 
   ordinaColonna(column: MyHeaders) {
@@ -101,50 +61,65 @@ export class MyTableComponent implements OnInit{
     });
   } 
 
-  aggiornaFiltro(){
-    if(this.valoreFiltro === '') {
-      delete this.filtro[this.campoFiltro.toLowerCase()];
-      this.filteredData = this.orderedData;
-      return;
-    }
+  aggiornaFiltro(event: any) {
+    this.filtro = {}
+    this.filtroRange = {};
+    if(event.type !== "date")
+      this.filtro = event.input !== "" ? { [event.field]: event.input } : {};
     else {
-      this.filtro[this.campoFiltro.toLowerCase()] = this.valoreFiltro;
-      this.filter();
+      this.filtroRange[`${event.field}Min`] = event.inputMin;
+      this.filtroRange[`${event.field}Max`] = event.inputMax;
     }
+    this.filter();
+    this.cambiaPagina(1);
   }
 
   filter() {
     let arrayRisposta: any[] = this.orderedData.filter(elem => { 
-      return Object.keys(this.filtro).every(field => {
-        if (this.filtro[field]) {
+      
+      if(Object.keys(this.filtroRange).length > 0 ){
+        const field = Object.keys(this.filtroRange)[0].replace(/Min|Max/, '');
+        const [day, month, year] = elem[field].split("-").map(Number);
+        const dataElem = elem[field] !== "" ? new Date(year, month - 1, day) : undefined;
+        const dataMin = this.filtroRange[`${field}Min`] !== undefined ? new Date(this.filtroRange[`${field}Min`]) : undefined;
+        const dataMax = this.filtroRange[`${field}Max`] ? new Date(this.filtroRange[`${field}Max`]) : undefined;
+
+        if(dataElem){
+          if(dataMin && dataMax){
+            if (!(dataElem >= dataMin && dataElem <= dataMax)) 
+              return false;
+          } 
+          else if( (dataMin && dataElem) && dataElem <= dataMin )
+            return false
+          else if( (dataMax && dataElem) && dataElem >= dataMax )
+            return false;
+        } 
+        else 
+          return false;
+      }
+      else if(Object.keys(this.filtro).length > 0) {
+        const field = Object.keys(this.filtro)[0]
+        const filterValue = this.filtro[field]
+        if (typeof filterValue === "string") {
           const value = elem[field] ? elem[field].toString().toLowerCase() : '';
-          this.cambiaPagina(1);
-          return value.includes(this.filtro[field].toString().toLowerCase());
-        }
-        return true;
-      });
+          return value.includes(filterValue.toLowerCase())
+        } 
+        else if( filterValue === true || filterValue === false)
+          return elem[field] === filterValue;
+      }
+      return true;
     });
 
-    arrayRisposta.map((elem) => { 
-      if(this.isPrenotazione(elem))
-        elem.viewOnly = elem.editabile ? false : true })
-
-    return (arrayRisposta.length === 0 && Object.keys(this.filtro).length !== 0)
-        ? [] 
-        : this.filteredData = arrayRisposta;
+    this.filteredData = !(arrayRisposta.length === 0 && Object.keys(this.filtro).length !== 0) ? arrayRisposta : [];
+    return this.filteredData;
   }
 
   cambiaPagina(pagina: number) {
     this.pagina = pagina;
     this.paginaPrecedenteDisabled = this.pagina === 1 ? true : false;
-    this.paginaSuccessivaDisabled = (this.tableConfig?.pagination?.itemPerPage ?? 0) >0 && 
-                                    (pagina * (this.tableConfig?.pagination?.itemPerPage ?? 0)) >= this.filteredData.length
-                                    ? true : false;
-  }
-
-  get numeroPagine(): number[] {
-    const totalPages = Math.ceil((this.filteredData?.length || 0) / (this.tableConfig?.pagination?.itemPerPage || 1));
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
+    this.paginaSuccessivaDisabled = this.pagina === this.numeroPagine?.length 
+                                    || this.filteredData.length < (this.tableConfig?.pagination?.itemPerPage ?? 1) 
+                                        ? true : false;
   }
 
   isBoolean(value: any): boolean {
@@ -155,7 +130,8 @@ export class MyTableComponent implements OnInit{
     this.actionClick.emit({action, row})
   }
 
-  private isPrenotazione(elem: any): elem is Prenotazione {
-    return 'editabile' in elem;
+  get numeroPagine(): number[] {
+    const totalPages = Math.ceil((this.filteredData?.length || 0) / (this.tableConfig?.pagination?.itemPerPage || 1));
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 }

@@ -2,7 +2,7 @@ import { MyActions } from "./components/my-table/my-table-config"
 import { Auto, Prenotazione, Utente } from "./config"
 
 export const BASE_URL = "http://localhost:8080"
-export const ENCRYPTION_KEY = "12345678901234567890123456789012"
+//export const ENCRYPTION_KEY = "12345678901234567890123456789012"
 
 export const UTENTE_VUOTO: Utente = {
     id: 0,
@@ -54,7 +54,7 @@ export const PRENOTAZIONI_BUTTON: MyActions = {
     }
 }
 
-export const EDIT_BUTTON = { 
+export const EDIT_BUTTON: MyActions = { 
     field: "edit",
     icon: "edit",
     iconPosition: "left",
@@ -68,7 +68,7 @@ export const EDIT_BUTTON = {
     } 
 }
 
-export const DELETE_BUTTON = {  
+export const DELETE_BUTTON: MyActions = {  
     field: "delete",
     icon:"delete",
     iconPosition:"right",
@@ -85,7 +85,7 @@ export const DELETE_BUTTON = {
     } 
 }
 
-export const ADD_BUTTON = { 
+export const ADD_BUTTON: MyActions = { 
     label: "Aggiungi",
     field: "add",
     icon: "add",
@@ -106,7 +106,7 @@ export const ADD_BUTTON = {
     } 
 }
 
-export const LOGOUT_BUTTON =    {
+export const LOGOUT_BUTTON: MyActions =    {
     label: "LOGOUT",
     field: "logout",
     icon: "logout",
@@ -126,7 +126,7 @@ export const LOGOUT_BUTTON =    {
     }
 }
 
-export const BACK_BUTTON = {
+export const BACK_BUTTON: MyActions = {
     label: "GO BACK",
     field: "goBack",
     icon: "arrow_back",
@@ -147,7 +147,7 @@ export const BACK_BUTTON = {
     }
 }
 
-export const ACCEPT_BUTTON = { 
+export const ACCEPT_BUTTON: MyActions = { 
     field: "accetta",
     icon: "check",
     iconPosition: "left",
@@ -162,7 +162,7 @@ export const ACCEPT_BUTTON = {
     } 
 }
 
-export const REFUSE_BUTTON = {  
+export const REFUSE_BUTTON: MyActions = {  
     field: "rifiuta",
     icon:"do_not_disturb_on",
     iconPosition:"right",
@@ -180,7 +180,7 @@ export const REFUSE_BUTTON = {
     } 
 }
 
-export const VISIBILITY_BUTTON = { 
+export const VISIBILITY_BUTTON: MyActions = { 
     field: "visibility",
     icon: "visibility",
     iconPosition: "left",
@@ -193,7 +193,7 @@ export const VISIBILITY_BUTTON = {
     } 
 }
 
-export const VISIBILITY_OFF_BUTTON = { 
+export const VISIBILITY_OFF_BUTTON: MyActions = { 
     field: "visibility_off",
     icon: "visibility_off",
     iconPosition: "left",
@@ -206,7 +206,7 @@ export const VISIBILITY_OFF_BUTTON = {
     } 
 }
 
-export const SAVE_BUTTON = {
+export const SAVE_BUTTON: MyActions = {
     label: "SALVA", 
     field: "save",
     css: { 
@@ -222,7 +222,7 @@ export const SAVE_BUTTON = {
     } 
 }
 
-export const PAGINA_PRECEDENTE_BUTTON = {
+export const PAGINA_PRECEDENTE_BUTTON: MyActions = {
     label: "Precedente", 
     field: "pag_precedente",
     css: { 
@@ -237,7 +237,7 @@ export const PAGINA_PRECEDENTE_BUTTON = {
     } 
 }
 
-export const PAGINA_SUCCESSIVA_BUTTON = {
+export const PAGINA_SUCCESSIVA_BUTTON: MyActions = {
     label: "Successiva", 
     field: "pag_successiva",
     css: { 
@@ -252,8 +252,9 @@ export const PAGINA_SUCCESSIVA_BUTTON = {
     } 
 }
 
-export const NUM_PAGINA_BUTTON = {
+export const NUM_PAGINA_BUTTON: MyActions = {
     field: "num_pagina",
+    iconPosition: "left",
     css: { 
         "background-color": "#150d83",
         "color": "white",
@@ -266,7 +267,7 @@ export const NUM_PAGINA_BUTTON = {
     } 
 }
 
-export const LOGIN_BUTTON = {
+export const LOGIN_BUTTON: MyActions = {
     label: "LOGIN",
     field: "login",
     css: {
@@ -282,7 +283,7 @@ export const LOGIN_BUTTON = {
     }
 }
 
-export const VIEW_DETAILS_BUTTON = { 
+export const VIEW_DETAILS_BUTTON: MyActions = { 
     field: "viewDetails",
     icon: "visibility",
     iconPosition: "left",

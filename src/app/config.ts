@@ -1,7 +1,3 @@
-export class Config{
-    navHeaders: NavHeader[] | undefined;
-}
-
 export interface NavHeader{
     field: string;
     label: string;

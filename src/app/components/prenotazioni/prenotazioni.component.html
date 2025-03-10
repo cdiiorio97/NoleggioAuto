@@ -1,15 +1,8 @@
 
 <div *ngIf="backButtonVisibile" >
     <app-button [actionRichiesta]="goBackAction" (onClick)="goBack()"/>
-    <span> Prenotazioni di <b>{{utenteSelezionato?.nome}} {{utenteSelezionato?.cognome}}</b> </span>
+    <span> Prenotazioni di <b>{{utenteSelezionato}}</b> </span>
 </div>
 <ng-container *ngIf="datiCaricati" >
-    <app-my-table [data]="prenotazioni" 
-            [tableConfig]="tableConfig" 
-            [actionsTabella]="actionsTabella"
-            [dettagliURL]="'/dettagli-prenotazione'" 
-            [aggiuntaConsentita]="!utenteLoggato.isAdmin"
-            [aggiuntaURL]="'/aggiungi-prenotazione'"
-            (actionClick)="handleAction($event)" 
-            [datiCaricati]="datiCaricati"/>
+    <app-my-table [data]="prenotazioniTabella" [tableConfig]="tableConfig" (actionClick)="handleAction($event)" />
 </ng-container>

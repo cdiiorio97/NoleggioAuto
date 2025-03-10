@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Auto, Prenotazione, Utente } from '../../config';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
 import { AutoService } from '../../services/auto/auto.service';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { MyActions } from '../my-table/my-table-config';
-import { DateFormatPipe } from '../../date-format.pipe';
+import { DateFormatPipe } from '../../pipes/date-format.pipe';
 import { BACK_BUTTON, PRENOTAZIONE_VUOTA, SAVE_BUTTON, UTENTE_VUOTO } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
 
@@ -18,6 +18,7 @@ export class DettagliPrenotazioneComponent {
   private autoService = inject(AutoService)
   private userService = inject(UtentiService)
   private router = inject(Router)
+  private activeRoute = inject(ActivatedRoute)
   private prenotazioniService = inject(PrenotazioniService)
   private datePipe = inject(DateFormatPipe)
   public storageService = inject(StorageService)
@@ -34,20 +35,21 @@ export class DettagliPrenotazioneComponent {
   autoScelta: any | undefined;
   utenteLoggato: Utente = UTENTE_VUOTO;
   currentUrl: string = this.router.url;
-  dataMinima: string = this.datePipe.transform(new Date(), "yyyy-MM-dd", "yyyy-MM-dd");
+  dataMinima: string = "";
+  actionAllowed: string = "";
 
   ngOnInit(): void {
+    this.dataMinima = this.datePipe.transform(new Date());
     this.userService.getUserByEmail(this.storageService.getEmail()).subscribe({
       next:(response)=> { this.utenteLoggato = response }
     })
     this.getAutoList();
-    if (this.currentUrl !== "/aggiungi-prenotazione"){
-      const match = this.currentUrl.match(/\/dettagli-prenotazione\/(\d+)/);
-      if (match) {
-        const numero = parseInt(match[1], 10);
-        this.getPrenotazioneById(numero);
-      }
-    }
+    this.activeRoute.params.subscribe(param =>{
+      this.actionAllowed = param['action'];
+      const id = parseInt(param['id'],10);
+      if(id !== null)
+        this.getPrenotazioneById(id);
+    })
   }
 
   getAutoList(): void{
@@ -78,24 +80,18 @@ export class DettagliPrenotazioneComponent {
   }
 
   convertiDatePrenotazione(){
-    this.prenotazione.dataRichiesta = this.datePipe.transform(this.prenotazione.dataRichiesta, "yyyy-MM-dd", "yyyy-MM-dd")
-    this.prenotazione.dataRifiuto = !this.prenotazione?.dataRifiuto ? undefined
-                                        : this.datePipe.transform(this.prenotazione?.dataRifiuto, "yyyy-MM-dd", "yyyy-MM-dd") 
-    this.prenotazione.dataConferma = !this.prenotazione?.dataConferma ? undefined
-                                        : this.datePipe.transform(this.prenotazione?.dataConferma, "yyyy-MM-dd", "yyyy-MM-dd") 
-    this.prenotazione.dataInizio = !this.prenotazione?.dataInizio ? undefined
-                                        : this.datePipe.transform(this.prenotazione?.dataInizio, "yyyy-MM-dd", "yyyy-MM-dd")
-    this.prenotazione.dataFine = !this.prenotazione?.dataFine ? undefined
-                                        : this.datePipe.transform(this.prenotazione?.dataFine, "yyyy-MM-dd", "yyyy-MM-dd")                 
+    this.prenotazione.dataRichiesta = this.datePipe.transform(this.prenotazione.dataRichiesta)
+    this.prenotazione.dataRifiuto = this.prenotazione?.dataRifiuto ? this.datePipe.transform(this.prenotazione?.dataRifiuto) : undefined 
+    this.prenotazione.dataConferma = this.prenotazione?.dataConferma ? this.datePipe.transform(this.prenotazione?.dataConferma) : undefined 
+    this.prenotazione.dataInizio = this.prenotazione?.dataInizio ? this.datePipe.transform(this.prenotazione?.dataInizio) : undefined
+    this.prenotazione.dataFine = this.prenotazione?.dataFine ? this.datePipe.transform(this.prenotazione?.dataFine) : undefined                 
   }
 
   async onSubmit() {
-    if(this.currentUrl === "/aggiungi-prenotazione"){
-      let dataInizio = !this.prenotazione.dataInizio ? undefined 
-                                          : this.datePipe.transform(this.prenotazione?.dataInizio, "yyyy-MM-dd", "yyyy-MM-dd");
-      let dataFine = !this.prenotazione.dataFine ? undefined 
-                                          : this.datePipe.transform(this.prenotazione?.dataFine, "yyyy-MM-dd", "yyyy-MM-dd");
-      if(dataInizio && dataFine)
+    if(this.actionAllowed === "ADD"){
+      let dataInizio = this.prenotazione.dataInizio ? new Date(this.prenotazione?.dataInizio) : undefined 
+      let dataFine = this.prenotazione.dataFine ? new Date(this.prenotazione.dataFine) : undefined 
+       if(dataInizio && dataFine)
         this.prenotazioniService.inserisciRichiestaPrenotazione(this.prenotazione.auto.id, dataInizio, dataFine).subscribe({
           next: () => {
             alert(`Richiesta prenotazione inoltrata correttamente`)
@@ -117,15 +113,15 @@ export class DettagliPrenotazioneComponent {
 
   onDateChange(): void{
     if(this.prenotazione.dataInizio && this.prenotazione.dataFine){
-      let dataInizio = this.prenotazione.dataInizio instanceof Date ? this.datePipe.transform(this.prenotazione?.dataInizio, "yyyy-MM-dd", "yyyy-MM-dd") : this.prenotazione.dataInizio
-      let dataFine = this.prenotazione.dataFine instanceof Date ? this.datePipe.transform(this.prenotazione?.dataFine, "yyyy-MM-dd", "yyyy-MM-dd") : this.prenotazione.dataFine
+      let dataInizio = new Date(this.prenotazione.dataInizio)
+      let dataFine = new Date(this.prenotazione.dataFine)
       this.autoService.getAutoDisponibili(dataInizio,dataFine).subscribe({
         next: (response) => {
           this.autoList = response;
           this.autoCaricate = true;
         }
       })
-    }
+    } 
   }
  
   goBack(): void {

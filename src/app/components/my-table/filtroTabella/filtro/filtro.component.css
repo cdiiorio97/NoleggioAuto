@@ -1,0 +1,25 @@
+.filters-div {
+    display: flex; 
+    margin-bottom: 10px; 
+    width: auto;
+    gap: 20px;
+    align-items: center;
+} 
+
+select {
+    height: 38px;
+    padding: 0;
+    width: 150px;
+    border-radius: 5px;
+  }
+
+input {
+    height: 30px;
+    border-radius: 5px;
+}
+
+.boolean-filter{
+    display: flex; 
+    flex-direction: row; 
+    align-items: center;
+}

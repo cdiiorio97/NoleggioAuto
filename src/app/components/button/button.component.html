@@ -1,10 +1,15 @@
-<button type="button" [ngClass]="{'disabled-button': disabled,'hover-button': !disabled  }" [ngStyle]="actionRichiesta?.css" (click)="handleClick()"  
-        [disabled]="disabled" > <!-- (mouseover)="applyHoverStyle()" (mouseout)="removeHoverStyle()"-->
-    <ng-container *ngIf="!iconCentered">
+<button type="button" [ngClass]="{'disabled-button': disabled,'hover-button': !disabled  }" 
+        [ngStyle]="actionRichiesta?.css" (click)="handleClick()"  
+        [disabled]="disabled" >
+    
+    <ng-container *ngIf="!iconCentered && !number; else showNumber">
         <mat-icon *ngIf="iconPositionLeft">{{actionRichiesta?.icon}}</mat-icon>
-            {{actionRichiesta?.label ?? number}}
+            {{actionRichiesta?.label}}
         <mat-icon *ngIf="iconPositionRight">{{actionRichiesta?.icon}}</mat-icon>
     </ng-container>
+    <ng-template #showNumber>
+        {{number}}
+    </ng-template>
     <ng-container *ngIf="iconCentered">
         <mat-icon *ngIf="iconPositionLeft">{{actionRichiesta?.icon}}</mat-icon>
     </ng-container>

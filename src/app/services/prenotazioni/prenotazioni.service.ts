@@ -38,7 +38,7 @@ export class PrenotazioniService {
     return this.http.get<Prenotazione[]>(`${this.baseUrl}/admin/get-richieste-prenotazioni`);
   }
   
-  inserisciRichiestaPrenotazione(id: number, dataInizio: string, dataFine: string): Observable<any>{
+  inserisciRichiestaPrenotazione(id: number, dataInizio: Date, dataFine: Date): Observable<any>{
     const url = `${this.baseUrl}/user/aggiungi-richiesta-prenotazione`;
     let body = {id: id, dataInizio: dataInizio, dataFine: dataFine}
     return this.http.post<Prenotazione>(url, body, { headers: this.headers, responseType: 'text' as 'json' })

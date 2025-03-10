@@ -1,12 +1,13 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { PrenotazioniService } from '../../services/prenotazioni/prenotazioni.service';
-import { Prenotazione, Utente } from '../../config';
-import { Router } from '@angular/router';
-import { DateFormatPipe } from '../../date-format.pipe';
-import { BACK_BUTTON, DELETE_BUTTON, EDIT_BUTTON, UTENTE_VUOTO, VIEW_DETAILS_BUTTON, VISIBILITY_BUTTON } from '../../costanti';
-import { UtentiService } from '../../services/utenti/utenti.service';
+import { Prenotazione } from '../../config';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DateFormatPipe } from '../../pipes/date-format.pipe';
+import { BACK_BUTTON, DELETE_BUTTON, EDIT_BUTTON, VIEW_DETAILS_BUTTON } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
+import { DtoPrenotazioneTabella } from '../../dto/DtoPrenotazioneTabella';
+import { UtentiService } from '../../services/utenti/utenti.service';
 
 @Component({
   selector: 'app-prenotazioni',
@@ -14,44 +15,44 @@ import { StorageService } from '../../services/storage/storage.service';
   styleUrl: './prenotazioni.component.css'
 })
 export class PrenotazioniComponent implements OnInit {
-  @Input() aggiuntaConsentita?: boolean;
   private prenotazioneService = inject(PrenotazioniService);
+  private userService = inject(UtentiService)
   private router = inject(Router);
+  private activeRoute = inject(ActivatedRoute)
   private datePipe = inject(DateFormatPipe);
   public storageService = inject(StorageService)
 
-  prenotazioni: Prenotazione[] = [];
-  utenteLoggato: Utente = UTENTE_VUOTO;
-  utenteSelezionato: Utente | undefined;
+  prenotazioniTabella: DtoPrenotazioneTabella[] = [];
+  utenteSelezionato: string = "";
   backButtonVisibile: boolean = false;
   goBackAction: MyActions = BACK_BUTTON;
   headers: MyHeaders[] = [
-    { name: "ID", field: "id", sorting: 'asc', visibile: true },
-    { name: "Auto", field: "auto", sorting: 'asc', visibile: true },
-    { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true },
-    { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true },
-    /* { name: "Data Richiesta", field: "dataRichiesta", sorting: 'asc', visibile: true }, */
-    { name: "Confermata", field: "confermata", sorting: 'asc', visibile: true },
-    { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: true },
-    { name: "Confermata Da", field: "confermataDa", sorting: 'asc', visibile: true },
-    { name: "Rifiutata", field: "rifiutata", sorting: 'asc', visibile: true },
-    { name: "Data Rifiuto", field: "dataRifiuto", sorting: 'asc', visibile: true },
-    { name: "Rifiutata Da", field: "rifiutataDa", sorting: 'asc', visibile: true },
-    { name: "Actions", field: "actions", sorting: 'asc', visibile: true },
+    { name: "ID", field: "id", sorting: 'asc', visibile: true, css:{'width': '5%', "align-items": "center"}, type: "string"  },
+    { name: "Auto", field: "auto", sorting: 'asc', visibile: true, type: "string" },
+    { name: "Data Inizio", field: "dataInizio", sorting: 'asc', visibile: true, type: "date" },
+    { name: "Data Fine", field: "dataFine", sorting: 'asc', visibile: true, type: "date" },
+    { name: "Confermata", field: "confermata", sorting: 'asc', visibile: true, css:{'width': '5%', "align-items": "center"}, type: "boolean"  },
+    { name: "Data Conferma", field: "dataConferma", sorting: 'asc', visibile: true, type: "date" },
+    { name: "Confermata Da", field: "confermataDa", sorting: 'asc', visibile: true, type: "string" },
+    { name: "Rifiutata", field: "rifiutata", sorting: 'asc', visibile: true, css:{'width': '5%', "align-items": "center"}, type: "boolean"  },
+    { name: "Data Rifiuto", field: "dataRifiuto", sorting: 'asc', visibile: true, type: "date" },
+    { name: "Rifiutata Da", field: "rifiutataDa", sorting: 'asc', visibile: true, type: "string" },
+    { name: "Actions", field: "actions", sorting: 'asc', visibile: true, css:{ "border":"none", "background-color":"white", "display":"none", "max-width":"250px" } },
   ];
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
-    pagination: { itemPerPage: 8 }
+    pagination: { itemPerPage: 8, numeroPagine: [1] },
+    myActions: [VIEW_DETAILS_BUTTON],
+    aggiuntaUrl: ""
   };
-  actionsTabella: MyActions[] = []
   currentUrl: string = this.router.url;
   datiCaricati: boolean = false;
 
   ngOnInit(): void {
-    this.actionsTabella.push(VIEW_DETAILS_BUTTON)
     if(!this.storageService.getIsAdmin()){
-        this.actionsTabella.push(EDIT_BUTTON)
-        this.actionsTabella.push(DELETE_BUTTON)
+      this.tableConfig.myActions?.push(EDIT_BUTTON)
+      this.tableConfig.myActions?.push(DELETE_BUTTON)
+      this.tableConfig.aggiuntaUrl = "/dettagli-prenotazione/ADD"
     }
     this.caricaPrenotazioni()
   }
@@ -60,7 +61,7 @@ export class PrenotazioniComponent implements OnInit {
     if (this.currentUrl === "/prenotazioni"){
       if(this.storageService.getIsAdmin()){
         this.tableConfig.headers?.splice(1,0,
-          { name: "Utente", field: "utente", sorting: 'asc', visibile: true },
+          { name: "Utente", field: "utente", sorting: 'asc', visibile: true, type: "string" }
         )
         this.getPrenotazioniAdmin();
       }
@@ -68,31 +69,43 @@ export class PrenotazioniComponent implements OnInit {
     else {
       if(this.storageService.getIsAdmin()){
         this.backButtonVisibile = true;
-        const match = this.currentUrl.match(/\/prenotazioni-utente\/(\d+)/);
-        if (match) {
-          const numero = parseInt(match[1], 10);
-          this.prenotazioneService.getPrenotazioniByUtenteId(numero).subscribe({ 
-            next: (response: Prenotazione[]) => {
-              this.prenotazioni = response;
-              this.formattaInformazioni();
-            },
-            error: (e) => { alert(e.error.text) },
-            complete: ()=>{ this.datiCaricati = true }
-          })
-          this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "utente")
-        }
-      } 
+        this.activeRoute.params.subscribe(param=>{
+          const id = parseInt(param["id"], 10);
+          if (id !== null) {
+            this.prenotazioneService.getPrenotazioniByUtenteId(id).subscribe({ 
+              next: (response: Prenotazione[]) => { 
+                this.formattaInformazioni(response); 
+                this.getUtenteById(id);
+              },
+              error: (e) => { alert(e.error.text) },
+              complete: () => { this.datiCaricati = true }
+            })
+            this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "utente")
+          }
+        })
+      }
       else
         this.getPrenotazioniByUserEmail(this.storageService.getEmail());
     }
   }
 
+  getUtenteById(id: number){
+    this.userService.getUserById(id).subscribe({
+      next: (user)=> { this.utenteSelezionato = user.cognome + " " + user.nome },
+      error: (e) => { alert(e.error) }
+    })
+  }
+
+  getUtenteByEmail(email: string) {
+    this.userService.getUserByEmail(email).subscribe({
+      next: (user) => { this.utenteSelezionato = user.cognome + " " + user.nome },
+      error: (e) => { alert(e.error) }
+    })
+  }
+
   getPrenotazioniAdmin(): void {
     this.prenotazioneService.getPrenotazioni().subscribe({
-      next: (data : Prenotazione[]) => {
-        this.prenotazioni = data;
-        this.formattaInformazioni();
-      },
+      next: (data : Prenotazione[]) => { this.formattaInformazioni(data); },
       error: (e) => { alert(e.error.text) },
       complete: ()=>{ this.datiCaricati = true }
     })
@@ -100,9 +113,9 @@ export class PrenotazioniComponent implements OnInit {
   
   getPrenotazioniByUserEmail(email: string): void {
     this.prenotazioneService.getPrenotazioniUtente(email).subscribe({
-      next: (response: Prenotazione[]) => {
-        this.prenotazioni = response;
-        this.formattaInformazioni();
+      next: (response: Prenotazione[]) => { 
+        this.formattaInformazioni(response); 
+        this.utenteSelezionato = this.prenotazioniTabella[0]?.utente || "";
       },
       error: (e) => { alert(e.error.text) },
       complete: ()=>{ this.datiCaricati = true }
@@ -110,48 +123,27 @@ export class PrenotazioniComponent implements OnInit {
     this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "utente")
   }
 
-  formattaInformazioni(): void {
-    this.prenotazioni.forEach(elem => {
-      for (const key in elem) {
-        const value = (elem as any)[key];
-        if(key === "utente" || key === "confermataDa" || key === "rifiutataDa" ) {
-          if(value?.cognome != null && value?.cognome != null)
-            (elem as any)[key] = `${value?.nome} ${value?.cognome}`
-          else 
-            (elem as any)[key] = "";
-        }
-        if(key ==="auto")
-            (elem as any)[key] = `${value?.brand} ${value?.modello}`
-        if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)))) {
-          (elem as any)[key] = this.datePipe.transform(value, "yyyy-MM-dd", "dd-MM-yyyy");
-        }
-      }
-      let dataInizio = elem["dataInizio"] ? this.parseDateString(elem["dataInizio"].toString()) : null;
-      if(dataInizio && !this.storageService.getIsAdmin())
-        elem.editabile = elem["dataInizio"] instanceof Date 
-                        ? this.getDaysDifference(elem["dataInizio"]) 
-                        : typeof elem["dataInizio"] === 'string' 
-                            ? this.getDaysDifference(new Date(dataInizio)) 
-                            : false;
+  formattaInformazioni(prenotazioni: Prenotazione[]): void {
+    prenotazioni.forEach(elem => {
+      let temp = new DtoPrenotazioneTabella(elem);
+
+      temp.dataRichiesta = temp.dataRichiesta ? this.datePipe.transform(temp.dataRichiesta, "dd-MM-yyyy") : "";
+      temp.dataInizio = temp.dataInizio ? this.datePipe.transform(temp.dataInizio, "dd-MM-yyyy") : "";
+      temp.dataFine = temp.dataFine ? this.datePipe.transform(temp.dataFine, "dd-MM-yyyy") : "";
+      temp.dataConferma = temp.dataConferma ? this.datePipe.transform(temp.dataConferma, "dd-MM-yyyy") : "";
+      temp.dataRifiuto = temp.dataRifiuto ? this.datePipe.transform(temp.dataRifiuto, "dd-MM-yyyy") : "";
+
+      if(temp.dataInizio !== "" && !this.storageService.getIsAdmin())
+        temp.editabile = elem.dataInizio ? this.getDaysDifference(new Date(elem.dataInizio)) : false  
       else 
-        elem.viewOnly = true
-    });
+        temp.editabile = false;
+        temp.viewOnly = !temp.editabile 
+      this.prenotazioniTabella.push(temp) 
+      })
   }
 
   goBack(): void {
     this.router.navigateByUrl('/homepage')
-  }
-
-  parseDateString(dateString: string): Date | null {
-    const parts = dateString.split('-');
-    if (parts.length !== 3) {
-      return null;
-    }
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
-  
-    return new Date(year, month, day);
   }
 
   getDaysDifference(dataInizio: Date): boolean {
@@ -167,8 +159,10 @@ export class PrenotazioniComponent implements OnInit {
         this.onDelete(event.row)
         break;
       case 'edit':
+        this.router.navigateByUrl(`/dettagli-prenotazione/EDIT/${event.row.id}`)
+        break;
       case 'viewDetails':
-        this.router.navigateByUrl(`/dettagli-prenotazione/${event.row.id}`)
+        this.router.navigateByUrl(`/dettagli-prenotazione/VIEW/${event.row.id}`)
         break;
     }
   }
@@ -180,9 +174,7 @@ export class PrenotazioniComponent implements OnInit {
           alert(response) 
           window.location.reload();
         },
-        error: (error) => {
-          alert(error.error)
-        }
+        error: (error) => { alert(error.error) }
       });
     }
   }

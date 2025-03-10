@@ -1,6 +1,8 @@
 export class MyTableConfig{
     headers: MyHeaders[] | undefined;
     pagination: MyPagination | undefined;
+    myActions: MyActions[] | undefined;
+    aggiuntaUrl: string | undefined;
 }
 
 export interface MyHeaders {
@@ -9,6 +11,7 @@ export interface MyHeaders {
     sorting?: "asc" | "desc";
     visibile: boolean;
     css?: any;
+    type?: string;
 }
 
 export interface MyActions{
@@ -21,4 +24,5 @@ export interface MyActions{
 
 export interface MyPagination{
     itemPerPage: number | undefined;
+    numeroPagine?: number[] | undefined;
 }

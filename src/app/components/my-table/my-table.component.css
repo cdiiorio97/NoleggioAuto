@@ -54,24 +54,10 @@ table tr:nth-child(even) {
   margin: 0 10px;
 }
 
-.filters-div {
-  display: flex; 
-  margin-bottom: 10px; 
-  width: auto;
-  gap: 10px;
-}
-
 .container{
   display:flex; 
   flex-direction: column;
 }
-
-select {
-  height: 30px;
-  width: 150px;
-  border-radius: 5px;
-}
-
 
 .bottoni-intestazione-tabella{
   display: flex;

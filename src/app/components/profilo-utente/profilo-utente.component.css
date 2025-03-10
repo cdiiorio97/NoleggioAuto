@@ -12,6 +12,13 @@ form{
     margin-left: 10px;
 }
 
+.form-group-password-change{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
 label {
     width: 100px;
     font-weight: bold;

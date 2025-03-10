@@ -22,6 +22,7 @@ import { RichiestePrenotazioniComponent } from './components/richieste-prenotazi
 import { DateFormatPipe } from './pipes/date-format.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from './HttpRequestInterceptor';
+import { FiltroComponent } from './components/my-table/filtroTabella/filtro/filtro.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { httpInterceptorProviders } from './HttpRequestInterceptor';
     DettagliPrenotazioneComponent,
     DettagliUtenteComponent,
     DettagliAutoComponent,
-    RichiestePrenotazioniComponent
+    RichiestePrenotazioniComponent,
+    FiltroComponent
   ],
   imports: [
     BrowserModule,

@@ -9,7 +9,6 @@
 
         <div class="form-group">
             <label for="utente">Utente:</label>
-            <!-- <input type="number" id="idUtente" [(ngModel)]="prenotazione.utente.id" name="utente" required style="width: 40px;"> -->
             <input type="text" id="utenteNome" [value]="prenotazione.utente.nome +' '+prenotazione.utente.cognome" name="utenteNome" readonly>
         </div>
     </ng-container>
@@ -43,31 +42,16 @@
     </ng-container>
 
     <ng-container *ngIf='this.currentUrl !== "/aggiungi-prenotazione"'>
-        <!-- <ng-container>
-            <div class="form-group" *ngIf="!prenotazione.rifiutata">
-                <label for="confermata">Confermata:</label>
-                <input id="confermata" name="confermata" [value]="prenotazione.confermata ? 'Si' : 'No'" readonly style="width: 30px;">
-            </div>
-        </ng-container> -->
         <div class="form-group" *ngIf="prenotazione.confermata">    
             <label for="dataConferma">data Conferma:</label>
             <input type="date" id="dataConferma" [(ngModel)]="prenotazione.dataConferma" name="dataConferma" readonly>
         </div>
         <div *ngIf="prenotazione.rifiutata" style="display:flex; flex-direction:column; gap: 10px;"> 
-            <!-- <div class="form-group">
-                <label for="rifiutata">Rifiutata:</label>
-                <input id="rifiutata" name="rifiutata" [value]="prenotazione.rifiutata ? 'Si' : 'No'" readonly style="width: 30px;">
-            </div> -->
             <div class="form-group">    
                 <label for="dataRifiuto">data Cancellazione:</label>
                 <input type="date" id="dataRifiuto" [(ngModel)]="prenotazione.dataRifiuto" 
                         name="dataRifiuto" readonly>
             </div>
-            <!-- <div class="form-group">    
-                <label for="rifiutataDa">Respinta Da:</label>
-                <input  [value]="prenotazione.rifiutataDa?.nome + ' ' + prenotazione.rifiutataDa?.cognome" 
-                        name="rifiutataDa" readonly type="text" id="rifiutataDa"> 
-            </div> -->
         </div>
     </ng-container>
 

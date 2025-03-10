@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Auto } from '../../config';
 import { AutoService } from '../../services/auto/auto.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MyActions } from '../my-table/my-table-config';
 import { AUTO_VUOTA, BACK_BUTTON, SAVE_BUTTON } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
@@ -13,6 +13,7 @@ import { StorageService } from '../../services/storage/storage.service';
 })
 export class DettagliAutoComponent {
   private carService = inject(AutoService);
+  private activeRoute = inject(ActivatedRoute)
   private router = inject(Router);
   public storageService = inject(StorageService)
 
@@ -21,15 +22,16 @@ export class DettagliAutoComponent {
   salvaAction: MyActions = SAVE_BUTTON;
   currentUrl: string = this.router.url;
   isAdmin: boolean = this.storageService.getIsAdmin();
+  actionAllowed: string = "";
 
   ngOnInit(): void {
-    if(this.currentUrl !== "/aggiungi-auto"){
-      const match = this.currentUrl.match(/\/dettagli-auto\/(\d+)/);
-      if (match) {
-        const numero = parseInt(match[1], 10);
-        this.getAutoById(numero);
-      }
-    }
+    let urlId;
+    this.activeRoute.params.subscribe(param => {
+      this.actionAllowed = param['action'];
+      urlId = parseInt(param['id'],10)
+    })
+    if (urlId !== undefined && urlId > 0) 
+      this.getAutoById(urlId);
   }
 
   getAutoById(id:number){
@@ -40,24 +42,13 @@ export class DettagliAutoComponent {
   }
 
   onSubmit() {
-    if(this.currentUrl === "/aggiungi-auto"){
-      this.carService.addAuto(this.auto).subscribe({
-        next: () => {
-          alert("auto aggiunta");
-          this.goBack();
-        },
-        error:(e) => { alert(e.error) }
-      })
-    }
-    else {
-      this.carService.updateAuto(this.auto).subscribe({
-        next: () => {
-          alert("auto aggiornata");
-          window.location.reload();
-        },
-        error: (e) => { alert(e.error) }
-      })
-    }
+    this.carService.gestioneAuto(this.auto, this.actionAllowed).subscribe({
+      next: (response) => {
+        alert(this.actionAllowed === "ADD" ? "Auto aggiunta" : "Auto aggiornata");
+        this.router.navigateByUrl(`/dettagli-auto/EDIT/${response}`)
+      },
+      error:(e) => { alert(e.error) }
+    })
   }
 
   goBack(): void {

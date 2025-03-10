@@ -1,0 +1,33 @@
+<div class="filters-div" *ngIf="campi && campi.length > 0" > 
+    <select [(ngModel)]="campoFiltro" (change)="aggiornaCampoFiltro()">
+        <option value= "" disabled> Seleziona Campo </option>
+        <option *ngFor="let option of campi" [value]="option.field">{{option.name}}</option>
+    </select>
+    <ng-container *ngIf="tipoFiltro !== '' ">
+        
+        <ng-container *ngIf="tipoFiltro === 'string' ">
+            <input type="string" [(ngModel)]="valoreFiltro" (input)="aggiornaFiltro()" placeholder=" Filtra per valore" style="width: 200px;">
+        </ng-container>
+
+        <ng-container *ngIf="tipoFiltro === 'date' ">
+            <span> Da:
+                <input type="date" [(ngModel)]="valoreFiltroMin" (input)="aggiornaFiltro()" style="width: 110px;" [max]="valoreFiltroMax">
+            </span>
+            <span> A: 
+                <input type="date" [(ngModel)]="valoreFiltroMax" (input)="aggiornaFiltro()" style="width: 110px" [min]="valoreFiltroMin">       
+            </span> 
+        </ng-container>
+
+        <ng-container *ngIf="tipoFiltro === 'boolean'">
+            <div class="boolean-filter" style="gap: 15px">
+                <label class="boolean-filter">
+                    <input type="radio" value="true" [(ngModel)]="valoreBoolean" (click)="aggiornaFiltroBoolean(true)"> True
+                </label>
+                <label class="boolean-filter">
+                    <input type="radio" value="false" [(ngModel)]="valoreBoolean" (click)="aggiornaFiltroBoolean(false)"> False
+                </label>
+            </div>
+        </ng-container>
+
+    </ng-container>
+</div>

@@ -3,7 +3,7 @@ import { Utente } from '../../config';
 import { MyActions, MyHeaders, MyTableConfig } from '../my-table/my-table-config';
 import { UtentiService } from '../../services/utenti/utenti.service';
 import { Router } from '@angular/router';
-import { DELETE_BUTTON, EDIT_BUTTON, UTENTE_VUOTO } from '../../costanti';
+import { DELETE_BUTTON, EDIT_BUTTON, PRENOTAZIONI_BUTTON, UTENTE_VUOTO } from '../../costanti';
 import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
@@ -18,36 +18,19 @@ export class HomepageComponent {
   utenti: Utente[]  = [];
   utenteLoggato: Utente = UTENTE_VUOTO;
   prenotazioni: any[] = [];
-  actions: MyActions[] = [{
-    label: "Prenotazioni",
-      field: "prenotazioni",
-      icon: "view_list",
-      iconPosition: "left",
-      css: {
-        "display": "flex",
-        "flex-direction": "row",
-        "margin-top": "5px", 
-        "height": "30px", 
-        "width": "fit-content",
-        "padding": "10px",
-        "margin-right": "5px", 
-        "border-radius": "10px",
-        "background-color": "grey",
-        "color": "white",
-        "align-items":"center"
-      }
-  }];
+  actions: MyActions[] = []
   headers: MyHeaders[] = [
-    { name: "Nome", field: "nome", sorting: 'asc', visibile: true },
-    { name: "Cognome", field: "cognome", sorting: 'asc', visibile: true },
-    { name: "Amministratore", field: "isAdmin", sorting: 'asc', visibile: true },
-    { name: "Email", field: "email", sorting: 'asc', visibile: true },
-    { name: "Password", field: "password", sorting: 'asc', visibile: false },
-    { name: "Actions", field: "actions", sorting: 'asc', visibile: true }
+    { name: "Nome", field: "nome", sorting: 'asc', visibile: true, type: "string" },
+    { name: "Cognome", field: "cognome", sorting: 'asc', visibile: true, type: "string" },
+    { name: "Amministratore", field: "isAdmin", sorting: 'asc', visibile: true,  css:{'width': '5%', "align-items": "center"}, type: "boolean"  },
+    { name: "Email", field: "email", sorting: 'asc', visibile: true, type: "string" },
+    { name: "Actions", field: "actions", sorting: 'asc', visibile: true, css:{ "border":"none", "background-color":"white", "display":"none", "max-width":"250px" } }
   ];
   tableConfig: MyTableConfig = {
     headers: this.headers.filter(elem => elem.visibile),
-    pagination: { itemPerPage: 8 },
+    pagination: { itemPerPage: 8, numeroPagine: [1] },
+    myActions: [],
+    aggiuntaUrl: ""
   }
   datiCaricati: boolean = false;
 
@@ -57,12 +40,13 @@ export class HomepageComponent {
         this.utenteLoggato = response;
 
         if(response.isAdmin){
-          this.actions.push(EDIT_BUTTON)  
-          this.actions.push(DELETE_BUTTON)
+          if (this.tableConfig.myActions)
+            this.tableConfig.myActions.push(PRENOTAZIONI_BUTTON, EDIT_BUTTON, DELETE_BUTTON);
+          this.tableConfig.aggiuntaUrl = '/dettagli-utente/ADD';
           this.getUtenti()
         }
         else
-          this.router.navigateByUrl(`prenotazioni-utente/${response.id}`)
+          this.router.navigate(['/prenotazioni-utente',response.id])
       }
     })
     
@@ -70,7 +54,12 @@ export class HomepageComponent {
 
   getUtenti(): void {
     this.utentiService.getUtenti().subscribe({
-      next: (data : Utente[]) => { this.utenti = data; },
+      next: (data : Utente[]) => { 
+        this.utenti = data.map(elem => {
+          elem.editabile = true;
+          return elem;
+        });
+      },
       error: (e) => { alert(e.error.text) },
       complete: () => { this.datiCaricati = true; }
     })
@@ -82,8 +71,10 @@ export class HomepageComponent {
         this.onDelete(event.row)
         break;
       case 'edit':
+        this.router.navigateByUrl(`/dettagli-utente/EDIT/${event.row.id}`)
+        break;
       case 'viewDetails':
-        this.router.navigateByUrl(`/dettagli-utente/${event.row.id}`)
+        this.router.navigateByUrl(`/dettagli-utente/VIEW/${event.row.id}`)
         break;
       case "prenotazioni":
         this.router.navigateByUrl(`/prenotazioni-utente/${event.row.id}`);
