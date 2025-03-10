@@ -83,7 +83,7 @@ export class RichiestePrenotazioniComponent implements OnInit {
           alert(response) 
           window.location.reload();
         },
-        error: (error) => { alert(error.error) }
+        error: (e) => { alert(e.error) }
       });
     }
   }
@@ -95,7 +95,7 @@ export class RichiestePrenotazioniComponent implements OnInit {
           alert(response) 
           window.location.reload();
         },
-        error: (error) => { alert(error.error) }
+        error: (e) => { alert(e.error) }
       });
     }
   }

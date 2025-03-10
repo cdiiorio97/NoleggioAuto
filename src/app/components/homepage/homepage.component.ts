@@ -60,7 +60,7 @@ export class HomepageComponent {
           return elem;
         });
       },
-      error: (e) => { alert(e.error.text) },
+      error: (e) => { alert(e.error) },
       complete: () => { this.datiCaricati = true; }
     })
   }
@@ -89,7 +89,7 @@ export class HomepageComponent {
           alert(response) 
           window.location.reload();
         },
-        error: (error) => { alert(error.error) }
+        error: (e) => { alert(e.error) }
       });
     }
   }

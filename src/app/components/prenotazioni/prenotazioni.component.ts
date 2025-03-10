@@ -77,7 +77,7 @@ export class PrenotazioniComponent implements OnInit {
                 this.formattaInformazioni(response); 
                 this.getUtenteById(id);
               },
-              error: (e) => { alert(e.error.text) },
+              error: (e) => { alert(e.error) },
               complete: () => { this.datiCaricati = true }
             })
             this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "utente")
@@ -106,7 +106,7 @@ export class PrenotazioniComponent implements OnInit {
   getPrenotazioniAdmin(): void {
     this.prenotazioneService.getPrenotazioni().subscribe({
       next: (data : Prenotazione[]) => { this.formattaInformazioni(data); },
-      error: (e) => { alert(e.error.text) },
+      error: (e) => { alert(e.error) },
       complete: ()=>{ this.datiCaricati = true }
     })
   }
@@ -117,7 +117,7 @@ export class PrenotazioniComponent implements OnInit {
         this.formattaInformazioni(response); 
         this.utenteSelezionato = this.prenotazioniTabella[0]?.utente || "";
       },
-      error: (e) => { alert(e.error.text) },
+      error: (e) => { alert(e.error) },
       complete: ()=>{ this.datiCaricati = true }
     })
     this.tableConfig.headers = this.tableConfig.headers?.filter(elem => elem.field !== "utente")
@@ -174,7 +174,7 @@ export class PrenotazioniComponent implements OnInit {
           alert(response) 
           window.location.reload();
         },
-        error: (error) => { alert(error.error) }
+        error: (e) => { alert(e.error) }
       });
     }
   }

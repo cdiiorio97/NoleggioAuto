@@ -54,7 +54,7 @@ export class ProfiloUtenteComponent {
   getUserById(id: number): void {
     this.userService.getUserById(id).subscribe({
       next: (elem: Utente) => { this.user = new DtoUtenteModificato(elem); },
-      error: (e) => { alert(e.error.text) }
+      error: (e) => { alert(e.error) }
     })
   }
 

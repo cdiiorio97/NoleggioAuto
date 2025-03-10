@@ -64,7 +64,7 @@ export class DettagliPrenotazioneComponent {
         this.utente = utente;
         this.utenteName = `${this.utente.nome} ${this.utente.cognome}`;
       },
-      error: (e) => { alert(e.error.text) }
+      error: (e) => { alert(e.error) }
     }); 
   }
 
@@ -97,7 +97,7 @@ export class DettagliPrenotazioneComponent {
             alert(`Richiesta prenotazione inoltrata correttamente`)
             this.goBack();
           },
-          error: (e) => { alert(`errore durante l'aggiunta: ${e.message}`) }
+          error: (e) => { alert(`errore durante l'aggiunta: ${e.error}`) }
         })
     }
       else {

@@ -40,7 +40,7 @@ export class LoginPageComponent {
         }
       },
       error: (e) => {
-        alert(e.error.text)
+        alert(e.error)
         this.storageService.clean();
       },
     });
